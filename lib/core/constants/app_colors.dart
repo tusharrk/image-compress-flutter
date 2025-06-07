@@ -18,12 +18,12 @@ class AppColors {
   static const white = Color(0xFFFFFFFF);
 
   // Rich modern blue tones
-  static const deepBlue = Color(0xFF0A2463); // Deep royal blue
-  static const richBlue = Color(0xFF1E56A0); // Rich medium blue
+  static const primimary = Color(0xFF1E1E1E); // Deep royal blue
+  static const secondary = Color(0xFF1E1E1E); // Rich medium blue
   static const vibrantBlue =
-      Color(0xFF1E56A0); // Vibrant blue with teal hints(old:- 0xFF1E56A0)
+      Color(0xFF1E1E1E); // Vibrant blue with teal hints(old:- 0xFF1E56A0)
   static const lightBlue =
-      Color(0xFF1E56A0); // Soft light blue (old:- 0xFF1E56A0)
+      Color(0xFF154FC4); // Soft light blue (old:- 0xFF1E56A0)
 
   // Variations for UI elements
   static const mediumGray = Color(0xFF636363);
@@ -38,3 +38,11 @@ class AppColors {
   static const shadow = Color(0xFF000000);
   static const scrim = Color(0xFF000000);
 }
+
+//colors to consider
+//#1b63f6 blue
+//#154FC4 dark version of above blue
+
+//#1E1E1E greyish color
+
+//#C4F35F yellow green to test

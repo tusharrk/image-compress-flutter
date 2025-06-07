@@ -9,7 +9,7 @@ final class CustomColorScheme {
   static const lightColorScheme = ColorScheme(
     brightness: Brightness.light,
     // Rich Blue as primary
-    primary: AppColors.richBlue,
+    primary: AppColors.primimary,
     onPrimary: AppColors.white,
     primaryContainer: AppColors.lightBlue,
     onPrimaryContainer: AppColors.black,
@@ -19,9 +19,9 @@ final class CustomColorScheme {
     secondaryContainer: AppColors.lightBlue,
     onSecondaryContainer: AppColors.black,
     // Deep Blue as tertiary
-    tertiary: AppColors.deepBlue,
+    tertiary: AppColors.secondary,
     onTertiary: AppColors.white,
-    tertiaryContainer: AppColors.richBlue,
+    tertiaryContainer: AppColors.primimary,
     onTertiaryContainer: AppColors.white,
     // Error colors
     error: AppColors.error,
@@ -38,7 +38,7 @@ final class CustomColorScheme {
     onInverseSurface: AppColors.white,
     inversePrimary: AppColors.lightBlue,
     shadow: AppColors.shadow,
-    surfaceTint: AppColors.richBlue,
+    surfaceTint: AppColors.primimary,
     outlineVariant: AppColors.lightGray,
     scrim: AppColors.scrim,
   );
@@ -52,14 +52,14 @@ final class CustomColorScheme {
     primaryContainer: AppColors.vibrantBlue,
     onPrimaryContainer: AppColors.white,
     // Rich Blue as secondary
-    secondary: AppColors.richBlue,
+    secondary: AppColors.primimary,
     onSecondary: AppColors.white,
-    secondaryContainer: AppColors.deepBlue,
+    secondaryContainer: AppColors.secondary,
     onSecondaryContainer: AppColors.white,
     // Vibrant Blue as tertiary
     tertiary: AppColors.vibrantBlue,
     onTertiary: AppColors.white,
-    tertiaryContainer: AppColors.deepBlue,
+    tertiaryContainer: AppColors.secondary,
     onTertiaryContainer: AppColors.white,
     // Error colors
     error: AppColors.errorLight,
@@ -74,7 +74,7 @@ final class CustomColorScheme {
     onSurfaceVariant: AppColors.lightGray,
     inverseSurface: AppColors.white,
     onInverseSurface: AppColors.black,
-    inversePrimary: AppColors.richBlue,
+    inversePrimary: AppColors.primimary,
     shadow: AppColors.shadow,
     surfaceTint: AppColors.lightBlue,
     outlineVariant: AppColors.mediumGray,

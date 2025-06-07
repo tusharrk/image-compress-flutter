@@ -1,4 +1,4 @@
-package com.tusharrk.flutter_boilerplate
+package com.tusharrk.image.compress.photo
 
 import io.flutter.embedding.android.FlutterActivity
 
