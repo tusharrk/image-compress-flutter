@@ -1,0 +1,17 @@
+{
+    "app_name": "My Application",
+    "home": {
+        "title": "Home Page en"
+    },
+    "general": {
+        "button": {
+            "save": "Save {}"
+        },
+        "dialog": {
+            "version": {
+                "title": "Version",
+                "content": "Version info"
+            }
+        }
+    }
+}
