@@ -801,32 +801,6 @@ class MockEnvironmentService extends _i1.Mock
       ) as bool);
 
   @override
-  String get apiUrl => (super.noSuchMethod(
-        Invocation.getter(#apiUrl),
-        returnValue: _i6.dummyValue<String>(
-          this,
-          Invocation.getter(#apiUrl),
-        ),
-        returnValueForMissingStub: _i6.dummyValue<String>(
-          this,
-          Invocation.getter(#apiUrl),
-        ),
-      ) as String);
-
-  @override
-  String get apiKey => (super.noSuchMethod(
-        Invocation.getter(#apiKey),
-        returnValue: _i6.dummyValue<String>(
-          this,
-          Invocation.getter(#apiKey),
-        ),
-        returnValueForMissingStub: _i6.dummyValue<String>(
-          this,
-          Invocation.getter(#apiKey),
-        ),
-      ) as String);
-
-  @override
   int get listenersCount => (super.noSuchMethod(
         Invocation.getter(#listenersCount),
         returnValue: 0,

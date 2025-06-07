@@ -21,8 +21,8 @@ class EnvironmentService with ListenableServiceMixin {
   bool get isDevelopment => _currentEnvironment == Environment.development;
   bool get isProduction => _currentEnvironment == Environment.production;
 
-  String get apiUrl => Env.apiUrl;
-  String get apiKey => Env.apiKey;
+  // String get apiUrl => Env.apiUrl;
+  // String get apiKey => Env.apiKey;
 
   // This would handle switching environments at runtime if needed
   // Note: With envied, full switching would require regenerating code
