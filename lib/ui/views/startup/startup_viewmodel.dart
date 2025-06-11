@@ -10,8 +10,8 @@ class StartupViewModel extends CommonBaseViewmodel {
 
     // This is where you can make decisions on where your app should navigate when
     // you have custom startup logic
-    test();
-    _navigationService.replaceWithExamplePageView();
+    // test();
+    _navigationService.replaceWithHomeView();
   }
 
   void test() {

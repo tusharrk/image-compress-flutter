@@ -4,7 +4,7 @@ import 'package:flutter_boilerplate/app/app.locator.dart';
 import '../helpers/test_helpers.dart';
 
 void main() {
-  group('HomeViewModel Tests -', () {
+  group('ListPhotosViewModel Tests -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
   });

@@ -7,12 +7,16 @@ import 'package:flutter_boilerplate/ui/views/example_page/example_page_view.dart
 import 'package:flutter_boilerplate/ui/views/startup/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:flutter_boilerplate/ui/views/home/home_view.dart';
+import 'package:flutter_boilerplate/ui/views/list_photos/list_photos_view.dart';
 // @stacked-import
 
 @StackedApp(
   routes: [
     MaterialRoute(page: StartupView),
     MaterialRoute(page: ExamplePageView),
+    MaterialRoute(page: HomeView),
+    MaterialRoute(page: ListPhotosView),
 // @stacked-route
   ],
   dependencies: [
