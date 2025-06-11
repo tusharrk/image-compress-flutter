@@ -9,6 +9,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:flutter_boilerplate/ui/views/home/home_view.dart';
 import 'package:flutter_boilerplate/ui/views/list_photos/list_photos_view.dart';
+import 'package:flutter_boilerplate/services/gallery_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -26,6 +27,7 @@ import 'package:flutter_boilerplate/ui/views/list_photos/list_photos_view.dart';
     LazySingleton(classType: StorageService),
     LazySingleton(classType: EnvironmentService),
     LazySingleton(classType: UserService),
+    LazySingleton(classType: GalleryService),
 // @stacked-service
   ],
   bottomsheets: [

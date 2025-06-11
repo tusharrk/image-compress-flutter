@@ -12,6 +12,7 @@ import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
 import '../services/environment_service.dart';
+import '../services/gallery_service.dart';
 import '../services/storage_service.dart';
 import '../services/user_service.dart';
 
@@ -32,4 +33,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => StorageService());
   locator.registerLazySingleton(() => EnvironmentService());
   locator.registerLazySingleton(() => UserService());
+  locator.registerLazySingleton(() => GalleryService());
 }

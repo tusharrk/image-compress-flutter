@@ -5,6 +5,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:flutter_boilerplate/services/storage_service.dart';
 import 'package:flutter_boilerplate/services/environment_service.dart';
 import 'package:flutter_boilerplate/services/user_service.dart';
+import 'package:flutter_boilerplate/services/gallery_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -18,6 +19,7 @@ import 'test_helpers.mocks.dart';
     MockSpec<StorageService>(onMissingStub: OnMissingStub.returnDefault),
     MockSpec<EnvironmentService>(onMissingStub: OnMissingStub.returnDefault),
     MockSpec<UserService>(onMissingStub: OnMissingStub.returnDefault),
+    MockSpec<GalleryService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
   ],
 )
@@ -28,6 +30,7 @@ void registerServices() {
   getAndRegisterStorageService();
   getAndRegisterEnvironmentService();
   getAndRegisterUserService();
+  getAndRegisterGalleryService();
 // @stacked-mock-register
 }
 
@@ -103,6 +106,13 @@ MockUserService getAndRegisterUserService() {
   _removeRegistrationIfExists<UserService>();
   final service = MockUserService();
   locator.registerSingleton<UserService>(service);
+  return service;
+}
+
+MockGalleryService getAndRegisterGalleryService() {
+  _removeRegistrationIfExists<GalleryService>();
+  final service = MockGalleryService();
+  locator.registerSingleton<GalleryService>(service);
   return service;
 }
 // @stacked-mock-create

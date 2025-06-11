@@ -14,6 +14,7 @@ import 'package:flutter_boilerplate/core/network/deo_client.dart' as _i3;
 import 'package:flutter_boilerplate/core/network/models/api_response.dart'
     as _i4;
 import 'package:flutter_boilerplate/data/model/Person.dart' as _i10;
+import 'package:flutter_boilerplate/services/gallery_service.dart' as _i12;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
 import 'package:stacked_services/stacked_services.dart' as _i5;
@@ -1266,3 +1267,8 @@ class MockUserService extends _i1.Mock implements _i2.UserService {
         returnValueForMissingStub: null,
       );
 }
+
+/// A class which mocks [GalleryService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGalleryService extends _i1.Mock implements _i12.GalleryService {}
