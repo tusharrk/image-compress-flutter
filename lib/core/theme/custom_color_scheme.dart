@@ -5,30 +5,25 @@ import 'package:flutter_boilerplate/core/constants/app_colors.dart';
 final class CustomColorScheme {
   CustomColorScheme._();
 
-  /// Light color scheme set
+  /// Light color scheme
   static const lightColorScheme = ColorScheme(
     brightness: Brightness.light,
-    // Rich Blue as primary
-    primary: AppColors.primimary,
+    primary: AppColors.primary,
     onPrimary: AppColors.white,
-    primaryContainer: AppColors.lightBlue,
+    primaryContainer: AppColors.primaryLight,
     onPrimaryContainer: AppColors.black,
-    // Vibrant Blue as secondary
-    secondary: AppColors.vibrantBlue,
+    secondary: AppColors.secondary,
     onSecondary: AppColors.white,
-    secondaryContainer: AppColors.lightBlue,
+    secondaryContainer: AppColors.primaryLight,
     onSecondaryContainer: AppColors.black,
-    // Deep Blue as tertiary
-    tertiary: AppColors.secondary,
+    tertiary: AppColors.tertiary,
     onTertiary: AppColors.white,
-    tertiaryContainer: AppColors.primimary,
+    tertiaryContainer: AppColors.primary,
     onTertiaryContainer: AppColors.white,
-    // Error colors
     error: AppColors.error,
     onError: AppColors.white,
     errorContainer: AppColors.errorLight,
     onErrorContainer: AppColors.errorDark,
-    // Background and surface colors
     outline: AppColors.darkGray,
     surface: AppColors.offWhite,
     onSurface: AppColors.black,
@@ -36,37 +31,32 @@ final class CustomColorScheme {
     onSurfaceVariant: AppColors.darkGray,
     inverseSurface: AppColors.black,
     onInverseSurface: AppColors.white,
-    inversePrimary: AppColors.lightBlue,
+    inversePrimary: AppColors.primaryLight,
     shadow: AppColors.shadow,
-    surfaceTint: AppColors.primimary,
+    surfaceTint: AppColors.primary,
     outlineVariant: AppColors.lightGray,
     scrim: AppColors.scrim,
   );
 
-  /// Dark color scheme set
+  /// Dark color scheme
   static const darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
-    // Light Blue as primary for dark theme
-    primary: AppColors.lightBlue,
+    primary: AppColors.primary,
     onPrimary: AppColors.white,
-    primaryContainer: AppColors.vibrantBlue,
+    primaryContainer: AppColors.secondary,
     onPrimaryContainer: AppColors.white,
-    // Rich Blue as secondary
-    secondary: AppColors.primimary,
+    secondary: AppColors.primary,
     onSecondary: AppColors.white,
-    secondaryContainer: AppColors.secondary,
+    secondaryContainer: AppColors.tertiary,
     onSecondaryContainer: AppColors.white,
-    // Vibrant Blue as tertiary
-    tertiary: AppColors.vibrantBlue,
+    tertiary: AppColors.secondary,
     onTertiary: AppColors.white,
-    tertiaryContainer: AppColors.secondary,
+    tertiaryContainer: AppColors.primaryDark,
     onTertiaryContainer: AppColors.white,
-    // Error colors
     error: AppColors.errorLight,
     onError: AppColors.errorDark,
     errorContainer: AppColors.error,
     onErrorContainer: AppColors.white,
-    // Background and surface colors
     outline: AppColors.lightGray,
     surface: AppColors.black,
     onSurface: AppColors.white,
@@ -74,9 +64,9 @@ final class CustomColorScheme {
     onSurfaceVariant: AppColors.lightGray,
     inverseSurface: AppColors.white,
     onInverseSurface: AppColors.black,
-    inversePrimary: AppColors.primimary,
+    inversePrimary: AppColors.primary,
     shadow: AppColors.shadow,
-    surfaceTint: AppColors.lightBlue,
+    surfaceTint: AppColors.primaryLight,
     outlineVariant: AppColors.mediumGray,
     scrim: AppColors.scrim,
   );

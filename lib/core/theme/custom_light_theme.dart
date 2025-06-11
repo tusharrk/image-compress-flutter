@@ -14,6 +14,7 @@ final class CustomLightTheme implements CustomTheme {
         appBarTheme: appBarTheme,
         cardTheme: cardThemeData,
         elevatedButtonTheme: elevatedButtonThemeData,
+        outlinedButtonTheme: outlinedButtonThemeData,
         textButtonTheme: textButtonThemeData,
         textTheme: textTheme,
         iconTheme: iconThemeData,
@@ -23,15 +24,19 @@ final class CustomLightTheme implements CustomTheme {
 
   @override
   FloatingActionButtonThemeData get floatingActionButtonThemeData =>
-      const FloatingActionButtonThemeData();
+      FloatingActionButtonThemeData(
+        backgroundColor: CustomColorScheme.lightColorScheme.primary,
+        foregroundColor: CustomColorScheme.lightColorScheme.onPrimary,
+      );
 
   @override
   AppBarTheme get appBarTheme => AppBarTheme(
         backgroundColor: CustomColorScheme.lightColorScheme.primary,
         elevation: 0,
         centerTitle: true,
-        iconTheme:
-            IconThemeData(color: CustomColorScheme.lightColorScheme.onPrimary),
+        iconTheme: IconThemeData(
+          color: CustomColorScheme.lightColorScheme.onPrimary,
+        ),
         titleTextStyle: TextStyle(
           color: CustomColorScheme.lightColorScheme.onPrimary,
           fontSize: 20,
@@ -40,7 +45,12 @@ final class CustomLightTheme implements CustomTheme {
       );
 
   @override
-  CardThemeData get cardThemeData => const CardThemeData();
+  CardThemeData get cardThemeData => CardThemeData(
+        color: CustomColorScheme.lightColorScheme.surface,
+        elevation: 2,
+        shadowColor: CustomColorScheme.lightColorScheme.shadow,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      );
 
   @override
   ElevatedButtonThemeData get elevatedButtonThemeData =>
@@ -48,12 +58,26 @@ final class CustomLightTheme implements CustomTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: CustomColorScheme.lightColorScheme.primary,
           foregroundColor: CustomColorScheme.lightColorScheme.onPrimary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
           textStyle: const TextStyle(fontWeight: FontWeight.w600),
         ),
       );
 
   @override
-  IconThemeData get iconThemeData => const IconThemeData();
+  OutlinedButtonThemeData get outlinedButtonThemeData =>
+      OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          foregroundColor: CustomColorScheme.lightColorScheme.primary,
+          side: BorderSide(color: CustomColorScheme.lightColorScheme.primary),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+      );
 
   @override
   TextButtonThemeData get textButtonThemeData => TextButtonThemeData(
@@ -64,37 +88,44 @@ final class CustomLightTheme implements CustomTheme {
       );
 
   @override
-  OutlinedButtonThemeData get outlinedButtonThemeData =>
-      OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          backgroundColor: CustomColorScheme.lightColorScheme.primary,
-          foregroundColor: CustomColorScheme.lightColorScheme.onPrimary,
-          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+  TextTheme get textTheme => GoogleFonts.robotoTextTheme(
+        const TextTheme(
+          titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          bodyMedium: TextStyle(fontSize: 16),
+          labelLarge: TextStyle(fontWeight: FontWeight.w600),
         ),
       );
 
   @override
-  TextTheme get textTheme => GoogleFonts.robotoTextTheme(
-        const TextTheme(
-          titleMedium: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+  IconThemeData get iconThemeData => IconThemeData(
+        color: CustomColorScheme.lightColorScheme.primary,
       );
+
   @override
   SwitchThemeData get switchThemeData => SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith(
-            (states) => states.contains(WidgetState.selected) ? null : null),
-        trackColor: WidgetStateProperty.resolveWith(
-            (states) => states.contains(WidgetState.selected) ? null : null),
-        trackOutlineWidth: const WidgetStatePropertyAll(null),
+        thumbColor: WidgetStateProperty.resolveWith((states) =>
+            states.contains(WidgetState.selected)
+                ? CustomColorScheme.lightColorScheme.primary
+                : CustomColorScheme.lightColorScheme.outline),
+        trackColor: WidgetStateProperty.resolveWith((states) =>
+            states.contains(WidgetState.selected)
+                ? CustomColorScheme.lightColorScheme.primary.withOpacity(0.5)
+                : CustomColorScheme.lightColorScheme.outlineVariant),
       );
 
   @override
   TabBarTheme get tabBarTheme => TabBarTheme(
-        labelColor: CustomColorScheme.lightColorScheme.onPrimary,
-        // indicator: const UnderlineTabIndicator(
-        //   borderSide: BorderSide(color: Colors.white, width: 2.0),
+        // TabBar background is primary blue - so texts must be light
+        labelColor: CustomColorScheme.lightColorScheme.onPrimary, // white
+        unselectedLabelColor:
+            CustomColorScheme.lightColorScheme.onPrimary.withOpacity(0.7),
+        // indicator: UnderlineTabIndicator(
+        //   borderSide: BorderSide(
+        //     color:
+        //         CustomColorScheme.lightColorScheme.onPrimary, // white underline
+        //     width: 2,
+        //   ),
         // ),
+        // Add background color for TabBar container if needed outside theme
       );
 }
