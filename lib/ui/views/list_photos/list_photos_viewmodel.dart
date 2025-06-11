@@ -7,16 +7,6 @@ import 'package:photo_manager/photo_manager.dart';
 class ListPhotosViewModel extends CommonBaseViewmodel {
   final _galleryService = locator<GalleryService>();
 
-  List<AssetEntity> get accessibleAssets => _galleryService.accessibleAssets;
-  List<AssetPathEntity> get albums => _galleryService.albums;
-  bool get hasPermission =>
-      _galleryService.permissionState == PermissionState.authorized ||
-      _galleryService.permissionState == PermissionState.limited;
-  // bool get hasPermission => true;
-
-  bool get hasFullAccess => _galleryService.hasFullAccess;
-  bool get hasLimitedAccess => _galleryService.hasLimitedAccess;
-
   Future<void> initialise() async {
     setBusy(true);
     await _galleryService.loadAccessibleContent();
@@ -32,10 +22,6 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
       await _galleryService.loadAccessibleContent();
       _showPermissionMessage();
     } else {
-      // _snackbarService.showSnackbar(
-      //   message: 'Photo access is required to use this feature',
-      //   duration: const Duration(seconds: 3),
-      // );
       logger.w(
         'Photo access is required to use this feature',
       );
@@ -43,26 +29,17 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
     setBusy(false);
   }
 
-  void _showPermissionMessage() {
-    if (hasFullAccess) {
-      // _snackbarService.showSnackbar(
-      //   message:
-      //       'Full access granted! All photos and albums are now available.',
-      //   duration: const Duration(seconds: 3),
-      // );
-      logger.i(
-        'Full access granted! All photos and albums are now available.',
-      );
-    } else if (hasLimitedAccess) {
-      // _snackbarService.showSnackbar(
-      //   message: 'Limited access granted. You can add more photos anytime.',
-      //   duration: const Duration(seconds: 3),
-      // );
-      logger.i(
-        'Limited access granted. You can add more photos anytime.',
-      );
-    }
-  }
+  bool get hasPermission =>
+      _galleryService.permissionState == PermissionState.authorized ||
+      _galleryService.permissionState == PermissionState.limited;
+
+  bool get hasFullAccess => _galleryService.hasFullAccess;
+
+  bool get hasLimitedAccess => _galleryService.hasLimitedAccess;
+
+  List<AssetPathEntity> get albums => _galleryService.albums;
+
+  List<AssetEntity> get accessibleAssets => _galleryService.accessibleAssets;
 
   Future<void> addMorePhotos() async {
     if (!hasPermission) {
@@ -121,6 +98,27 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
     logger.i(
       'Showing ${albumAssets.length} photos from album: ${album.name}',
     );
+  }
+
+  void _showPermissionMessage() {
+    if (hasFullAccess) {
+      // _snackbarService.showSnackbar(
+      //   message:
+      //       'Full access granted! All photos and albums are now available.',
+      //   duration: const Duration(seconds: 3),
+      // );
+      logger.i(
+        'Full access granted! All photos and albums are now available.',
+      );
+    } else if (hasLimitedAccess) {
+      // _snackbarService.showSnackbar(
+      //   message: 'Limited access granted. You can add more photos anytime.',
+      //   duration: const Duration(seconds: 3),
+      // );
+      logger.i(
+        'Limited access granted. You can add more photos anytime.',
+      );
+    }
   }
 
   void viewPhoto(AssetEntity asset) {

@@ -26,10 +26,11 @@ class GalleryService {
     if (_permissionState == PermissionState.authorized) {
       // Full access - load all photos and albums
       await _loadAlbums();
-      await _loadAllPhotos();
+      // await _loadAllPhotos();
     } else if (_permissionState == PermissionState.limited) {
-      // Limited access - load only accessible photos
-      await _loadAccessiblePhotos();
+      // Limited access - load albums and accessible photos
+      await _loadAlbums(); // Load albums even in limited access
+      // await _loadAccessiblePhotos();
     }
   }
 
