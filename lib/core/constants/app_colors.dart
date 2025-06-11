@@ -12,7 +12,7 @@ class AppColors {
   AppColors._(); // Private constructor to prevent instantiation
 
   // Primary palette colors
-  static const black = Color(0xFF111111);
+  static const black = Color(0xFF1C1C1C);
   static const darkGray = Color(0xFF2F2F2F);
   static const offWhite = Color(0xFFF6F6F6);
   static const white = Color(0xFFFFFFFF);
@@ -23,7 +23,7 @@ class AppColors {
   static const vibrantBlue =
       Color(0xFF1E1E1E); // Vibrant blue with teal hints(old:- 0xFF1E56A0)
   static const lightBlue =
-      Color(0xFF154FC4); // Soft light blue (old:- 0xFF1E56A0)
+      Color(0xFF4E54F1); // Soft light blue (old:- 0xFF1E56A0)
 
   // Variations for UI elements
   static const mediumGray = Color(0xFF636363);
@@ -46,3 +46,7 @@ class AppColors {
 //#1E1E1E greyish color
 
 //#C4F35F yellow green to test
+
+//#2D3A6E purple blue
+
+//#4E54F1 new blue modern fresh
