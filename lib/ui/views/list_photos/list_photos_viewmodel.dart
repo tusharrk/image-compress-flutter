@@ -16,6 +16,12 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
   bool get hasMore => _hasMore;
   late AssetPathEntity _currentAlbum;
 
+  // Selection logic
+  final Set<AssetEntity> _selectedPhotos = {};
+  Set<AssetEntity> get selectedPhotos => _selectedPhotos;
+  int get selectedCount => _selectedPhotos.length;
+  bool isSelected(AssetEntity photo) => _selectedPhotos.contains(photo);
+
   @override
   List<AssetEntity> get photos => _galleryService.accessibleAssets;
 
@@ -30,7 +36,9 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
           await _galleryService.getAssetsFromAlbum(album, page: _currentPage);
       photos.clear();
       photos.addAll(albumAssets);
-      _hasMore = albumAssets.length == 500; // If less than 500, no more pages
+      _hasMore = albumAssets.length ==
+          _galleryService
+              .pageSize; // If less than  _galleryService.pageSize, no more pages
       notifyListeners();
     } catch (e) {
       logger.e('Error initializing gallery: $e');
@@ -49,7 +57,7 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
           page: _currentPage);
       if (newAssets.isNotEmpty) {
         photos.addAll(newAssets);
-        _hasMore = newAssets.length == 500;
+        _hasMore = newAssets.length == _galleryService.pageSize;
         notifyListeners();
       } else {
         _hasMore = false;
@@ -62,9 +70,22 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
     }
   }
 
+  void toggleSelection(AssetEntity photo) {
+    if (_selectedPhotos.contains(photo)) {
+      _selectedPhotos.remove(photo);
+    } else {
+      _selectedPhotos.add(photo);
+    }
+    notifyListeners();
+  }
+
+  void clearSelection() {
+    _selectedPhotos.clear();
+    notifyListeners();
+  }
+
   void selectPhoto(AssetEntity photo) {
-    // Handle photo selection logic here
-    // For example, navigate to a detail view or perform an action
+    // Deprecated: use toggleSelection instead
     logger.i('Selected photo: ${photo.title}');
   }
 

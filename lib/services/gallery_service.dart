@@ -3,6 +3,7 @@ import 'package:photo_manager/photo_manager.dart';
 class GalleryService {
   List<AssetEntity> _accessibleAssets = [];
   List<AssetPathEntity> _albums = [];
+  int pageSize = 200;
   PermissionState _permissionState = PermissionState.notDetermined;
 
   // Getters
@@ -120,7 +121,7 @@ class GalleryService {
   Future<List<AssetEntity>> getAssetsFromAlbum(
     AssetPathEntity album, {
     int page = 0,
-    int size = 500,
+    int size = 200,
   }) async {
     try {
       return await album.getAssetListPaged(page: page, size: size);
@@ -133,7 +134,7 @@ class GalleryService {
   /// Load more assets from a specific album (for pagination)
   Future<List<AssetEntity>> loadMoreAssetsFromAlbum(
       AssetPathEntity album, int currentCount,
-      {int pageSize = 500}) async {
+      {int pageSize = 200}) async {
     try {
       final page = (currentCount / pageSize).floor();
       return await album.getAssetListPaged(page: page, size: pageSize);

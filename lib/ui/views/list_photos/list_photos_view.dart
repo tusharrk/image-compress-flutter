@@ -18,9 +18,28 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
     Widget? child,
   ) {
     return AppScaffold(
-      appBar: const AppAppBar(
-        title: "Select Images",
+      appBar: AppAppBar(
+        title: viewModel.selectedCount > 0
+            ? "Selected (${viewModel.selectedCount})"
+            : "Select Images",
         showBack: true,
+        actions: [
+          TextButton(
+            onPressed: viewModel.selectedCount > 0
+                ? () {
+                    // TODO: Handle next action
+                  }
+                : null,
+            child: Text(
+              "Next",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: viewModel.selectedCount > 0
+                      ? Colors.white
+                      : Colors.white.withOpacity(0.30)),
+            ),
+          ),
+        ],
       ),
       body: _PaginatedPhotoGrid(viewModel: viewModel),
     );
@@ -105,49 +124,87 @@ class _PaginatedPhotoGridState extends State<_PaginatedPhotoGrid> {
                 );
               }
               final photo = viewModel.photos[index];
+              final isSelected = viewModel.isSelected(photo);
               return GestureDetector(
-                onTap: () => viewModel.selectPhoto(photo),
+                onTap: () => setState(() => viewModel.toggleSelection(photo)),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final imageSize = constraints.maxWidth * 0.85;
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
+                    return Stack(
                       children: [
-                        Container(
-                          width: imageSize,
-                          height: imageSize,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: AssetEntityImage(
-                              photo,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                              isOriginal: false,
-                              thumbnailSize: const ThumbnailSize.square(200),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Expanded(
-                          child: FutureBuilder<String>(
-                            future: viewModel.getFileSize(photo),
-                            builder: (context, snapshot) {
-                              return Text(
-                                snapshot.data ?? '',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Stack(
+                              children: [
+                                Container(
+                                  width: imageSize,
+                                  height: imageSize,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: AssetEntityImage(
+                                      photo,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      isOriginal: false,
+                                      thumbnailSize:
+                                          const ThumbnailSize.square(200),
+                                    ),
+                                  ),
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                              );
-                            },
-                          ),
+                                if (isSelected)
+                                  Positioned(
+                                    bottom: 6,
+                                    right: 6,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.15),
+                                            blurRadius: 2,
+                                          ),
+                                        ],
+                                      ),
+                                      padding: const EdgeInsets.all(1),
+                                      child: const CircleAvatar(
+                                        radius: 10,
+                                        backgroundColor: Colors.blue,
+                                        child: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            Expanded(
+                              child: FutureBuilder<String>(
+                                future: viewModel.getFileSize(photo),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                    snapshot.data ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     );
