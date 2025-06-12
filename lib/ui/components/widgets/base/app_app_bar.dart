@@ -8,6 +8,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBackPressed;
   final List<Widget>? actions;
   final Color? backgroundColor;
+  final Color? foregroundColor;
   final double? elevation;
   final PreferredSizeWidget? bottom;
 
@@ -20,6 +21,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackPressed,
     this.actions,
     this.backgroundColor,
+    this.foregroundColor,
     this.elevation,
     this.bottom,
   });
@@ -32,7 +34,15 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: titleWidget ?? (title != null ? Text(title!) : null),
+      title: titleWidget ??
+          (title != null
+              ? Text(
+                  title!,
+                  style: TextStyle(
+                      color: foregroundColor ??
+                          Theme.of(context).colorScheme.onSurface),
+                )
+              : null),
       centerTitle: centerTitle,
       leading: showBack
           ? IconButton(
@@ -42,7 +52,8 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.primary,
-      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      foregroundColor:
+          foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
       actions: actions,
       elevation: elevation ?? 0,
       bottom: bottom,
