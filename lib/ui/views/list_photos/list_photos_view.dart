@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
+import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:stacked/stacked.dart';
@@ -6,7 +8,8 @@ import 'package:stacked/stacked.dart';
 import 'list_photos_viewmodel.dart';
 
 class ListPhotosView extends StackedView<ListPhotosViewModel> {
-  const ListPhotosView({Key? key}) : super(key: key);
+  final AssetPathEntity album;
+  const ListPhotosView({Key? key, required this.album}) : super(key: key);
 
   @override
   Widget builder(
@@ -14,19 +17,9 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
     ListPhotosViewModel viewModel,
     Widget? child,
   ) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Photo Albums"),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        actions: [
-          if (viewModel.isAdBtnVisible())
-            IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: viewModel.addMorePhotos,
-              tooltip: 'Add photos',
-            ),
-        ],
+    return AppScaffold(
+      appBar: const AppAppBar(
+        title: "Select Images",
       ),
       body: _buildBody(context, viewModel),
       // floatingActionButton: FloatingActionButton.extended(
@@ -43,22 +36,16 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
     if (viewModel.isBusy) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (!viewModel.hasPermission) {
-      return Center(
-        child: ElevatedButton(
-          onPressed: viewModel.requestPermission,
-          child: const Text('Grant Photo Access'),
-        ),
-      );
-    }
 
-    if (viewModel.albums.isEmpty) {
+    if (viewModel.photos.isEmpty) {
       return const Center(
         child: Text('No albums available.'),
       );
     }
     return GridView.builder(
       padding: const EdgeInsets.all(16),
+      cacheExtent: 1000, // Keep more items in memory
+      addAutomaticKeepAlives: true,
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 150,
         crossAxisSpacing: 8,
@@ -66,11 +53,11 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
         childAspectRatio:
             0.8, // Add this - makes items taller (width/height ratio)
       ),
-      itemCount: viewModel.albums.length,
+      itemCount: viewModel.photos.length,
       itemBuilder: (context, index) {
-        final album = viewModel.albums[index];
+        final photo = viewModel.photos[index];
         return GestureDetector(
-          onTap: () => viewModel.showAlbumPhotos(album),
+          onTap: () => viewModel.selectPhoto(photo),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final imageSize =
@@ -86,63 +73,36 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: FutureBuilder<List<AssetEntity>>(
-                        future: album.getAssetListPaged(page: 0, size: 1),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                            return AssetEntityImage(
-                              snapshot.data!.first,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            );
-                          } else {
-                            return Container(
-                              color: Colors.grey[300],
-                              child: const Icon(
-                                Icons.photo_album,
-                                size: 50,
-                                color: Colors.grey,
-                              ),
-                            );
-                          }
-                        },
+                      child: AssetEntityImage(
+                        photo,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        isOriginal:
+                            false, // Use thumbnail for better performance
+                        thumbnailSize: const ThumbnailSize.square(200),
                       ),
                     ),
                   ),
                   const SizedBox(height: 6),
                   Expanded(
-                    // Allow text to take remaining space
-                    child: Text(
-                      album.name,
-                      style: const TextStyle(
-                        fontSize: 12, // Slightly smaller font
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 2, // Allow 2 lines for longer names
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  // Expanded(
-                  //   child: FutureBuilder<int>(
-                  //     future: album.assetCountAsync,
-                  //     builder: (context, snapshot) {
-                  //       if (snapshot.connectionState == ConnectionState.done &&
-                  //           snapshot.hasData) {
-                  //         return Text(
-                  //           '${snapshot.data} photos',
-                  //           style: const TextStyle(
-                  //             fontSize: 10, // Smaller font for count
-                  //             color: Colors.black54,
-                  //           ),
-                  //         );
-                  //       } else {
-                  //         return const SizedBox.shrink();
-                  //       }
-                  //     },
-                  //   ),
-                  // ),
+                      // Allow text to take remaining space
+
+                      child: FutureBuilder<String>(
+                    future: viewModel.getFileSize(photo),
+                    builder: (context, snapshot) {
+                      return Text(
+                        snapshot.data ?? '',
+                        style: const TextStyle(
+                          fontSize: 12, // Slightly smaller font
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2, // Allow 2 lines for longer names
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      );
+                    },
+                  )),
                 ],
               );
             },
@@ -160,5 +120,5 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
 
   @override
   void onViewModelReady(ListPhotosViewModel viewModel) =>
-      viewModel.initialise();
+      viewModel.initialise(album);
 }

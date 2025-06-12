@@ -10,6 +10,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:flutter_boilerplate/ui/views/home/home_view.dart';
 import 'package:flutter_boilerplate/ui/views/list_photos/list_photos_view.dart';
 import 'package:flutter_boilerplate/services/gallery_service.dart';
+import 'package:flutter_boilerplate/ui/views/list_albums/list_albums_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -18,6 +19,7 @@ import 'package:flutter_boilerplate/services/gallery_service.dart';
     MaterialRoute(page: ExamplePageView),
     MaterialRoute(page: HomeView),
     MaterialRoute(page: ListPhotosView),
+    MaterialRoute(page: ListAlbumsView),
 // @stacked-route
   ],
   dependencies: [

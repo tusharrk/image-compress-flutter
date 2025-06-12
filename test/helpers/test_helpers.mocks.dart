@@ -17,6 +17,7 @@ import 'package:flutter_boilerplate/data/model/Person.dart' as _i10;
 import 'package:flutter_boilerplate/services/gallery_service.dart' as _i12;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:photo_manager/photo_manager.dart' as _i13;
 import 'package:stacked_services/stacked_services.dart' as _i5;
 
 // ignore_for_file: type=lint
@@ -1271,4 +1272,197 @@ class MockUserService extends _i1.Mock implements _i2.UserService {
 /// A class which mocks [GalleryService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGalleryService extends _i1.Mock implements _i12.GalleryService {}
+class MockGalleryService extends _i1.Mock implements _i12.GalleryService {
+  @override
+  List<_i13.AssetEntity> get accessibleAssets => (super.noSuchMethod(
+        Invocation.getter(#accessibleAssets),
+        returnValue: <_i13.AssetEntity>[],
+        returnValueForMissingStub: <_i13.AssetEntity>[],
+      ) as List<_i13.AssetEntity>);
+
+  @override
+  List<_i13.AssetPathEntity> get albums => (super.noSuchMethod(
+        Invocation.getter(#albums),
+        returnValue: <_i13.AssetPathEntity>[],
+        returnValueForMissingStub: <_i13.AssetPathEntity>[],
+      ) as List<_i13.AssetPathEntity>);
+
+  @override
+  _i13.PermissionState get permissionState => (super.noSuchMethod(
+        Invocation.getter(#permissionState),
+        returnValue: _i13.PermissionState.notDetermined,
+        returnValueForMissingStub: _i13.PermissionState.notDetermined,
+      ) as _i13.PermissionState);
+
+  @override
+  bool get hasFullAccess => (super.noSuchMethod(
+        Invocation.getter(#hasFullAccess),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool get hasLimitedAccess => (super.noSuchMethod(
+        Invocation.getter(#hasLimitedAccess),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool get hasAnyAccess => (super.noSuchMethod(
+        Invocation.getter(#hasAnyAccess),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  String get permissionStatusMessage => (super.noSuchMethod(
+        Invocation.getter(#permissionStatusMessage),
+        returnValue: _i6.dummyValue<String>(
+          this,
+          Invocation.getter(#permissionStatusMessage),
+        ),
+        returnValueForMissingStub: _i6.dummyValue<String>(
+          this,
+          Invocation.getter(#permissionStatusMessage),
+        ),
+      ) as String);
+
+  @override
+  bool get hasEffectiveFullAccess => (super.noSuchMethod(
+        Invocation.getter(#hasEffectiveFullAccess),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  _i8.Future<_i13.PermissionState> requestPermission() => (super.noSuchMethod(
+        Invocation.method(
+          #requestPermission,
+          [],
+        ),
+        returnValue: _i8.Future<_i13.PermissionState>.value(
+            _i13.PermissionState.notDetermined),
+        returnValueForMissingStub: _i8.Future<_i13.PermissionState>.value(
+            _i13.PermissionState.notDetermined),
+      ) as _i8.Future<_i13.PermissionState>);
+
+  @override
+  _i8.Future<void> loadAccessibleContent() => (super.noSuchMethod(
+        Invocation.method(
+          #loadAccessibleContent,
+          [],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<List<_i13.AssetEntity>> getAssetsFromAlbum(
+    _i13.AssetPathEntity? album, {
+    int? page = 0,
+    int? size = 500,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAssetsFromAlbum,
+          [album],
+          {
+            #page: page,
+            #size: size,
+          },
+        ),
+        returnValue:
+            _i8.Future<List<_i13.AssetEntity>>.value(<_i13.AssetEntity>[]),
+        returnValueForMissingStub:
+            _i8.Future<List<_i13.AssetEntity>>.value(<_i13.AssetEntity>[]),
+      ) as _i8.Future<List<_i13.AssetEntity>>);
+
+  @override
+  _i8.Future<List<_i13.AssetEntity>> loadMoreAssetsFromAlbum(
+    _i13.AssetPathEntity? album,
+    int? currentCount, {
+    int? pageSize = 500,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #loadMoreAssetsFromAlbum,
+          [
+            album,
+            currentCount,
+          ],
+          {#pageSize: pageSize},
+        ),
+        returnValue:
+            _i8.Future<List<_i13.AssetEntity>>.value(<_i13.AssetEntity>[]),
+        returnValueForMissingStub:
+            _i8.Future<List<_i13.AssetEntity>>.value(<_i13.AssetEntity>[]),
+      ) as _i8.Future<List<_i13.AssetEntity>>);
+
+  @override
+  _i8.Future<bool> requestMorePhotos() => (super.noSuchMethod(
+        Invocation.method(
+          #requestMorePhotos,
+          [],
+        ),
+        returnValue: _i8.Future<bool>.value(false),
+        returnValueForMissingStub: _i8.Future<bool>.value(false),
+      ) as _i8.Future<bool>);
+
+  @override
+  _i8.Future<void> openAppSettings() => (super.noSuchMethod(
+        Invocation.method(
+          #openAppSettings,
+          [],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<void> refresh() => (super.noSuchMethod(
+        Invocation.method(
+          #refresh,
+          [],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<int> getAlbumAssetCount(_i13.AssetPathEntity? album) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAlbumAssetCount,
+          [album],
+        ),
+        returnValue: _i8.Future<int>.value(0),
+        returnValueForMissingStub: _i8.Future<int>.value(0),
+      ) as _i8.Future<int>);
+
+  @override
+  _i8.Future<bool> hasMoreAssets(
+    _i13.AssetPathEntity? album,
+    int? currentCount,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #hasMoreAssets,
+          [
+            album,
+            currentCount,
+          ],
+        ),
+        returnValue: _i8.Future<bool>.value(false),
+        returnValueForMissingStub: _i8.Future<bool>.value(false),
+      ) as _i8.Future<bool>);
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
