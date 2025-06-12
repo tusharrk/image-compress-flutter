@@ -19,6 +19,7 @@ class ListAlbumsView extends StackedView<ListAlbumsViewModel> {
     return AppScaffold(
       appBar: AppAppBar(
         title: "Photo Albums",
+        showBack: true,
         actions: [
           if (viewModel.isAdBtnVisible())
             IconButton(

@@ -20,6 +20,7 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
     return AppScaffold(
       appBar: const AppAppBar(
         title: "Select Images",
+        showBack: true,
       ),
       body: _buildBody(context, viewModel),
       // floatingActionButton: FloatingActionButton.extended(
