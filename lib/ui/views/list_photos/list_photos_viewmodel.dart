@@ -24,8 +24,12 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
 
   List<AssetEntity> photos = [];
 
+  int maxNumberOfAllowedSelectedPhotos = 0;
+
   Future<void> initialise(AssetPathEntity album) async {
     setBusy(true);
+    maxNumberOfAllowedSelectedPhotos =
+        maxNumberOfSelectedPhotos(); // Set the limit based on user type
     _currentAlbum = album;
     _currentPage = 0;
     _hasMore = true;
@@ -73,7 +77,14 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
     if (_selectedPhotos.contains(photo)) {
       _selectedPhotos.remove(photo);
     } else {
-      _selectedPhotos.add(photo);
+      if (_selectedPhotos.length >= maxNumberOfAllowedSelectedPhotos) {
+        logger.w(
+            'Maximum selection limit reached: ${maxNumberOfSelectedPhotos()}');
+        //open pro user dialog
+        return; // Optionally show a message to the user
+      } else {
+        _selectedPhotos.add(photo);
+      }
     }
     notifyListeners();
   }
@@ -102,5 +113,9 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
         .floor(); // bytes must be converted to double implicitly
     final size = bytes / pow(1024, i);
     return '${size.toStringAsFixed(decimals)} ${suffixes[i]}';
+  }
+
+  int maxNumberOfSelectedPhotos() {
+    return isProUser() ? 10000 : 3; // Example limit, adjust based on your logic
   }
 }

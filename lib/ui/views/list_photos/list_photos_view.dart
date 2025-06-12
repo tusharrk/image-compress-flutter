@@ -126,7 +126,7 @@ class _PaginatedPhotoGridState extends State<_PaginatedPhotoGrid> {
               final photo = viewModel.photos[index];
               final isSelected = viewModel.isSelected(photo);
               return GestureDetector(
-                onTap: () => setState(() => viewModel.toggleSelection(photo)),
+                onTap: () => viewModel.toggleSelection(photo),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final imageSize = constraints.maxWidth * 0.85;

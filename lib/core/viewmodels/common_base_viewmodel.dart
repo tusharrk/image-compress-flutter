@@ -27,4 +27,24 @@ class CommonBaseViewmodel extends BaseViewModel {
   //       : Environment.development);
   //   notifyListeners();
   // }
+
+  bool isProUser() {
+    if (storageService.read<bool>("isProUser") == true) {
+      logger.i('User is a Pro user');
+      return true;
+    } else {
+      logger.i('User is not a Pro user');
+      return false;
+    }
+  }
+
+  void setProUser(bool isPro) {
+    storageService.write("isProUser", isPro);
+    logger.i('Set Pro user status to: $isPro');
+  }
+
+  void clearProUser() {
+    storageService.remove("isProUser");
+    logger.i('Cleared Pro user status');
+  }
 }

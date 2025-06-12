@@ -218,13 +218,13 @@ class ListAlbumsViewModel extends CommonBaseViewmodel {
     logger.w('Photo access denied. Please enable in settings.');
   }
 
-  void _showEmptyAlbumMessage(String albumName) {
-    // snackbarService.showSnackbar(
-    //   message: 'This is a simple message',
-    //   duration: const Duration(seconds: 3),
-    // );
-    logger.w('Album "$albumName" is empty');
-  }
+  // void _showEmptyAlbumMessage(String albumName) {
+  //   // snackbarService.showSnackbar(
+  //   //   message: 'This is a simple message',
+  //   //   duration: const Duration(seconds: 3),
+  //   // );
+  //   logger.w('Album "$albumName" is empty');
+  // }
 
   void _showErrorMessage(String message) {
     // _snackbarService.showSnackbar(

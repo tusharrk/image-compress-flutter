@@ -10,11 +10,12 @@ class StartupViewModel extends CommonBaseViewmodel {
 
     // This is where you can make decisions on where your app should navigate when
     // you have custom startup logic
-    // test();
+    test();
     _navigationService.replaceWithListAlbumsView();
   }
 
   void test() {
     storageService.write('testKey', "test Value");
+    setProUser(false);
   }
 }
