@@ -9,6 +9,7 @@ class CommonBaseViewmodel extends BaseViewModel {
   final environmentService = locator<EnvironmentService>();
   final dialogService = locator<DialogService>();
   final bottomSheetService = locator<BottomSheetService>();
+  final snackbarService = locator<SnackbarService>();
 
   Environment get currentEnvironment => environmentService.currentEnvironment;
   late final Logger logger;

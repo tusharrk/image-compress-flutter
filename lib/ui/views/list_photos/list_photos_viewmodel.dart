@@ -22,8 +22,7 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
   int get selectedCount => _selectedPhotos.length;
   bool isSelected(AssetEntity photo) => _selectedPhotos.contains(photo);
 
-  @override
-  List<AssetEntity> get photos => _galleryService.accessibleAssets;
+  List<AssetEntity> photos = [];
 
   Future<void> initialise(AssetPathEntity album) async {
     setBusy(true);

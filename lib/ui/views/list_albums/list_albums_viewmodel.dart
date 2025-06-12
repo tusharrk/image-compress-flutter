@@ -219,9 +219,9 @@ class ListAlbumsViewModel extends CommonBaseViewmodel {
   }
 
   void _showEmptyAlbumMessage(String albumName) {
-    // _snackbarService.showSnackbar(
-    //   message: 'Album "$albumName" is empty',
-    //   duration: const Duration(seconds: 2),
+    // snackbarService.showSnackbar(
+    //   message: 'This is a simple message',
+    //   duration: const Duration(seconds: 3),
     // );
     logger.w('Album "$albumName" is empty');
   }

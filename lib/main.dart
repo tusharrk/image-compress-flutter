@@ -14,10 +14,30 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await setupLocator();
+  setupServices();
+  setupSnackbarUi();
   setupDialogUi();
   setupBottomSheetUi();
   runApp(AppLocalization(child: const MainApp()));
   //runApp(const MainApp());
+}
+
+void setupServices() {
+  locator.registerLazySingleton(() => SnackbarService());
+}
+
+void setupSnackbarUi() {
+  final service = locator<SnackbarService>();
+
+  // Registers a config to be used when calling showSnackbar
+  service.registerSnackbarConfig(SnackbarConfig(
+    textColor: Colors.white,
+    mainButtonTextColor: Colors.black,
+    snackPosition: SnackPosition.BOTTOM,
+    animationDuration: const Duration(milliseconds: 200),
+    barBlur: 1,
+    snackStyle: SnackStyle.FLOATING,
+  ));
 }
 
 class MainApp extends StatelessWidget {
