@@ -9,21 +9,56 @@ import 'package:photo_manager/photo_manager.dart';
 class ListPhotosViewModel extends CommonBaseViewmodel {
   final _galleryService = locator<GalleryService>();
 
+  int _currentPage = 0;
+  bool _isLoadingMore = false;
+  bool _hasMore = true;
+  bool get isLoadingMore => _isLoadingMore;
+  bool get hasMore => _hasMore;
+  late AssetPathEntity _currentAlbum;
+
+  @override
   List<AssetEntity> get photos => _galleryService.accessibleAssets;
 
   Future<void> initialise(AssetPathEntity album) async {
     setBusy(true);
+    _currentAlbum = album;
+    _currentPage = 0;
+    _hasMore = true;
     try {
       await _galleryService.loadAccessibleContent();
-      final albumAssets = await _galleryService.getAssetsFromAlbum(album);
+      final albumAssets =
+          await _galleryService.getAssetsFromAlbum(album, page: _currentPage);
       photos.clear();
       photos.addAll(albumAssets);
+      _hasMore = albumAssets.length == 500; // If less than 500, no more pages
       notifyListeners();
-      // _showPermissionMessage();
     } catch (e) {
       logger.e('Error initializing gallery: $e');
     } finally {
       setBusy(false);
+    }
+  }
+
+  Future<void> loadMore() async {
+    if (_isLoadingMore || !_hasMore) return;
+    _isLoadingMore = true;
+    notifyListeners();
+    try {
+      _currentPage++;
+      final newAssets = await _galleryService.getAssetsFromAlbum(_currentAlbum,
+          page: _currentPage);
+      if (newAssets.isNotEmpty) {
+        photos.addAll(newAssets);
+        _hasMore = newAssets.length == 500;
+        notifyListeners();
+      } else {
+        _hasMore = false;
+      }
+    } catch (e) {
+      logger.e('Error loading more photos: $e');
+    } finally {
+      _isLoadingMore = false;
+      notifyListeners();
     }
   }
 

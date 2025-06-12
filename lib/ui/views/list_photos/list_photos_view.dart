@@ -22,94 +22,7 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
         title: "Select Images",
         showBack: true,
       ),
-      body: _buildBody(context, viewModel),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: viewModel.addMorePhotos,
-      //   icon: const Icon(Icons.add_photo_alternate),
-      //   label: const Text('Add Photos'),
-      //   backgroundColor: Colors.blue,
-      //   foregroundColor: Colors.white,
-      // ),
-    );
-  }
-
-  Widget _buildBody(BuildContext context, ListPhotosViewModel viewModel) {
-    if (viewModel.isBusy) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (viewModel.photos.isEmpty) {
-      return const Center(
-        child: Text('No albums available.'),
-      );
-    }
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      cacheExtent: 1000, // Keep more items in memory
-      addAutomaticKeepAlives: true,
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 150,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        childAspectRatio:
-            0.8, // Add this - makes items taller (width/height ratio)
-      ),
-      itemCount: viewModel.photos.length,
-      itemBuilder: (context, index) {
-        final photo = viewModel.photos[index];
-        return GestureDetector(
-          onTap: () => viewModel.selectPhoto(photo),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final imageSize =
-                  constraints.maxWidth * 0.85; // Slightly smaller image
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: imageSize,
-                    height: imageSize,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: AssetEntityImage(
-                        photo,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                        isOriginal:
-                            false, // Use thumbnail for better performance
-                        thumbnailSize: const ThumbnailSize.square(200),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Expanded(
-                      // Allow text to take remaining space
-
-                      child: FutureBuilder<String>(
-                    future: viewModel.getFileSize(photo),
-                    builder: (context, snapshot) {
-                      return Text(
-                        snapshot.data ?? '',
-                        style: const TextStyle(
-                          fontSize: 12, // Slightly smaller font
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 2, // Allow 2 lines for longer names
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                      );
-                    },
-                  )),
-                ],
-              );
-            },
-          ),
-        );
-      },
+      body: _PaginatedPhotoGrid(viewModel: viewModel),
     );
   }
 
@@ -122,4 +35,129 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
   @override
   void onViewModelReady(ListPhotosViewModel viewModel) =>
       viewModel.initialise(album);
+}
+
+// Add a new widget for paginated grid
+class _PaginatedPhotoGrid extends StatefulWidget {
+  final ListPhotosViewModel viewModel;
+  const _PaginatedPhotoGrid({required this.viewModel});
+
+  @override
+  State<_PaginatedPhotoGrid> createState() => _PaginatedPhotoGridState();
+}
+
+class _PaginatedPhotoGridState extends State<_PaginatedPhotoGrid> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
+      if (widget.viewModel.hasMore && !widget.viewModel.isLoadingMore) {
+        widget.viewModel.loadMore();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    if (viewModel.isBusy && viewModel.photos.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (viewModel.photos.isEmpty) {
+      return const Center(child: Text('No albums available.'));
+    }
+    return Column(
+      children: [
+        Expanded(
+          child: GridView.builder(
+            controller: _scrollController,
+            padding: const EdgeInsets.all(16),
+            cacheExtent: 1000,
+            addAutomaticKeepAlives: true,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 150,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              childAspectRatio: 0.8,
+            ),
+            itemCount:
+                viewModel.photos.length + (viewModel.isLoadingMore ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index == viewModel.photos.length && viewModel.isLoadingMore) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+              final photo = viewModel.photos[index];
+              return GestureDetector(
+                onTap: () => viewModel.selectPhoto(photo),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final imageSize = constraints.maxWidth * 0.85;
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: imageSize,
+                          height: imageSize,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: AssetEntityImage(
+                              photo,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                              isOriginal: false,
+                              thumbnailSize: const ThumbnailSize.square(200),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Expanded(
+                          child: FutureBuilder<String>(
+                            future: viewModel.getFileSize(photo),
+                            builder: (context, snapshot) {
+                              return Text(
+                                snapshot.data ?? '',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
 }
