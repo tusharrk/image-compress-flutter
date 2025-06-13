@@ -3,6 +3,7 @@ import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart'
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/secondary_full_width_container.dart';
 import 'package:flutter_boilerplate/ui/views/compress_image/widgets/image_list.dart';
+import 'package:flutter_boilerplate/ui/views/compress_image/widgets/stats_view.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
 
@@ -38,7 +39,14 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
                       viewModel: viewModel, photosList: photosList)
                 ],
               ),
-            )
+            ),
+            const SizedBox(height: 24),
+            StatsView(
+              totalImages: photosList.length,
+              compressedImages: 0, // Placeholder for actual count
+              totalSizeBefore: 12000000, // Placeholder for actual size in bytes
+              totalSizeAfter: 7000000, // Placeholder for actual size in bytes
+            ),
           ],
         ),
       ),
