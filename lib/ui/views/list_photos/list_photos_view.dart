@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/core/utils/asset_utils.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -27,7 +28,7 @@ class ListPhotosView extends StackedView<ListPhotosViewModel> {
           TextButton(
             onPressed: viewModel.selectedCount > 0
                 ? () {
-                    // TODO: Handle next action
+                    viewModel.navigateToCompressImage();
                   }
                 : null,
             child: Text(
@@ -189,7 +190,7 @@ class _PaginatedPhotoGridState extends State<_PaginatedPhotoGrid> {
                             const SizedBox(height: 6),
                             Expanded(
                               child: FutureBuilder<String>(
-                                future: viewModel.getFileSize(photo),
+                                future: AssetUtils().getFileSize(photo),
                                 builder: (context, snapshot) {
                                   return Text(
                                     snapshot.data ?? '',

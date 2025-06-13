@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
+import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
+import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/secondary_full_width_container.dart';
+import 'package:flutter_boilerplate/ui/views/compress_image/widgets/image_list.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
 
 import 'compress_image_viewmodel.dart';
 
 class CompressImageView extends StackedView<CompressImageViewModel> {
-  const CompressImageView({Key? key}) : super(key: key);
+  final List<AssetEntity> photosList;
+  const CompressImageView({Key? key, required this.photosList})
+      : super(key: key);
 
   @override
   Widget builder(
@@ -12,11 +19,28 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
     CompressImageViewModel viewModel,
     Widget? child,
   ) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Container(
-        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-        child: const Center(child: Text("CompressImageView")),
+    return AppScaffold(
+      appBar: const AppAppBar(
+        title: "Compression Settings",
+        showBack: true,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 24),
+            SecondaryFullWidthContainer(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  ThumbNailImageList(
+                      viewModel: viewModel, photosList: photosList)
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -26,4 +50,8 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
     BuildContext context,
   ) =>
       CompressImageViewModel();
+
+  @override
+  void onViewModelReady(CompressImageViewModel viewModel) =>
+      viewModel.initialise(photosList);
 }

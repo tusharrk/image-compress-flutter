@@ -148,8 +148,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i8.CompressImageView: (data) {
+      final args = data.getArgs<CompressImageViewArguments>(nullOk: false);
       return _i12.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i8.CompressImageView(),
+        builder: (context) =>
+            _i8.CompressImageView(key: args.key, photosList: args.photosList),
         settings: data,
       );
     },
@@ -204,6 +206,33 @@ class ListPhotosViewArguments {
   @override
   int get hashCode {
     return key.hashCode ^ album.hashCode;
+  }
+}
+
+class CompressImageViewArguments {
+  const CompressImageViewArguments({
+    this.key,
+    required this.photosList,
+  });
+
+  final _i12.Key? key;
+
+  final List<_i13.AssetEntity> photosList;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "photosList": "$photosList"}';
+  }
+
+  @override
+  bool operator ==(covariant CompressImageViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.photosList == photosList;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ photosList.hashCode;
   }
 }
 
@@ -295,14 +324,17 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToCompressImageView([
+  Future<dynamic> navigateToCompressImageView({
+    _i12.Key? key,
+    required List<_i13.AssetEntity> photosList,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.compressImageView,
+        arguments: CompressImageViewArguments(key: key, photosList: photosList),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -438,14 +470,17 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithCompressImageView([
+  Future<dynamic> replaceWithCompressImageView({
+    _i12.Key? key,
+    required List<_i13.AssetEntity> photosList,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.compressImageView,
+        arguments: CompressImageViewArguments(key: key, photosList: photosList),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

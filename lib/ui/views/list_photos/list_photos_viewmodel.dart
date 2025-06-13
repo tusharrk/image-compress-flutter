@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_boilerplate/app/app.locator.dart';
+import 'package:flutter_boilerplate/app/app.router.dart';
 import 'package:flutter_boilerplate/core/viewmodels/common_base_viewmodel.dart';
 import 'package:flutter_boilerplate/services/gallery_service.dart'
     show GalleryService;
@@ -117,5 +118,21 @@ class ListPhotosViewModel extends CommonBaseViewmodel {
 
   int maxNumberOfSelectedPhotos() {
     return isProUser() ? 10000 : 3; // Example limit, adjust based on your logic
+  }
+
+  void navigateToCompressImage() {
+    if (_selectedPhotos.isEmpty) {
+      logger.w('No photos selected for compression');
+      return; // Optionally show a message to the user
+    }
+    if (_selectedPhotos.length > maxNumberOfAllowedSelectedPhotos) {
+      logger.w(
+          'Selected photos exceed the maximum allowed limit: $maxNumberOfAllowedSelectedPhotos');
+      return; // Optionally show a message to the user
+    }
+    // Navigate to the CompressImageView with the selected photos
+    navigationService.navigateToCompressImageView(
+      photosList: _selectedPhotos.toList(),
+    );
   }
 }

@@ -16,6 +16,6 @@ class StartupViewModel extends CommonBaseViewmodel {
 
   void test() {
     storageService.write('testKey', "test Value");
-    setProUser(false);
+    setProUser(true);
   }
 }
