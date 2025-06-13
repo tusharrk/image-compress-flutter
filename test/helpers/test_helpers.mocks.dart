@@ -1274,6 +1274,22 @@ class MockUserService extends _i1.Mock implements _i2.UserService {
 /// See the documentation for Mockito's code generation for more information.
 class MockGalleryService extends _i1.Mock implements _i12.GalleryService {
   @override
+  int get pageSize => (super.noSuchMethod(
+        Invocation.getter(#pageSize),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  set pageSize(int? _pageSize) => super.noSuchMethod(
+        Invocation.setter(
+          #pageSize,
+          _pageSize,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   List<_i13.AssetEntity> get accessibleAssets => (super.noSuchMethod(
         Invocation.getter(#accessibleAssets),
         returnValue: <_i13.AssetEntity>[],
@@ -1361,7 +1377,7 @@ class MockGalleryService extends _i1.Mock implements _i12.GalleryService {
   _i8.Future<List<_i13.AssetEntity>> getAssetsFromAlbum(
     _i13.AssetPathEntity? album, {
     int? page = 0,
-    int? size = 500,
+    int? size = 200,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1382,7 +1398,7 @@ class MockGalleryService extends _i1.Mock implements _i12.GalleryService {
   _i8.Future<List<_i13.AssetEntity>> loadMoreAssetsFromAlbum(
     _i13.AssetPathEntity? album,
     int? currentCount, {
-    int? pageSize = 500,
+    int? pageSize = 200,
   }) =>
       (super.noSuchMethod(
         Invocation.method(

@@ -11,6 +11,11 @@ import 'package:flutter_boilerplate/ui/views/list_photos/list_photos_view.dart';
 import 'package:flutter_boilerplate/ui/views/startup/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:flutter_boilerplate/ui/views/settings/settings_view.dart';
+import 'package:flutter_boilerplate/ui/views/compress_image/compress_image_view.dart';
+import 'package:flutter_boilerplate/ui/views/compress_process/compress_process_view.dart';
+import 'package:flutter_boilerplate/ui/views/compress_result/compress_result_view.dart';
+import 'package:flutter_boilerplate/ui/views/paywall_subscription/paywall_subscription_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -20,6 +25,11 @@ import 'package:stacked_services/stacked_services.dart';
     MaterialRoute(page: HomeView),
     MaterialRoute(page: ListPhotosView),
     MaterialRoute(page: ListAlbumsView),
+    MaterialRoute(page: SettingsView),
+    MaterialRoute(page: CompressImageView),
+    MaterialRoute(page: CompressProcessView),
+    MaterialRoute(page: CompressResultView),
+    MaterialRoute(page: PaywallSubscriptionView),
 // @stacked-route
   ],
   dependencies: [
