@@ -41,9 +41,8 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   subtitle: "${(viewModel.compressionQuality * 100).round()}%",
                   value: viewModel.compressionQuality,
                   onChanged: viewModel.updateCompressionQuality,
-                  min: 0.1,
+                  min: 0.05,
                   max: 1.0,
-                  divisions: 9,
                 ),
                 const SettingsDivider(),
                 SettingsSegmentedTile<ImageFormat>(
