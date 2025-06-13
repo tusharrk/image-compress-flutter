@@ -14,6 +14,7 @@ import 'package:stacked_shared/stacked_shared.dart';
 import '../services/environment_service.dart';
 import '../services/gallery_service.dart';
 import '../services/storage_service.dart';
+import '../services/theme_service.dart';
 import '../services/user_service.dart';
 
 final locator = StackedLocator.instance;
@@ -34,4 +35,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => EnvironmentService());
   locator.registerLazySingleton(() => UserService());
   locator.registerLazySingleton(() => GalleryService());
+  locator.registerLazySingleton(() => ThemeService());
 }

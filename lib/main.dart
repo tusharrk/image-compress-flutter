@@ -7,6 +7,7 @@ import 'package:flutter_boilerplate/app/app.router.dart';
 import 'package:flutter_boilerplate/core/theme/custom_dark_theme.dart';
 import 'package:flutter_boilerplate/core/theme/custom_light_theme.dart';
 import 'package:flutter_boilerplate/core/translation/app_localization.dart';
+import 'package:flutter_boilerplate/services/theme_service.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -45,18 +46,24 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'app_name',
-      theme: CustomLightTheme().themeData,
-      darkTheme: CustomDarkTheme().themeData,
-      themeMode: ThemeMode.system,
-      initialRoute: Routes.startupView,
-      onGenerateRoute: StackedRouter().onGenerateRoute,
-      navigatorKey: StackedService.navigatorKey,
-      navigatorObservers: [StackedService.routeObserver],
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-    );
+    final themeService = locator<ThemeService>();
+
+    return ValueListenableBuilder(
+        valueListenable: themeService.themeModeNotifier,
+        builder: (context, ThemeMode mode, _) {
+          return GetMaterialApp(
+            title: 'app_name',
+            theme: CustomLightTheme().themeData,
+            darkTheme: CustomDarkTheme().themeData,
+            themeMode: mode,
+            initialRoute: Routes.startupView,
+            onGenerateRoute: StackedRouter().onGenerateRoute,
+            navigatorKey: StackedService.navigatorKey,
+            navigatorObservers: [StackedService.routeObserver],
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+          );
+        });
   }
 }

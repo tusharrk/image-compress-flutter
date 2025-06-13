@@ -15,6 +15,7 @@ import 'package:flutter_boilerplate/core/network/models/api_response.dart'
     as _i4;
 import 'package:flutter_boilerplate/data/model/Person.dart' as _i10;
 import 'package:flutter_boilerplate/services/gallery_service.dart' as _i12;
+import 'package:flutter_boilerplate/services/theme_service.dart' as _i14;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
 import 'package:photo_manager/photo_manager.dart' as _i13;
@@ -1482,3 +1483,8 @@ class MockGalleryService extends _i1.Mock implements _i12.GalleryService {
         returnValueForMissingStub: null,
       );
 }
+
+/// A class which mocks [ThemeService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockThemeService extends _i1.Mock implements _i14.ThemeService {}

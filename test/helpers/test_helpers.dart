@@ -6,6 +6,7 @@ import 'package:flutter_boilerplate/services/storage_service.dart';
 import 'package:flutter_boilerplate/services/environment_service.dart';
 import 'package:flutter_boilerplate/services/user_service.dart';
 import 'package:flutter_boilerplate/services/gallery_service.dart';
+import 'package:flutter_boilerplate/services/theme_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -20,6 +21,7 @@ import 'test_helpers.mocks.dart';
     MockSpec<EnvironmentService>(onMissingStub: OnMissingStub.returnDefault),
     MockSpec<UserService>(onMissingStub: OnMissingStub.returnDefault),
     MockSpec<GalleryService>(onMissingStub: OnMissingStub.returnDefault),
+    MockSpec<ThemeService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
   ],
 )
@@ -31,6 +33,7 @@ void registerServices() {
   getAndRegisterEnvironmentService();
   getAndRegisterUserService();
   getAndRegisterGalleryService();
+  getAndRegisterThemeService();
 // @stacked-mock-register
 }
 
@@ -113,6 +116,13 @@ MockGalleryService getAndRegisterGalleryService() {
   _removeRegistrationIfExists<GalleryService>();
   final service = MockGalleryService();
   locator.registerSingleton<GalleryService>(service);
+  return service;
+}
+
+MockThemeService getAndRegisterThemeService() {
+  _removeRegistrationIfExists<ThemeService>();
+  final service = MockThemeService();
+  locator.registerSingleton<ThemeService>(service);
   return service;
 }
 // @stacked-mock-create

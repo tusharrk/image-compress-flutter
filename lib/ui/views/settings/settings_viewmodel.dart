@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
+import 'package:flutter_boilerplate/services/theme_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsViewModel extends CommonBaseViewmodel {
+  // services
+  final themeService = locator<ThemeService>();
+
   // Compression Settings
   double _compressionQuality = 0.8;
   ImageFormat _defaultImageFormat = ImageFormat.jpeg;
@@ -66,6 +70,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
   void updateThemeMode(ThemeMode mode) {
     _themeMode = mode;
     _saveThemeMode(mode);
+    themeService.updateTheme(_themeMode);
     notifyListeners();
   }
 

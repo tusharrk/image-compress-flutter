@@ -16,6 +16,7 @@ import 'package:flutter_boilerplate/ui/views/compress_image/compress_image_view.
 import 'package:flutter_boilerplate/ui/views/compress_process/compress_process_view.dart';
 import 'package:flutter_boilerplate/ui/views/compress_result/compress_result_view.dart';
 import 'package:flutter_boilerplate/ui/views/paywall_subscription/paywall_subscription_view.dart';
+import 'package:flutter_boilerplate/services/theme_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -40,6 +41,7 @@ import 'package:flutter_boilerplate/ui/views/paywall_subscription/paywall_subscr
     LazySingleton(classType: EnvironmentService),
     LazySingleton(classType: UserService),
     LazySingleton(classType: GalleryService),
+    LazySingleton(classType: ThemeService),
 // @stacked-service
   ],
   bottomsheets: [
