@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
+import 'package:flutter_boilerplate/core/constants/app_strings.dart';
 import 'package:flutter_boilerplate/services/theme_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsViewModel extends CommonBaseViewmodel {
@@ -132,6 +134,18 @@ class SettingsViewModel extends CommonBaseViewmodel {
     // Implement app store rating logic
     _launchUrl(
         "https://play.google.com/store/apps/details?id=your.package.name");
+  }
+
+  void shareApp() {
+    if (Platform.isIOS) {
+      SharePlus.instance.share(ShareParams(
+          text:
+              'Check out this amazing Image Compressor app: ${AppStrings.iosAppStoreUrl}'));
+    } else {
+      SharePlus.instance.share(ShareParams(
+          text:
+              'Check out this amazing Image Compressor app: ${AppStrings.androidPlaystoreUrl}'));
+    }
   }
 
   void showAboutDeveloper() {

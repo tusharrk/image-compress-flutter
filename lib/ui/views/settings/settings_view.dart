@@ -168,13 +168,34 @@ class SettingsView extends StackedView<SettingsViewModel> {
                 ),
                 const SettingsDivider(),
                 SettingsActionTile(
+                  title: "Tell a Friend",
+                  subtitle: "Share the app with your friends",
+                  trailing: const Icon(Icons.share_outlined, size: 20),
+                  onTap: viewModel.shareApp,
+                ),
+                const SettingsDivider(),
+                SettingsActionTile(
                   title: "About Developer",
                   trailing: const Icon(Icons.info_outline, size: 20),
                   onTap: viewModel.showAboutDeveloper,
                 ),
               ],
             ),
-
+            const SizedBox(height: 24),
+            _buildSectionHeader("Our other Apps"),
+            SettingsCard(children: [
+              SettingsActionTile(
+                title: "GPS Map Camera",
+                trailing: const Icon(Icons.camera_alt_outlined, size: 20),
+                onTap: viewModel.rateApp,
+              ),
+              SettingsActionTile(
+                title: "Rate App",
+                subtitle: "Help us improve by leaving a review",
+                trailing: const Icon(Icons.camera_alt_outlined, size: 20),
+                onTap: viewModel.rateApp,
+              ),
+            ]),
             const SizedBox(height: 32),
           ],
         ),
