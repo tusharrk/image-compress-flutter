@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
+import 'package:flutter_boilerplate/ui/components/widgets/common/pro_feature_banner.dart';
+import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/primary_full_width_container.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_action_tile.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_card.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_divider.dart';
@@ -21,6 +23,9 @@ class SettingsView extends StackedView<SettingsViewModel> {
     SettingsViewModel viewModel,
     Widget? child,
   ) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return AppScaffold(
       appBar: const AppAppBar(
         title: "Settings",
@@ -31,6 +36,15 @@ class SettingsView extends StackedView<SettingsViewModel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
+
+            //Pro Banner
+            if (!viewModel.isProUser())
+              ModernProBadgeContainer(
+                onTap: () {},
+                child: ProFeatureBannerView(
+                    colorScheme: colorScheme, theme: theme),
+              ),
+            const SizedBox(height: 24),
 
             // Compression Settings Section
             _buildSectionHeader("Compression Settings"),
