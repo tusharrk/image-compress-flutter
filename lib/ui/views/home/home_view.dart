@@ -31,7 +31,7 @@ class HomeView extends StackedView<HomeViewModel> {
             child: IconButton(
               icon:
                   Icon(Icons.tune_rounded, color: colorScheme.onSurfaceVariant),
-              onPressed: () {},
+              onPressed: viewModel.navigateToSettings,
             ),
           )
         ],

@@ -2,9 +2,7 @@ import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 
 class HomeViewModel extends CommonBaseViewmodel {
   void navigateToSettings() {
-    // Implement navigation to settings page
-    // For example, using Navigator:
-    // Navigator.pushNamed(context, '/settings');
+    navigationService.navigateToSettingsView();
   }
 
   void navigateToProUpgrade() {}
