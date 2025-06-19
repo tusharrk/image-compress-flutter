@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/core/utils/asset_utils.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/secondary_icon_container.dart';
 
 class StatsView extends StatelessWidget {
@@ -23,29 +24,42 @@ class StatsView extends StatelessWidget {
         Expanded(
           child: _buildStatItem(
             context,
-            title: '7 MB',
-            subTitle: "from 12 MB",
+            title: AssetUtils().formatBytes(totalSizeAfter),
+            subTitle: "from ${AssetUtils().formatBytes(totalSizeBefore)}",
+            icon: Icons.insert_drive_file_outlined,
           ),
         ),
         const SizedBox(width: 8), // Add spacing between items
         Expanded(
-          child: _buildStatItem(
-            context,
-            title: '46%',
-            subTitle: "smaller",
-          ),
+          child: _buildStatItem(context,
+              title: calculateCompressionPercentage(),
+              subTitle: "smaller",
+              icon: Icons.trending_down_rounded),
         ),
       ],
     );
   }
 
+  String calculateCompressionPercentage() {
+    if (totalSizeBefore == 0) return '0%';
+    final percentage =
+        ((totalSizeBefore - totalSizeAfter) / totalSizeBefore) * 100;
+    return '${percentage.toStringAsFixed(1)}%';
+  }
+
   Widget _buildStatItem(BuildContext context,
-      {required String title, required String subTitle}) {
+      {required String title,
+      required String subTitle,
+      required IconData icon}) {
     return SecondaryIconContainer(
       padding: const EdgeInsets.all(12.0),
       child: Row(
         children: [
-          Icon(Icons.image, color: Theme.of(context).colorScheme.primary),
+          Icon(
+            icon,
+            color: Theme.of(context).colorScheme.primary,
+            size: 35,
+          ),
           const SizedBox(width: 8),
           Expanded(
             // This Expanded is now properly constrained

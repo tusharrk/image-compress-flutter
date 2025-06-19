@@ -5,6 +5,7 @@ class SettingsSegmentedTile<T extends Object> extends StatelessWidget {
   final String title;
   final T value;
   final List<T> items;
+  final EdgeInsetsGeometry padding;
   final ValueChanged<T> onChanged;
   final String Function(T) itemBuilder;
 
@@ -13,6 +14,7 @@ class SettingsSegmentedTile<T extends Object> extends StatelessWidget {
     required this.title,
     required this.value,
     required this.items,
+    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     required this.onChanged,
     required this.itemBuilder,
   }) : super(key: key);
@@ -20,18 +22,19 @@ class SettingsSegmentedTile<T extends Object> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+          if (title.isNotEmpty)
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
+          if (title.isNotEmpty) const SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
             child: CupertinoSlidingSegmentedControl<T>(
@@ -46,7 +49,7 @@ class SettingsSegmentedTile<T extends Object> extends StatelessWidget {
                       item,
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                            horizontal: 8, vertical: 6),
                         child: Text(
                           itemBuilder(item),
                           style: const TextStyle(fontSize: 14),

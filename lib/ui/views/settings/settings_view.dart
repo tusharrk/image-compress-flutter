@@ -51,7 +51,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
             SettingsCard(
               children: [
                 SettingsSliderTile(
-                  title: "Default Compression Quality",
+                  title: "Default Photo Quality",
                   subtitle: "${(viewModel.compressionQuality * 100).round()}%",
                   value: viewModel.compressionQuality,
                   onChanged: viewModel.updateCompressionQuality,

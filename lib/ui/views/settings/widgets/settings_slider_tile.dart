@@ -62,49 +62,76 @@ class SettingsSliderTile extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 16),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              // Modern thumb design
-              thumbShape: const CustomSliderThumb(
-                thumbRadius: 12,
-                pressedThumbRadius: 14,
-              ),
-
-              // Track styling
-              trackHeight: 6,
-              activeTrackColor: theme.colorScheme.primary,
-              // inactiveTrackColor: theme.colorScheme.primary.withOpacity(0.2),
-
-              // Overlay (ripple effect)
-              overlayColor: theme.colorScheme.primary.withOpacity(0.1),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
-
-              // Tick marks
-              tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 2),
-              activeTickMarkColor: theme.colorScheme.primary,
-              inactiveTickMarkColor: theme.colorScheme.outline.withOpacity(0.3),
-
-              // Value indicator
-              valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
-              valueIndicatorColor: theme.colorScheme.primary,
-              valueIndicatorTextStyle: TextStyle(
-                color: theme.colorScheme.onPrimary,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-              showValueIndicator: ShowValueIndicator.onlyForDiscrete,
-            ),
-            child: Slider(
+          const SizedBox(height: 8),
+          CustomSettingsSlider(
+              theme: theme,
               value: value,
               onChanged: onChanged,
               min: min,
-              max: max,
-              label: value.round().toString(),
-              // divisions: divisions,
-            ),
-          ),
+              max: max),
         ],
+      ),
+    );
+  }
+}
+
+class CustomSettingsSlider extends StatelessWidget {
+  const CustomSettingsSlider({
+    super.key,
+    required this.theme,
+    required this.value,
+    required this.onChanged,
+    required this.min,
+    required this.max,
+  });
+
+  final ThemeData theme;
+  final double value;
+  final ValueChanged<double> onChanged;
+  final double min;
+  final double max;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliderTheme(
+      data: SliderTheme.of(context).copyWith(
+        // Modern thumb design
+        thumbShape: const CustomSliderThumb(
+          thumbRadius: 12,
+          pressedThumbRadius: 14,
+        ),
+
+        // Track styling
+        trackHeight: 6,
+        activeTrackColor: theme.colorScheme.primary,
+        // inactiveTrackColor: theme.colorScheme.primary.withOpacity(0.2),
+
+        // Overlay (ripple effect)
+        overlayColor: theme.colorScheme.primary.withOpacity(0.1),
+        overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+
+        // Tick marks
+        tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 2),
+        activeTickMarkColor: theme.colorScheme.primary,
+        inactiveTickMarkColor: theme.colorScheme.outline.withOpacity(0.3),
+
+        // Value indicator
+        valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+        valueIndicatorColor: theme.colorScheme.primary,
+        valueIndicatorTextStyle: TextStyle(
+          color: theme.colorScheme.onPrimary,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+        showValueIndicator: ShowValueIndicator.onlyForDiscrete,
+      ),
+      child: Slider(
+        value: value,
+        onChanged: onChanged,
+        min: min,
+        max: max,
+        label: value.round().toString(),
+        // divisions: divisions,
       ),
     );
   }
