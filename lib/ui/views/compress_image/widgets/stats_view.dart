@@ -4,44 +4,50 @@ import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/seco
 
 class StatsView extends StatelessWidget {
   final int totalImages;
-  final int compressedImages;
   final int totalSizeBefore;
   final int totalSizeAfter;
 
   const StatsView({
     Key? key,
     required this.totalImages,
-    required this.compressedImages,
     required this.totalSizeBefore,
     required this.totalSizeAfter,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bool isBeforeSizeZero = totalSizeBefore == 0;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: _buildStatItem(
             context,
-            title: AssetUtils().formatBytes(totalSizeAfter),
-            subTitle: "from ${AssetUtils().formatBytes(totalSizeBefore)}",
+            title: totalSizeAfter == 0
+                ? '--'
+                : AssetUtils().formatBytes(totalSizeAfter),
+            subTitle: isBeforeSizeZero
+                ? '--'
+                : "from ${AssetUtils().formatBytes(totalSizeBefore)}",
             icon: Icons.insert_drive_file_outlined,
           ),
         ),
-        const SizedBox(width: 8), // Add spacing between items
+        const SizedBox(width: 8),
         Expanded(
-          child: _buildStatItem(context,
-              title: calculateCompressionPercentage(),
-              subTitle: "smaller",
-              icon: Icons.trending_down_rounded),
+          child: _buildStatItem(
+            context,
+            title: isBeforeSizeZero ? '--' : calculateCompressionPercentage(),
+            subTitle: isBeforeSizeZero ? '--' : "smaller",
+            icon: Icons.trending_down_rounded,
+          ),
         ),
       ],
     );
   }
 
   String calculateCompressionPercentage() {
-    if (totalSizeBefore == 0) return '0%';
+    if (totalSizeBefore == 0) return '--';
     final percentage =
         ((totalSizeBefore - totalSizeAfter) / totalSizeBefore) * 100;
     return '${percentage.toStringAsFixed(1)}%';

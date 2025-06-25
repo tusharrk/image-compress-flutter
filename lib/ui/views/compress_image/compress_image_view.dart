@@ -47,9 +47,10 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
             const SizedBox(height: 24),
             StatsView(
               totalImages: photosList.length,
-              compressedImages: 0, // Placeholder for actual count
-              totalSizeBefore: 12000000, // Placeholder for actual size in bytes
-              totalSizeAfter: 7000000, // Placeholder for actual size in bytes
+              totalSizeBefore: viewModel
+                  .totalImageSize, // Placeholder for actual size in bytes
+              totalSizeAfter: viewModel
+                  .totalCompressedImageSize, // Placeholder for actual size in bytes
             ),
             const SizedBox(height: 16),
             const SettingsDivider(),
@@ -82,7 +83,7 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
     return SettingsCard(
       children: [
         SettingsSliderTile(
-          title: "Photo Quality",
+          title: "Photo Quality: ${viewModel.photoQualityText}",
           subtitle: "${(viewModel.photoQuality * 100).round()}%",
           value: viewModel.photoQuality,
           onChanged: viewModel.updatePhotoQuality,
@@ -91,7 +92,7 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
         ),
         const SettingsDivider(),
         SettingsSliderTile(
-          title: "Photo Dimension: 1024x7681",
+          title: "Photo Dimension: ${viewModel.photoDimensionsText}",
           subtitle: "${(viewModel.photoDimensions * 100).round()}%",
           value: viewModel.photoDimensions,
           onChanged: viewModel.updatePhotoDimension,
