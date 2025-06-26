@@ -81,7 +81,7 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(
-                    Icons.add_photo_alternate_rounded,
+                    Icons.compress_rounded,
                     color: Colors.white,
                     size: 24,
                   ),
