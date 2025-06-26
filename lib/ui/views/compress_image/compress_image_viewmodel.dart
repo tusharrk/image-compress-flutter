@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter_boilerplate/core/utils/ImageCompressor.dart';
 import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
+import 'package:flutter_boilerplate/core/utils/permission_manager.dart';
 import 'package:flutter_boilerplate/core/viewmodels/common_base_viewmodel.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -124,6 +126,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
 
   Future<void> calculateTotalCompressedImageSize() async {
     _debounceTimer?.cancel();
+    _totalCompressedImageSize = 0;
     _debounceTimer = Timer(const Duration(milliseconds: 300), () {
       _updateEstimatedSize();
     });
@@ -153,6 +156,41 @@ class CompressImageViewModel extends CommonBaseViewmodel {
 
     _isCalculating = false;
     notifyListeners();
+  }
+
+  Future<void> compressImages() async {
+    if (selectedPhotosList.isEmpty) return;
+
+    setBusy(true);
+    try {
+      final permissionGranted = await requestStoragePermission();
+      if (!permissionGranted) {
+        print("Storage permission denied.");
+        return;
+      }
+
+      await ImageCompressor.compressAndSaveImages(
+        imageAssets: selectedPhotosList,
+        quality: photoQuality,
+        dimension: photoDimensions,
+        format: selectedFormat,
+        folderName: "MyAppCompressedImages",
+        onProgress: ({
+          required String currentName,
+          required int currentIndex,
+          required int total,
+        }) {
+          print("Compressing $currentName ($currentIndex/$total)");
+        },
+      );
+
+      // Optionally, you can navigate to a success screen or show a success message
+    } catch (e) {
+      // Handle any errors that occur during compression
+      print("Compression error: $e");
+    } finally {
+      setBusy(false);
+    }
   }
 
   @override

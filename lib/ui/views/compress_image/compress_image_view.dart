@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
+import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/primary_full_width_container.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/secondary_full_width_container.dart';
 import 'package:flutter_boilerplate/ui/views/compress_image/widgets/image_list.dart';
 import 'package:flutter_boilerplate/ui/views/compress_image/widgets/stats_view.dart';
@@ -24,6 +25,7 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
     CompressImageViewModel viewModel,
     Widget? child,
   ) {
+    final theme = Theme.of(context);
     return AppScaffold(
       appBar: const AppAppBar(
         title: "Compression Settings",
@@ -71,6 +73,29 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
               _advancedOptionsView(viewModel),
             ],
             const SizedBox(height: 16),
+            PrimaryFullWidthContainer(
+              onTap: () {
+                viewModel.compressImages();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.add_photo_alternate_rounded,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    "Compress",
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
