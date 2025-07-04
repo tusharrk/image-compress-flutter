@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:gal/gal.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -15,6 +16,50 @@ typedef CompressionProgressCallback = void Function({
 });
 
 class ImageCompressor {
+  // static Future<List<File>> compressAndSaveImages({
+  //   required List<AssetEntity> imageAssets,
+  //   required double quality,
+  //   required double dimension,
+  //   required ExportFormat format,
+  //   required CompressionProgressCallback onProgress,
+  //   required String folderName,
+  // }) async {
+  //   final List<File> compressedFiles = [];
+  //   final total = imageAssets.length;
+
+  //   final Directory saveDir = await _getSaveDirectory(folderName);
+
+  //   for (int i = 0; i < imageAssets.length; i++) {
+  //     final image = imageAssets[i];
+  //     final name = "compressed_${image.title ?? "image_$i"}";
+
+  //     final originalBytes = await image.originBytes;
+  //     if (originalBytes == null) continue;
+
+  //     final compressedBytes = await _compressImageBytes(
+  //       bytes: originalBytes,
+  //       quality: (quality * 100).toInt(),
+  //       dimensionRatio: dimension,
+  //       format: format,
+  //     );
+  //     final finalBytes = compressedBytes ?? originalBytes;
+
+  //     final String fileExt = _getExtension(format);
+  //     final File file = File(p.join(saveDir.path, "$name.$fileExt"));
+
+  //     await file.writeAsBytes(finalBytes);
+  //     compressedFiles.add(file);
+  //     // Progress callback
+  //     onProgress(
+  //       currentName: name,
+  //       currentIndex: i + 1,
+  //       total: total,
+  //     );
+  //   }
+
+  //   return compressedFiles;
+  // }
+
   static Future<List<File>> compressAndSaveImages({
     required List<AssetEntity> imageAssets,
     required double quality,
@@ -26,7 +71,13 @@ class ImageCompressor {
     final List<File> compressedFiles = [];
     final total = imageAssets.length;
 
-    final Directory saveDir = await _getSaveDirectory(folderName);
+    // Create temporary directory for processing
+    final Directory tempDir = await getTemporaryDirectory();
+    final Directory processingDir =
+        Directory(p.join(tempDir.path, 'compressed_images'));
+    if (!await processingDir.exists()) {
+      await processingDir.create(recursive: true);
+    }
 
     for (int i = 0; i < imageAssets.length; i++) {
       final image = imageAssets[i];
@@ -44,10 +95,29 @@ class ImageCompressor {
       final finalBytes = compressedBytes ?? originalBytes;
 
       final String fileExt = _getExtension(format);
-      final File file = File(p.join(saveDir.path, "$name.$fileExt"));
 
-      await file.writeAsBytes(finalBytes);
-      compressedFiles.add(file);
+      // Save to temporary location first
+      final File tempFile = File(p.join(processingDir.path, "$name.$fileExt"));
+      await tempFile.writeAsBytes(finalBytes);
+
+      try {
+        // Save to gallery with album name
+        await Gal.putImage(
+          tempFile.path,
+          album: folderName, // This creates/uses the album
+        );
+
+        // Keep reference to temp file
+        compressedFiles.add(tempFile);
+      } catch (e) {
+        print('Error saving to gallery: $e');
+        // Fallback: save to app directory
+        final Directory saveDir = await _getSaveDirectory(folderName);
+        final File fallbackFile = File(p.join(saveDir.path, "$name.$fileExt"));
+        await fallbackFile.writeAsBytes(finalBytes);
+        compressedFiles.add(fallbackFile);
+      }
+
       // Progress callback
       onProgress(
         currentName: name,
