@@ -189,6 +189,8 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   Future<void> _saveThemeMode(ThemeMode mode) async {
     storageService.write("theme_mode", mode);
+
+    print("Theme mode saved: ${storageService.read<ThemeMode>("theme_mode")}");
   }
 
   Future<void> _saveLanguage(String language) async {
