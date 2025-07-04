@@ -7,6 +7,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:flutter/material.dart' as _i12;
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/core/models/compression_settings.dart'
+    as _i14;
 import 'package:flutter_boilerplate/ui/views/compress_image/compress_image_view.dart'
     as _i8;
 import 'package:flutter_boilerplate/ui/views/compress_process/compress_process_view.dart'
@@ -27,7 +29,7 @@ import 'package:flutter_boilerplate/ui/views/settings/settings_view.dart'
 import 'package:flutter_boilerplate/ui/views/startup/startup_view.dart' as _i2;
 import 'package:photo_manager/photo_manager.dart' as _i13;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i14;
+import 'package:stacked_services/stacked_services.dart' as _i15;
 
 class Routes {
   static const startupView = '/startup-view';
@@ -156,8 +158,12 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i9.CompressProcessView: (data) {
+      final args = data.getArgs<CompressProcessViewArguments>(nullOk: false);
       return _i12.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i9.CompressProcessView(),
+        builder: (context) => _i9.CompressProcessView(
+            key: args.key,
+            photosList: args.photosList,
+            compressSettings: args.compressSettings),
         settings: data,
       );
     },
@@ -236,7 +242,39 @@ class CompressImageViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i14.NavigationService {
+class CompressProcessViewArguments {
+  const CompressProcessViewArguments({
+    this.key,
+    required this.photosList,
+    required this.compressSettings,
+  });
+
+  final _i12.Key? key;
+
+  final List<_i13.AssetEntity> photosList;
+
+  final _i14.PhotoCompressSettings compressSettings;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "photosList": "$photosList", "compressSettings": "$compressSettings"}';
+  }
+
+  @override
+  bool operator ==(covariant CompressProcessViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.photosList == photosList &&
+        other.compressSettings == compressSettings;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ photosList.hashCode ^ compressSettings.hashCode;
+  }
+}
+
+extension NavigatorStateExtension on _i15.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -341,14 +379,21 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToCompressProcessView([
+  Future<dynamic> navigateToCompressProcessView({
+    _i12.Key? key,
+    required List<_i13.AssetEntity> photosList,
+    required _i14.PhotoCompressSettings compressSettings,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.compressProcessView,
+        arguments: CompressProcessViewArguments(
+            key: key,
+            photosList: photosList,
+            compressSettings: compressSettings),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -487,14 +532,21 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithCompressProcessView([
+  Future<dynamic> replaceWithCompressProcessView({
+    _i12.Key? key,
+    required List<_i13.AssetEntity> photosList,
+    required _i14.PhotoCompressSettings compressSettings,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.compressProcessView,
+        arguments: CompressProcessViewArguments(
+            key: key,
+            photosList: photosList,
+            compressSettings: compressSettings),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

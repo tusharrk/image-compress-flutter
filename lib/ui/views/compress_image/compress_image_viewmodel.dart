@@ -1,9 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
+import 'package:flutter_boilerplate/core/models/compression_settings.dart';
 import 'package:flutter_boilerplate/core/utils/ImageCompressor.dart';
 import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
 import 'package:flutter_boilerplate/core/utils/permission_manager.dart';
-import 'package:flutter_boilerplate/core/viewmodels/common_base_viewmodel.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class CompressImageViewModel extends CommonBaseViewmodel {
@@ -160,6 +161,18 @@ class CompressImageViewModel extends CommonBaseViewmodel {
 
   Future<void> compressImages() async {
     if (selectedPhotosList.isEmpty) return;
+
+    var compressSettings = PhotoCompressSettings(
+      photoQuality: _photoQuality,
+      photoDimensions: _photoDimensions,
+      outputFormat: selectedFormat,
+      keepLocation: false,
+      keepExif: false,
+    );
+
+    navigationService.navigateToCompressProcessView(
+        photosList: selectedPhotosList, compressSettings: compressSettings);
+    return;
 
     setBusy(true);
     try {
