@@ -5,12 +5,12 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 
 class ThumbNailImageList extends StatelessWidget {
-  final CompressImageViewModel viewModel;
+  final CompressImageViewModel? viewModel;
   final List<AssetEntity> photosList;
 
   const ThumbNailImageList({
     Key? key,
-    required this.viewModel,
+    this.viewModel,
     required this.photosList,
   }) : super(key: key);
 
@@ -22,7 +22,7 @@ class ThumbNailImageList extends StatelessWidget {
 
 Widget imageList(
   BuildContext context,
-  CompressImageViewModel viewModel,
+  CompressImageViewModel? viewModel,
   List<AssetEntity> photosList,
 ) {
   const int maxDisplayImages = 10;
@@ -55,7 +55,7 @@ Widget imageList(
 
 Widget _buildImageItem(
   AssetEntity asset,
-  CompressImageViewModel viewModel,
+  CompressImageViewModel? viewModel,
 ) {
   return Container(
     margin: const EdgeInsets.only(right: 8),

@@ -14,14 +14,17 @@ class PhotoCompressSettings {
   final ExportFormat outputFormat;
   final bool keepLocation;
   final bool keepExif;
+  final int totalSize;
+  final int compressedSize;
 
-  PhotoCompressSettings({
-    required this.photoQuality,
-    required this.photoDimensions,
-    required this.outputFormat,
-    required this.keepLocation,
-    required this.keepExif,
-  });
+  PhotoCompressSettings(
+      {required this.photoQuality,
+      required this.photoDimensions,
+      required this.outputFormat,
+      required this.keepLocation,
+      required this.keepExif,
+      required this.totalSize,
+      required this.compressedSize});
 
   // factory PhotoCompressSettings.fromJson(Map<String, dynamic> json) {
   //   return PhotoCompressSettings(

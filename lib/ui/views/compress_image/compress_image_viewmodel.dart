@@ -162,13 +162,17 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   Future<void> compressImages() async {
     if (selectedPhotosList.isEmpty) return;
 
+    print("totalImageSize: $_totalImageSize");
+    print("totalCompressedImageSize: $_totalCompressedImageSize");
+
     var compressSettings = PhotoCompressSettings(
-      photoQuality: _photoQuality,
-      photoDimensions: _photoDimensions,
-      outputFormat: selectedFormat,
-      keepLocation: false,
-      keepExif: false,
-    );
+        photoQuality: _photoQuality,
+        photoDimensions: _photoDimensions,
+        outputFormat: selectedFormat,
+        keepLocation: false,
+        keepExif: false,
+        totalSize: _totalImageSize,
+        compressedSize: _totalCompressedImageSize);
 
     navigationService.navigateToCompressProcessView(
         photosList: selectedPhotosList, compressSettings: compressSettings);
