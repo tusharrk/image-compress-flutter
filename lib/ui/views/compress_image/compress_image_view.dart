@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
-import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/primary_full_width_container.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/custom_containers/secondary_full_width_container.dart';
 import 'package:flutter_boilerplate/ui/views/compress_image/widgets/image_list.dart';
+import 'package:flutter_boilerplate/ui/views/compress_image/widgets/slider_button.dart';
 import 'package:flutter_boilerplate/ui/views/compress_image/widgets/stats_view.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_card.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_divider.dart';
@@ -73,29 +73,38 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
               _advancedOptionsView(viewModel),
             ],
             const SizedBox(height: 16),
-            PrimaryFullWidthContainer(
-              onTap: () {
+            const SizedBox(height: 16),
+            SwipeToCompressWidget(
+              onCompress: () {
                 viewModel.compressImages();
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.compress_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    "Compress",
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
+              backgroundColor: theme.colorScheme.primary,
+              text: "Swipe to Compress",
+              icon: Icons.compress_rounded,
             ),
+            // PrimaryFullWidthContainer(
+            //   onTap: () {
+            //     viewModel.compressImages();
+            //   },
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       const Icon(
+            //         Icons.compress_rounded,
+            //         color: Colors.white,
+            //         size: 24,
+            //       ),
+            //       const SizedBox(width: 12),
+            //       Text(
+            //         "Compress",
+            //         style: theme.textTheme.titleMedium?.copyWith(
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.w600,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

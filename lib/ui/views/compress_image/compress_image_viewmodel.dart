@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/models/compression_settings.dart';
-import 'package:flutter_boilerplate/core/utils/ImageCompressor.dart';
 import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
-import 'package:flutter_boilerplate/core/utils/permission_manager.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class CompressImageViewModel extends CommonBaseViewmodel {
@@ -178,36 +176,36 @@ class CompressImageViewModel extends CommonBaseViewmodel {
         photosList: selectedPhotosList, compressSettings: compressSettings);
     return;
 
-    setBusy(true);
-    try {
-      final permissionGranted = await requestStoragePermission();
-      if (!permissionGranted) {
-        print("Storage permission denied.");
-        return;
-      }
+    // setBusy(true);
+    // try {
+    //   final permissionGranted = await requestStoragePermission();
+    //   if (!permissionGranted) {
+    //     print("Storage permission denied.");
+    //     return;
+    //   }
 
-      await ImageCompressor.compressAndSaveImages(
-        imageAssets: selectedPhotosList,
-        quality: photoQuality,
-        dimension: photoDimensions,
-        format: selectedFormat,
-        folderName: "MyAppCompressedImages",
-        onProgress: ({
-          required String currentName,
-          required int currentIndex,
-          required int total,
-        }) {
-          print("Compressing $currentName ($currentIndex/$total)");
-        },
-      );
+    //   await ImageCompressor.compressAndSaveImages(
+    //     imageAssets: selectedPhotosList,
+    //     quality: photoQuality,
+    //     dimension: photoDimensions,
+    //     format: selectedFormat,
+    //     folderName: "MyAppCompressedImages",
+    //     onProgress: ({
+    //       required String currentName,
+    //       required int currentIndex,
+    //       required int total,
+    //     }) {
+    //       print("Compressing $currentName ($currentIndex/$total)");
+    //     },
+    //   );
 
-      // Optionally, you can navigate to a success screen or show a success message
-    } catch (e) {
-      // Handle any errors that occur during compression
-      print("Compression error: $e");
-    } finally {
-      setBusy(false);
-    }
+    //   // Optionally, you can navigate to a success screen or show a success message
+    // } catch (e) {
+    //   // Handle any errors that occur during compression
+    //   print("Compression error: $e");
+    // } finally {
+    //   setBusy(false);
+    // }
   }
 
   @override

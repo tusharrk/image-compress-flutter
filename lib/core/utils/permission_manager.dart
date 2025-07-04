@@ -19,6 +19,16 @@ Future<bool> requestStoragePermission() async {
     }
   } else if (Platform.isIOS) {
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+    // For iOS 14+, use limited photo library access
+    if (iosInfo.systemVersion.split('.').first.compareTo('14') >= 0) {
+      final status = await Permission.photos.request();
+      return status.isGranted || status.isLimited;
+    } else {
+      // For iOS versions below 14, use photos permission
+      final status = await Permission.photos.request();
+      return status.isGranted;
+    }
   }
 
   return true;
