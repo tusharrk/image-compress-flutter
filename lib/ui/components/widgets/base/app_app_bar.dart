@@ -40,7 +40,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
                   title!,
                   style: TextStyle(
                       color: foregroundColor ??
-                          Theme.of(context).colorScheme.onSurface),
+                          Theme.of(context).colorScheme.onPrimary),
                 )
               : null),
       centerTitle: centerTitle,

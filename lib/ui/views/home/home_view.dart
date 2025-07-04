@@ -25,6 +25,7 @@ class HomeView extends StackedView<HomeViewModel> {
       appBar: AppAppBar(
         title: "Compresso",
         backgroundColor: Colors.transparent,
+        foregroundColor: colorScheme.onSurface,
         elevation: 0,
         actions: [
           SecondaryIconContainer(
