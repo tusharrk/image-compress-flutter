@@ -387,9 +387,9 @@ class DioClient {
   }
 
   // Update authorization token dynamically if needed
-  void updateAuthToken(String token) {
+  void updateAuthToken(String token) async {
     // StorageBox().getStorageBox().write("user_auth_token", token);
-    storageService.write("user_auth_token", token);
+    await storageService.write("user_auth_token", token);
   }
 
   // Set cache expiration period

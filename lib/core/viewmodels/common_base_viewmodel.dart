@@ -38,8 +38,8 @@ class CommonBaseViewmodel extends BaseViewModel {
     }
   }
 
-  void setProUser(bool isPro) {
-    storageService.write("isProUser", isPro);
+  void setProUser(bool isPro) async {
+    await storageService.write("isProUser", isPro);
     logger.i('Set Pro user status to: $isPro');
   }
 

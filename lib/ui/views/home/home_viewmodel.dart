@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 
 class HomeViewModel extends CommonBaseViewmodel {
   void navigateToSettings() {
-    print("Theme mode saved: ${storageService.read<ThemeMode>("theme_mode")}");
+    print("Theme mode saved: ${storageService.read<String>("theme_mode")}");
 
     navigationService.navigateToSettingsView();
   }

@@ -742,6 +742,16 @@ class MockDialogService extends _i1.Mock implements _i6.DialogService {
 /// See the documentation for Mockito's code generation for more information.
 class MockStorageService extends _i1.Mock implements _i2.StorageService {
   @override
+  _i8.Future<void> init() => (super.noSuchMethod(
+        Invocation.method(
+          #init,
+          [],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
   T? read<T>(String? key) => (super.noSuchMethod(
         Invocation.method(
           #read,
@@ -786,6 +796,26 @@ class MockStorageService extends _i1.Mock implements _i2.StorageService {
         returnValue: _i8.Future<void>.value(),
         returnValueForMissingStub: _i8.Future<void>.value(),
       ) as _i8.Future<void>);
+
+  @override
+  bool hasKey(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #hasKey,
+          [key],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  Set<String> getKeys() => (super.noSuchMethod(
+        Invocation.method(
+          #getKeys,
+          [],
+        ),
+        returnValue: <String>{},
+        returnValueForMissingStub: <String>{},
+      ) as Set<String>);
 }
 
 /// A class which mocks [EnvironmentService].
@@ -1500,6 +1530,19 @@ class MockGalleryService extends _i1.Mock implements _i12.GalleryService {
 /// See the documentation for Mockito's code generation for more information.
 class MockThemeService extends _i1.Mock implements _i14.ThemeService {
   @override
+  _i2.StorageService get storageService => (super.noSuchMethod(
+        Invocation.getter(#storageService),
+        returnValue: _FakeStorageService_0(
+          this,
+          Invocation.getter(#storageService),
+        ),
+        returnValueForMissingStub: _FakeStorageService_0(
+          this,
+          Invocation.getter(#storageService),
+        ),
+      ) as _i2.StorageService);
+
+  @override
   _i5.ValueNotifier<_i5.ThemeMode> get themeModeNotifier => (super.noSuchMethod(
         Invocation.getter(#themeModeNotifier),
         returnValue: _FakeValueNotifier_3<_i5.ThemeMode>(
@@ -1511,6 +1554,16 @@ class MockThemeService extends _i1.Mock implements _i14.ThemeService {
           Invocation.getter(#themeModeNotifier),
         ),
       ) as _i5.ValueNotifier<_i5.ThemeMode>);
+
+  @override
+  set themeModeNotifier(_i5.ValueNotifier<_i5.ThemeMode>? _themeModeNotifier) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #themeModeNotifier,
+          _themeModeNotifier,
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
   _i5.ThemeMode get themeMode => (super.noSuchMethod(

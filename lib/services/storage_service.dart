@@ -1,55 +1,108 @@
-import 'package:get_storage/get_storage.dart';
+import 'dart:convert';
 
-class StorageService {
-  static bool _initialized = false;
-  late final GetStorage _box;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stacked/stacked_annotations.dart';
 
-  // Constructor that initializes GetStorage
-  StorageService() {
-    _initializeAsync();
+class StorageService implements InitializableDependency {
+  late SharedPreferences _prefs;
+
+  // Remove the constructor parameter since we'll initialize in init()
+  StorageService();
+
+  @override
+  Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
-  // Private async initialization method
-  Future<void> _initializeAsync() async {
-    if (!_initialized) {
-      await GetStorage.init();
-      _initialized = true;
-    }
-    _box = GetStorage();
-  }
-
-  // Read value (synchronous)
+  // Read value
   T? read<T>(String key) {
-    // Make sure storage is initialized before reading
-    if (!_initialized) {
-      print('Warning: Attempting to read before storage is initialized');
+    return _readValue<T>(key);
+  }
+
+  // Private method to handle actual reading
+  T? _readValue<T>(String key) {
+    try {
+      if (T == String) {
+        return _prefs.getString(key) as T?;
+      } else if (T == int) {
+        return _prefs.getInt(key) as T?;
+      } else if (T == bool) {
+        return _prefs.getBool(key) as T?;
+      } else if (T == double) {
+        return _prefs.getDouble(key) as T?;
+      } else if (T == List<String>) {
+        return _prefs.getStringList(key) as T?;
+      } else {
+        // For complex objects, try to deserialize from JSON
+        final jsonString = _prefs.getString(key);
+        if (jsonString != null) {
+          try {
+            final decoded = json.decode(jsonString);
+            return decoded as T;
+          } catch (e) {
+            print('Error decoding JSON for key $key: $e');
+            return null;
+          }
+        }
+        return null;
+      }
+    } catch (e) {
+      print('Error reading value for key $key: $e');
       return null;
     }
-    return _box.read<T>(key);
   }
 
   // Write value
   Future<void> write(String key, dynamic value) async {
-    // Ensure initialization is complete before writing
-    if (!_initialized) {
-      await _initializeAsync();
+    try {
+      if (value is String) {
+        await _prefs.setString(key, value);
+      } else if (value is int) {
+        await _prefs.setInt(key, value);
+      } else if (value is bool) {
+        await _prefs.setBool(key, value);
+      } else if (value is double) {
+        await _prefs.setDouble(key, value);
+      } else if (value is List<String>) {
+        await _prefs.setStringList(key, value);
+      } else {
+        // For complex objects, serialize to JSON
+        final jsonString = json.encode(value);
+        await _prefs.setString(key, jsonString);
+      }
+    } catch (e) {
+      print('Error writing value for key $key: $e');
+      throw Exception('Failed to write value for key $key: $e');
     }
-    return _box.write(key, value);
   }
 
   // Remove a key
   Future<void> remove(String key) async {
-    if (!_initialized) {
-      await _initializeAsync();
+    try {
+      await _prefs.remove(key);
+    } catch (e) {
+      print('Error removing key $key: $e');
+      throw Exception('Failed to remove key $key: $e');
     }
-    return _box.remove(key);
   }
 
   // Clear all data
   Future<void> erase() async {
-    if (!_initialized) {
-      await _initializeAsync();
+    try {
+      await _prefs.clear();
+    } catch (e) {
+      print('Error clearing storage: $e');
+      throw Exception('Failed to clear storage: $e');
     }
-    return _box.erase();
+  }
+
+  // Check if key exists
+  bool hasKey(String key) {
+    return _prefs.containsKey(key);
+  }
+
+  // Get all keys
+  Set<String> getKeys() {
+    return _prefs.getKeys();
   }
 }

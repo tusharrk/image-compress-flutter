@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/constants/app_strings.dart';
+import 'package:flutter_boilerplate/core/constants/enums/enum_helper.dart';
 import 'package:flutter_boilerplate/services/theme_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
@@ -160,12 +161,22 @@ class SettingsViewModel extends CommonBaseViewmodel {
       _compressionQuality =
           storageService.read<double>("compression_quality") ?? 0.8;
 
-      _defaultImageFormat =
-          storageService.read<ImageFormat>("default_image_format") ??
-              ImageFormat.original;
+      // _defaultImageFormat =
+      //     storageService.read<ImageFormat>("default_image_format") ??
+      //         ImageFormat.original;
+
+      _defaultImageFormat = EnumHelper.fromString<ImageFormat>(
+              storageService.read<String>("default_image_format"),
+              ImageFormat.values) ??
+          ImageFormat.original;
+
+      _themeMode = EnumHelper.fromString<ThemeMode>(
+              storageService.read<String>("theme_mode"), ThemeMode.values) ??
+          ThemeMode.system;
+
       _removeMetadata = storageService.read<bool>("remove_metadata") ?? true;
-      _themeMode =
-          storageService.read<ThemeMode>("theme_mode") ?? ThemeMode.system;
+      // _themeMode =
+      //     storageService.read<ThemeMode>("theme_mode") ?? ThemeMode.system;
       _selectedLanguage = storageService.read<String>("language") ?? 'en';
       _notificationsEnabled =
           storageService.read<bool>("notifications_enabled") ?? true;
@@ -176,29 +187,30 @@ class SettingsViewModel extends CommonBaseViewmodel {
   }
 
   Future<void> _saveCompressionQuality(double value) async {
-    storageService.write("compression_quality", value);
+    await storageService.write("compression_quality", value);
   }
 
   Future<void> _saveImageFormat(ImageFormat format) async {
-    storageService.write("default_image_format", format);
+    await storageService.write(
+        "default_image_format", EnumHelper.enumToString(format));
   }
 
   Future<void> _saveRemoveMetadata(bool value) async {
-    storageService.write("remove_metadata", value);
+    await storageService.write("remove_metadata", value);
   }
 
   Future<void> _saveThemeMode(ThemeMode mode) async {
-    storageService.write("theme_mode", mode);
+    await storageService.write("theme_mode", EnumHelper.enumToString(mode));
 
-    print("Theme mode saved: ${storageService.read<ThemeMode>("theme_mode")}");
+    //print("Theme mode saved: ${storageService.read<ThemeMode>("theme_mode")}");
   }
 
   Future<void> _saveLanguage(String language) async {
-    storageService.write("language", language);
+    await storageService.write("language", language);
   }
 
   Future<void> _saveNotificationsEnabled(bool value) async {
-    storageService.write("notifications_enabled", value);
+    await storageService.write("notifications_enabled", value);
   }
 
   Future<void> _calculateCacheSize() async {

@@ -10,12 +10,12 @@ class StartupViewModel extends CommonBaseViewmodel {
 
     // This is where you can make decisions on where your app should navigate when
     // you have custom startup logic
-    test();
+    await test();
     _navigationService.replaceWithHomeView();
   }
 
-  void test() {
-    storageService.write('testKey', "test Value");
+  Future<void> test() async {
+    await storageService.write('testKey', "test Value");
     setProUser(true);
   }
 }

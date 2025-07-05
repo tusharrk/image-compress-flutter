@@ -31,7 +31,10 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => BottomSheetService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => NavigationService());
-  locator.registerLazySingleton(() => StorageService());
+  final storageService = StorageService();
+  await storageService.init();
+  locator.registerSingleton(storageService);
+
   locator.registerLazySingleton(() => EnvironmentService());
   locator.registerLazySingleton(() => UserService());
   locator.registerLazySingleton(() => GalleryService());
