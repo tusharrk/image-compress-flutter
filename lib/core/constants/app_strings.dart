@@ -3,7 +3,8 @@ const String ksHomeBottomSheetDescription =
     'Stacked is built to help you build better apps. Give us a chance and we\'ll prove it to you. Check out stacked.filledstacks.com to learn more';
 
 class AppStrings {
-  static const String appName = "Image Compressor";
+  static const String appName = "Compresso";
+  static const String downloadFolderName = "Image Compressor";
   static const String androidPlaystoreUrl =
       "https://play.google.com/store/apps/details?id=com.tusharrk.gpsmapcamera.geotagginglocationphoto.weather";
   static const String iosAppStoreUrl =

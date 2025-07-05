@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate/core/theme/custom_color_scheme.dart';
 import 'package:flutter_boilerplate/core/theme/custom_theme.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,6 +32,7 @@ final class CustomLightTheme implements CustomTheme {
 
   @override
   AppBarTheme get appBarTheme => AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: CustomColorScheme.lightColorScheme.primary,
         elevation: 0,
         centerTitle: true,

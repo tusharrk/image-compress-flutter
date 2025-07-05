@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/core/common_imports/ui_imports.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/common/pro_feature_banner.dart';
@@ -23,8 +24,8 @@ class HomeView extends StackedView<HomeViewModel> {
 
     return AppScaffold(
       appBar: AppAppBar(
-        title: "Compresso",
-        backgroundColor: Colors.transparent,
+        title: AppStrings.appName,
+        backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
         actions: [

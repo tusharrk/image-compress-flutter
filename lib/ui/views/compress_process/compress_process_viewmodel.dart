@@ -79,7 +79,7 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
         quality: compressSettings?.photoQuality ?? 0.8,
         dimension: compressSettings?.photoDimensions ?? 0.9,
         format: compressSettings?.outputFormat ?? ExportFormat.jpg,
-        folderName: AppStrings.appName,
+        folderName: AppStrings.downloadFolderName,
         onProgress: ({
           required String currentName,
           required int currentIndex,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -34,6 +35,8 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
+      systemOverlayStyle: _overlayStyleFor(
+          backgroundColor ?? Theme.of(context).colorScheme.primary),
       title: titleWidget ??
           (title != null
               ? Text(
@@ -58,5 +61,14 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation ?? 0,
       bottom: bottom,
     );
+  }
+
+  SystemUiOverlayStyle _overlayStyleFor(Color backgroundColor) {
+    final luminance = backgroundColor.computeLuminance();
+    //print("Background color: $backgroundColor, luminance: $luminance");
+
+    return luminance > 0.5
+        ? SystemUiOverlayStyle.dark
+        : SystemUiOverlayStyle.light;
   }
 }
