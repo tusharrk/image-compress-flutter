@@ -1,6 +1,7 @@
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/services/gallery_service.dart'
     show GalleryService;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ListAlbumsViewModel extends CommonBaseViewmodel {
@@ -66,6 +67,8 @@ class ListAlbumsViewModel extends CommonBaseViewmodel {
   Future<void> requestPermission() async {
     setBusy(true);
     try {
+      final p = await Permission.accessMediaLocation.request();
+      print('Permission status accessMediaLocation: ${p.isGranted}');
       final permission = await _galleryService.requestPermission();
 
       if (permission == PermissionState.authorized ||

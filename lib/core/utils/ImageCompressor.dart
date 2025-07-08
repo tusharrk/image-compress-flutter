@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gal/gal.dart';
@@ -65,6 +65,8 @@ class ImageCompressor {
     required double quality,
     required double dimension,
     required ExportFormat format,
+    required bool keepExif,
+    required bool keepLocationData,
     required CompressionProgressCallback onProgress,
     required String folderName,
   }) async {
@@ -87,11 +89,12 @@ class ImageCompressor {
       if (originalBytes == null) continue;
 
       final compressedBytes = await _compressImageBytes(
-        bytes: originalBytes,
-        quality: (quality * 100).toInt(),
-        dimensionRatio: dimension,
-        format: format,
-      );
+          bytes: originalBytes,
+          quality: (quality * 100).toInt(),
+          dimensionRatio: dimension,
+          format: format,
+          keepExif: keepExif,
+          keepLocationData: keepLocationData);
       final finalBytes = compressedBytes ?? originalBytes;
 
       final String fileExt = _getExtension(format);
@@ -134,6 +137,8 @@ class ImageCompressor {
     required int quality,
     required double dimensionRatio,
     required ExportFormat format,
+    required bool keepExif,
+    required bool keepLocationData,
   }) async {
     final formatEnum = _getCompressFormat(format);
     final decodedImage = img.decodeImage(bytes);
@@ -141,14 +146,31 @@ class ImageCompressor {
 
     final newWidth = (decodedImage.width * dimensionRatio).toInt();
     final newHeight = (decodedImage.height * dimensionRatio).toInt();
-    final compressedBytes = await FlutterImageCompress.compressWithList(
+
+    final compressed = await FlutterImageCompress.compressWithList(
       bytes,
       quality: quality,
       format: formatEnum,
       minWidth: newWidth,
       minHeight: newHeight,
+      autoCorrectionAngle: true,
+      keepExif: false, // always false, we'll manually add EXIF
     );
-    return compressedBytes;
+
+    // Only JPEG & HEIC support EXIF
+    final shouldAddExif =
+        (format == ExportFormat.jpg || format == ExportFormat.heic) && keepExif;
+
+    if (shouldAddExif) {
+      final finalBytes = await ExifChannel.addExifToImage(
+        originalImage: bytes,
+        compressedImage: Uint8List.fromList(compressed),
+        keepLocation: keepLocationData,
+      );
+      return (finalBytes ?? compressed);
+    } else {
+      return compressed;
+    }
   }
 
   static CompressFormat _getCompressFormat(ExportFormat format) {
@@ -194,5 +216,24 @@ class ImageCompressor {
     }
 
     return baseDir;
+  }
+}
+
+class ExifChannel {
+  static const _channel = MethodChannel('image_exif_channel');
+
+  static Future<Uint8List?> addExifToImage({
+    required Uint8List originalImage,
+    required Uint8List compressedImage,
+    required bool keepLocation,
+  }) async {
+    return await _channel.invokeMethod<Uint8List>(
+      'addExifToImage',
+      {
+        'originalImage': originalImage,
+        'compressedImage': compressedImage,
+        'keepLocation': keepLocation,
+      },
+    );
   }
 }

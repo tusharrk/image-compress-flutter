@@ -80,6 +80,8 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
         dimension: compressSettings?.photoDimensions ?? 0.9,
         format: compressSettings?.outputFormat ?? ExportFormat.jpg,
         folderName: AppStrings.downloadFolderName,
+        keepExif: compressSettings?.keepExif ?? false,
+        keepLocationData: compressSettings?.keepLocation ?? false,
         onProgress: ({
           required String currentName,
           required int currentIndex,
@@ -96,6 +98,7 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
       notifyListeners();
       // Navigation to result page should be handled in the view after success
     } catch (e) {
+      print("Compression error: $e");
       _processError = "Compression error: $e";
       setBusy(false);
       notifyListeners();
