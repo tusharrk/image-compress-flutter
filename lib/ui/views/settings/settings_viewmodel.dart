@@ -13,7 +13,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   // Compression Settings
   double _compressionQuality = 0.8;
-  ImageFormat _defaultImageFormat = ImageFormat.original;
+  ImageFormat _defaultImageFormat = ImageFormat.jpeg;
   bool _removeMetadata = true;
 
   // Appearance Settings
@@ -168,7 +168,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
       _defaultImageFormat = EnumHelper.fromString<ImageFormat>(
               storageService.read<String>("default_image_format"),
               ImageFormat.values) ??
-          ImageFormat.original;
+          ImageFormat.jpeg;
 
       _themeMode = EnumHelper.fromString<ThemeMode>(
               storageService.read<String>("theme_mode"), ThemeMode.values) ??
@@ -258,15 +258,15 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
 // models/image_format.dart
 enum ImageFormat {
-  original,
+  // original,
   jpeg,
   png,
   webp;
 
   String get displayName {
     switch (this) {
-      case ImageFormat.original:
-        return 'Original';
+      // case ImageFormat.original:
+      //   return 'Original';
       case ImageFormat.jpeg:
         return 'JPEG';
       case ImageFormat.png:

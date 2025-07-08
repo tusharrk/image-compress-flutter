@@ -167,8 +167,8 @@ class CompressImageViewModel extends CommonBaseViewmodel {
         photoQuality: _photoQuality,
         photoDimensions: _photoDimensions,
         outputFormat: selectedFormat,
-        keepLocation: false,
-        keepExif: false,
+        keepLocation: true,
+        keepExif: true,
         totalSize: _totalImageSize,
         compressedSize: _totalCompressedImageSize);
 
