@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
+import 'package:flutter_boilerplate/core/utils/ImageCompressor.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 import 'package:photo_manager/photo_manager.dart';
@@ -20,6 +21,7 @@ class CompressionCalculator {
 
       final compressedBytes = await _compressImageBytes(
         bytes: originalBytes,
+        fileName: image.title ?? "image.${format.name}",
         quality: (quality * 100).toInt(),
         dimensionRatio: dimension,
         format: format,
@@ -40,11 +42,12 @@ class CompressionCalculator {
 
   static Future<Uint8List?> _compressImageBytes({
     required Uint8List bytes,
+    required String fileName,
     required int quality,
     required double dimensionRatio,
     required ExportFormat format,
   }) async {
-    final formatEnum = _getCompressFormat(format);
+    final formatEnum = ImageCompressor.getCompressFormat(format, fileName);
 
     final decodedImage = img.decodeImage(bytes);
     if (decodedImage == null) return null;
@@ -63,16 +66,18 @@ class CompressionCalculator {
     return compressedBytes;
   }
 
-  static CompressFormat _getCompressFormat(ExportFormat format) {
-    switch (format) {
-      case ExportFormat.jpeg:
-        return CompressFormat.jpeg;
-      case ExportFormat.png:
-        return CompressFormat.png;
-      case ExportFormat.webp:
-        return CompressFormat.webp;
-      // case ExportFormat.heic:
-      //   return CompressFormat.heic;
-    }
-  }
+  // static CompressFormat _getCompressFormat(ExportFormat format) {
+  //   switch (format) {
+  //     case ExportFormat.original:
+  //       return CompressFormat.jpeg;
+  //     case ExportFormat.jpeg:
+  //       return CompressFormat.jpeg;
+  //     case ExportFormat.png:
+  //       return CompressFormat.png;
+  //     case ExportFormat.webp:
+  //       return CompressFormat.webp;
+  //     // case ExportFormat.heic:
+  //     //   return CompressFormat.heic;
+  //   }
+  // }
 }

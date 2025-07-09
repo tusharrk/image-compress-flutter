@@ -40,10 +40,10 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   Timer? _debounceTimer;
   bool _isCalculating = false;
   bool get isCalculating => _isCalculating;
-  // ExportFormat selectedFormat = ExportFormat.jpeg;
+  // ExportFormat selectedFormat = ExportFormat.original;
 
 //advanced settings
-  ExportFormat _selectedFormat = ExportFormat.jpeg;
+  ExportFormat _selectedFormat = ExportFormat.original;
   ExportFormat get selectedFormat => _selectedFormat;
   List<ExportFormat> get imageFormats => ExportFormat.values;
 

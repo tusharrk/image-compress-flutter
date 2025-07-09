@@ -1,14 +1,14 @@
 // enum ImageFormat { jpg, png, webp, heic }
 enum ExportFormat {
-  // original,
+  original,
   jpeg,
   png,
   webp;
 
   String get displayName {
     switch (this) {
-      // case ImageFormat.original:
-      //   return 'Original';
+      case ExportFormat.original:
+        return 'Original';
       case ExportFormat.jpeg:
         return 'JPEG';
       case ExportFormat.png:

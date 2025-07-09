@@ -14,7 +14,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   // Compression Settings
   double _compressionQuality = 0.8;
-  ExportFormat _defaultImageFormat = ExportFormat.jpeg;
+  ExportFormat _defaultImageFormat = ExportFormat.original;
   bool _removeMetadata = true;
 
   // Appearance Settings
@@ -169,7 +169,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
       _defaultImageFormat = EnumHelper.fromString<ExportFormat>(
               storageService.read<String>("default_image_format"),
               ExportFormat.values) ??
-          ExportFormat.jpeg;
+          ExportFormat.original;
 
       _themeMode = EnumHelper.fromString<ThemeMode>(
               storageService.read<String>("theme_mode"), ThemeMode.values) ??

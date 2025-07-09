@@ -90,6 +90,7 @@ class ImageCompressor {
 
       final compressedBytes = await _compressImageBytes(
           bytes: originalBytes,
+          fileName: image.title ?? "image.${format.name}",
           quality: (quality * 100).toInt(),
           dimensionRatio: dimension,
           format: format,
@@ -97,7 +98,8 @@ class ImageCompressor {
           keepLocationData: keepLocationData);
       final finalBytes = compressedBytes ?? originalBytes;
 
-      final String fileExt = _getExtension(format);
+      final String fileExt =
+          _getExtension(format, image.title ?? "image.${format.name}");
 
       // Save to temporary location first
       final File tempFile = File(p.join(processingDir.path, "$name.$fileExt"));
@@ -134,13 +136,14 @@ class ImageCompressor {
 
   static Future<Uint8List?> _compressImageBytes({
     required Uint8List bytes,
+    required String fileName,
     required int quality,
     required double dimensionRatio,
     required ExportFormat format,
     required bool keepExif,
     required bool keepLocationData,
   }) async {
-    final formatEnum = _getCompressFormat(format);
+    final formatEnum = getCompressFormat(format, fileName);
     final decodedImage = img.decodeImage(bytes);
     if (decodedImage == null) return null;
 
@@ -175,29 +178,47 @@ class ImageCompressor {
     }
   }
 
-  static CompressFormat _getCompressFormat(ExportFormat format) {
-    switch (format) {
-      case ExportFormat.jpeg:
-        return CompressFormat.jpeg;
-      case ExportFormat.png:
-        return CompressFormat.png;
-      case ExportFormat.webp:
-        return CompressFormat.webp;
-      // case ExportFormat.heic:
-      //   return CompressFormat.heic;
-    }
-  }
+  // static CompressFormat getCompressFormat(ExportFormat format) {
+  //   switch (format) {
+  //     case ExportFormat.original:
+  //       return CompressFormat.jpeg;
+  //     case ExportFormat.jpeg:
+  //       return CompressFormat.jpeg;
+  //     case ExportFormat.png:
+  //       return CompressFormat.png;
+  //     case ExportFormat.webp:
+  //       return CompressFormat.webp;
+  //     // case ExportFormat.heic:
+  //     //   return CompressFormat.heic;
+  //   }
+  // }
 
-  static String _getExtension(ExportFormat format) {
+  static String _getExtension(ExportFormat format, String? filePath) {
+    if (format == ExportFormat.original && filePath != null) {
+      final ext = filePath.split('.').last.toLowerCase();
+      switch (ext) {
+        case 'jpg':
+        case 'jpeg':
+          return 'jpg';
+        case 'png':
+          return 'png';
+        case 'webp':
+          return 'webp';
+        // Add more if needed
+      }
+      // If extension is unknown or unsupported
+      return 'jpg';
+    }
+
     switch (format) {
       case ExportFormat.jpeg:
-        return "jpg";
+        return 'jpg';
       case ExportFormat.png:
-        return "png";
+        return 'png';
       case ExportFormat.webp:
-        return "webp";
-      // case ExportFormat.heic:
-      //   return "heic";
+        return 'webp';
+      case ExportFormat.original:
+        return 'jpg'; // fallback if filePath is null
     }
   }
 
@@ -218,6 +239,41 @@ class ImageCompressor {
     }
 
     return baseDir;
+  }
+
+  static CompressFormat getCompressFormat(
+      ExportFormat format, String? filePath) {
+    if (format == ExportFormat.original) {
+      if (filePath != null) {
+        final ext = filePath.split('.').last.toLowerCase();
+        switch (ext) {
+          case 'jpg':
+          case 'jpeg':
+            return CompressFormat.jpeg;
+          case 'png':
+            return CompressFormat.png;
+          case 'webp':
+            return CompressFormat.webp;
+          // Add more if flutter_image_compress supports them
+        }
+      }
+      // Default fallback if extension is unknown or unsupported
+      return CompressFormat.jpeg;
+    }
+
+    // Other specific formats
+    switch (format) {
+      case ExportFormat.jpeg:
+        return CompressFormat.jpeg;
+      case ExportFormat.png:
+        return CompressFormat.png;
+      case ExportFormat.webp:
+        return CompressFormat.webp;
+      // case ExportFormat.heic:
+      //   return CompressFormat.heic;
+      default:
+        return CompressFormat.jpeg; // Fallback default
+    }
   }
 }
 

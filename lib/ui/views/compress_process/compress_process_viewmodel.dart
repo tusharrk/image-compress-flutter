@@ -79,7 +79,7 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
         imageAssets: selectedPhotosList,
         quality: compressSettings?.photoQuality ?? 0.8,
         dimension: compressSettings?.photoDimensions ?? 0.9,
-        format: compressSettings?.outputFormat ?? ExportFormat.jpeg,
+        format: compressSettings?.outputFormat ?? ExportFormat.original,
         folderName: AppStrings.downloadFolderName,
         keepExif: compressSettings?.keepExif ?? false,
         keepLocationData: compressSettings?.keepLocation ?? false,
@@ -118,7 +118,7 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
         imageAssets: selectedPhotosList,
         quality: compressSettings?.photoQuality ?? 0.8,
         dimension: compressSettings?.photoDimensions ?? 0.9,
-        format: compressSettings?.outputFormat ?? ExportFormat.jpeg,
+        format: compressSettings?.outputFormat ?? ExportFormat.original,
       );
       if (_beforeCompressionSize != null && _afterCompressionSize != null) {
         _savedSize =
