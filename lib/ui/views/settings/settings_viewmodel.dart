@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/constants/app_strings.dart';
 import 'package:flutter_boilerplate/core/constants/enums/enum_helper.dart';
+import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/services/theme_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
@@ -13,7 +14,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   // Compression Settings
   double _compressionQuality = 0.8;
-  ImageFormat _defaultImageFormat = ImageFormat.jpeg;
+  ExportFormat _defaultImageFormat = ExportFormat.jpeg;
   bool _removeMetadata = true;
 
   // Appearance Settings
@@ -30,7 +31,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   // Getters
   double get compressionQuality => _compressionQuality;
-  ImageFormat get defaultImageFormat => _defaultImageFormat;
+  ExportFormat get defaultImageFormat => _defaultImageFormat;
   bool get removeMetadata => _removeMetadata;
   ThemeMode get themeMode => _themeMode;
   String get selectedLanguage => _selectedLanguage;
@@ -40,7 +41,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
   String get appVersion => _appVersion;
 
   // Available options
-  List<ImageFormat> get imageFormats => ImageFormat.values;
+  List<ExportFormat> get imageFormats => ExportFormat.values;
   List<ThemeMode> get themeModes => ThemeMode.values;
   List<String> get availableLanguages => ['en', 'es', 'fr', 'de', 'zh', 'hi'];
 
@@ -57,7 +58,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
     notifyListeners();
   }
 
-  void updateImageFormat(ImageFormat format) {
+  void updateImageFormat(ExportFormat format) {
     _defaultImageFormat = format;
     _saveImageFormat(format);
     notifyListeners();
@@ -165,10 +166,10 @@ class SettingsViewModel extends CommonBaseViewmodel {
       //     storageService.read<ImageFormat>("default_image_format") ??
       //         ImageFormat.original;
 
-      _defaultImageFormat = EnumHelper.fromString<ImageFormat>(
+      _defaultImageFormat = EnumHelper.fromString<ExportFormat>(
               storageService.read<String>("default_image_format"),
-              ImageFormat.values) ??
-          ImageFormat.jpeg;
+              ExportFormat.values) ??
+          ExportFormat.jpeg;
 
       _themeMode = EnumHelper.fromString<ThemeMode>(
               storageService.read<String>("theme_mode"), ThemeMode.values) ??
@@ -190,7 +191,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
     await storageService.write("compression_quality", value);
   }
 
-  Future<void> _saveImageFormat(ImageFormat format) async {
+  Future<void> _saveImageFormat(ExportFormat format) async {
     await storageService.write(
         "default_image_format", EnumHelper.enumToString(format));
   }
@@ -257,25 +258,25 @@ class SettingsViewModel extends CommonBaseViewmodel {
 }
 
 // models/image_format.dart
-enum ImageFormat {
-  // original,
-  jpeg,
-  png,
-  webp;
+// enum ImageFormat {
+//   // original,
+//   jpeg,
+//   png,
+//   webp;
 
-  String get displayName {
-    switch (this) {
-      // case ImageFormat.original:
-      //   return 'Original';
-      case ImageFormat.jpeg:
-        return 'JPEG';
-      case ImageFormat.png:
-        return 'PNG';
-      case ImageFormat.webp:
-        return 'WebP';
-    }
-  }
-}
+//   String get displayName {
+//     switch (this) {
+//       // case ImageFormat.original:
+//       //   return 'Original';
+//       case ImageFormat.jpeg:
+//         return 'JPEG';
+//       case ImageFormat.png:
+//         return 'PNG';
+//       case ImageFormat.webp:
+//         return 'WebP';
+//     }
+//   }
+// }
 
 // Extension for ThemeMode
 extension ThemeModeExtension on ThemeMode {

@@ -6,7 +6,7 @@
 //  "keepExif": false,
 // }
 
-import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
+import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 
 class PhotoCompressSettings {
   final double photoQuality;

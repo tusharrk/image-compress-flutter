@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
+import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gal/gal.dart';
 import 'package:image/image.dart' as img;
@@ -158,8 +158,10 @@ class ImageCompressor {
     );
 
     // Only JPEG & HEIC support EXIF
-    final shouldAddExif =
-        (format == ExportFormat.jpg || format == ExportFormat.heic) && keepExif;
+    // final shouldAddExif =
+    //     (format == ExportFormat.jpeg || format == ExportFormat.heic) && keepExif;
+
+    final shouldAddExif = (format == ExportFormat.jpeg) && keepExif;
 
     if (shouldAddExif) {
       final finalBytes = await ExifChannel.addExifToImage(
@@ -175,27 +177,27 @@ class ImageCompressor {
 
   static CompressFormat _getCompressFormat(ExportFormat format) {
     switch (format) {
-      case ExportFormat.jpg:
+      case ExportFormat.jpeg:
         return CompressFormat.jpeg;
       case ExportFormat.png:
         return CompressFormat.png;
       case ExportFormat.webp:
         return CompressFormat.webp;
-      case ExportFormat.heic:
-        return CompressFormat.heic;
+      // case ExportFormat.heic:
+      //   return CompressFormat.heic;
     }
   }
 
   static String _getExtension(ExportFormat format) {
     switch (format) {
-      case ExportFormat.jpg:
+      case ExportFormat.jpeg:
         return "jpg";
       case ExportFormat.png:
         return "png";
       case ExportFormat.webp:
         return "webp";
-      case ExportFormat.heic:
-        return "heic";
+      // case ExportFormat.heic:
+      //   return "heic";
     }
   }
 

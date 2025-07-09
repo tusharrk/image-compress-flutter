@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/models/compression_settings.dart';
+import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -39,7 +40,18 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   Timer? _debounceTimer;
   bool _isCalculating = false;
   bool get isCalculating => _isCalculating;
-  ExportFormat selectedFormat = ExportFormat.jpg;
+  // ExportFormat selectedFormat = ExportFormat.jpeg;
+
+//advanced settings
+  ExportFormat _selectedFormat = ExportFormat.jpeg;
+  ExportFormat get selectedFormat => _selectedFormat;
+  List<ExportFormat> get imageFormats => ExportFormat.values;
+
+  bool _isLocationEnabled = false;
+  bool get isLocationEnabled => _isLocationEnabled;
+
+  bool _isRemoveImageMetadata = true;
+  bool get isRemoveImageMetadata => _isRemoveImageMetadata;
 
   Future<void> initialise(List<AssetEntity> photosList) async {
     setBusy(true);
@@ -140,14 +152,14 @@ class CompressImageViewModel extends CommonBaseViewmodel {
     notifyListeners();
 
     print(
-        "photoQuality: $_photoQuality, photoDimensions: $_photoDimensions, selectedFormat: $selectedFormat");
+        "photoQuality: $_photoQuality, photoDimensions: $_photoDimensions, selectedFormat: $_selectedFormat");
     try {
       _totalCompressedImageSize =
           await CompressionCalculator.getTotalCompressedSize(
         imageAssets: selectedPhotosList,
         quality: photoQuality,
         dimension: photoDimensions,
-        format: selectedFormat,
+        format: _selectedFormat,
       );
     } catch (e) {
       _totalCompressedImageSize = 0;
@@ -166,9 +178,9 @@ class CompressImageViewModel extends CommonBaseViewmodel {
     var compressSettings = PhotoCompressSettings(
         photoQuality: _photoQuality,
         photoDimensions: _photoDimensions,
-        outputFormat: selectedFormat,
-        keepLocation: true,
-        keepExif: true,
+        outputFormat: _selectedFormat,
+        keepLocation: isLocationEnabled,
+        keepExif: !isRemoveImageMetadata,
         totalSize: _totalImageSize,
         compressedSize: _totalCompressedImageSize);
 
@@ -206,6 +218,22 @@ class CompressImageViewModel extends CommonBaseViewmodel {
     // } finally {
     //   setBusy(false);
     // }
+  }
+
+  void updateImageFormat(ExportFormat format) {
+    _selectedFormat = format;
+    notifyListeners();
+    _updateEstimatedSize();
+  }
+
+  void toggleLocationEnabled(bool value) {
+    _isLocationEnabled = value;
+    notifyListeners();
+  }
+
+  void toggleRemoveMetadata(bool value) {
+    _isRemoveImageMetadata = value;
+    notifyListeners();
   }
 
   @override

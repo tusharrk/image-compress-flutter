@@ -1,6 +1,7 @@
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/constants/app_strings.dart';
 import 'package:flutter_boilerplate/core/models/compression_settings.dart';
+import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/core/utils/ImageCompressor.dart';
 import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
 import 'package:flutter_boilerplate/core/utils/permission_manager.dart';
@@ -78,7 +79,7 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
         imageAssets: selectedPhotosList,
         quality: compressSettings?.photoQuality ?? 0.8,
         dimension: compressSettings?.photoDimensions ?? 0.9,
-        format: compressSettings?.outputFormat ?? ExportFormat.jpg,
+        format: compressSettings?.outputFormat ?? ExportFormat.jpeg,
         folderName: AppStrings.downloadFolderName,
         keepExif: compressSettings?.keepExif ?? false,
         keepLocationData: compressSettings?.keepLocation ?? false,
@@ -117,7 +118,7 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
         imageAssets: selectedPhotosList,
         quality: compressSettings?.photoQuality ?? 0.8,
         dimension: compressSettings?.photoDimensions ?? 0.9,
-        format: compressSettings?.outputFormat ?? ExportFormat.jpg,
+        format: compressSettings?.outputFormat ?? ExportFormat.jpeg,
       );
       if (_beforeCompressionSize != null && _afterCompressionSize != null) {
         _savedSize =

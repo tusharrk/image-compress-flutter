@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_scaffold.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/common/pro_feature_banner.dart';
@@ -59,7 +60,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   max: 1.0,
                 ),
                 const SettingsDivider(),
-                SettingsSegmentedTile<ImageFormat>(
+                SettingsSegmentedTile<ExportFormat>(
                   title: "Default Image Format",
                   value: viewModel.defaultImageFormat,
                   items: viewModel.imageFormats,

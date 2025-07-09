@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 import 'package:photo_manager/photo_manager.dart';
-
-// enum ImageFormat { jpg, png, webp, heic }
-enum ExportFormat { jpg, png, webp, heic }
 
 class CompressionCalculator {
   static Future<int> getTotalCompressedSize({
@@ -31,9 +29,10 @@ class CompressionCalculator {
       final originalSize = originalBytes.length;
 
       // Use whichever is smaller
-      totalCompressedSize += compressedSize > 0 && compressedSize < originalSize
-          ? compressedSize
-          : originalSize;
+      // totalCompressedSize += compressedSize > 0 && compressedSize < originalSize
+      //     ? compressedSize
+      //     : originalSize;
+      totalCompressedSize += compressedSize > 0 ? compressedSize : originalSize;
     }
 
     return totalCompressedSize;
@@ -66,14 +65,14 @@ class CompressionCalculator {
 
   static CompressFormat _getCompressFormat(ExportFormat format) {
     switch (format) {
-      case ExportFormat.jpg:
+      case ExportFormat.jpeg:
         return CompressFormat.jpeg;
       case ExportFormat.png:
         return CompressFormat.png;
       case ExportFormat.webp:
         return CompressFormat.webp;
-      case ExportFormat.heic:
-        return CompressFormat.heic;
+      // case ExportFormat.heic:
+      //   return CompressFormat.heic;
     }
   }
 }
