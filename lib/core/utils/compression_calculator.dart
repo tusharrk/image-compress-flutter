@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
@@ -6,38 +7,83 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 import 'package:photo_manager/photo_manager.dart';
 
+class CancellationToken {
+  bool _isCancelled = false;
+
+  bool get isCancelled => _isCancelled;
+
+  void cancel() {
+    _isCancelled = true;
+  }
+}
+
 class CompressionCalculator {
+  static CancellationToken? _currentToken;
+
   static Future<int> getTotalCompressedSize({
     required List<AssetEntity> imageAssets,
     required double quality,
     required double dimension,
     required ExportFormat format,
   }) async {
-    int totalCompressedSize = 0;
+    // Cancel any existing operation
+    _currentToken?.cancel();
 
-    for (final image in imageAssets) {
-      final originalBytes = await image.originBytes;
-      if (originalBytes == null) continue;
+    // Create new cancellation token
+    final token = CancellationToken();
+    _currentToken = token;
 
-      final compressedBytes = await _compressImageBytes(
-        bytes: originalBytes,
-        fileName: image.title ?? "image.${format.name}",
-        quality: (quality * 100).toInt(),
-        dimensionRatio: dimension,
-        format: format,
-      );
+    try {
+      int totalCompressedSize = 0;
 
-      final compressedSize = compressedBytes?.length ?? 0;
-      final originalSize = originalBytes.length;
+      for (int i = 0; i < imageAssets.length; i++) {
+        // Check if operation was cancelled
+        if (token.isCancelled) {
+          return 0; // Operation was cancelled
+        }
 
-      // Use whichever is smaller
-      // totalCompressedSize += compressedSize > 0 && compressedSize < originalSize
-      //     ? compressedSize
-      //     : originalSize;
-      totalCompressedSize += compressedSize > 0 ? compressedSize : originalSize;
+        final image = imageAssets[i];
+        final originalBytes = await image.originBytes;
+        if (originalBytes == null) continue;
+
+        // Check cancellation again before processing
+        if (token.isCancelled) {
+          return 0;
+        }
+
+        final compressedBytes = await _compressImageBytes(
+          bytes: originalBytes,
+          fileName: image.title ?? "image.${format.name}",
+          quality: (quality * 100).toInt(),
+          dimensionRatio: dimension,
+          format: format,
+          token: token,
+        );
+
+        // Check if compression was cancelled
+        if (compressedBytes == null && token.isCancelled) {
+          return 0;
+        }
+
+        final compressedSize = compressedBytes?.length ?? 0;
+        final originalSize = originalBytes.length;
+
+        totalCompressedSize +=
+            compressedSize > 0 ? compressedSize : originalSize;
+      }
+
+      // Final check before returning result
+      if (token.isCancelled) {
+        return 0;
+      }
+
+      return totalCompressedSize;
+    } finally {
+      // Clear the current token if it's still the active one
+      if (_currentToken == token) {
+        _currentToken = null;
+      }
     }
-
-    return totalCompressedSize;
   }
 
   static Future<Uint8List?> _compressImageBytes({
@@ -46,14 +92,30 @@ class CompressionCalculator {
     required int quality,
     required double dimensionRatio,
     required ExportFormat format,
+    required CancellationToken token,
   }) async {
+    // Check cancellation before starting compression
+    if (token.isCancelled) {
+      return null;
+    }
+
     final formatEnum = ImageCompressor.getCompressFormat(format, fileName);
 
     final decodedImage = img.decodeImage(bytes);
     if (decodedImage == null) return null;
 
+    // Check cancellation before expensive operations
+    if (token.isCancelled) {
+      return null;
+    }
+
     final newWidth = (decodedImage.width * dimensionRatio).toInt();
     final newHeight = (decodedImage.height * dimensionRatio).toInt();
+
+    // Check cancellation one more time before compression
+    if (token.isCancelled) {
+      return null;
+    }
 
     final compressedBytes = await FlutterImageCompress.compressWithList(
       bytes,
@@ -63,21 +125,20 @@ class CompressionCalculator {
       minHeight: newHeight,
     );
 
+    // Final check after compression
+    if (token.isCancelled) {
+      return null;
+    }
+
     return compressedBytes;
   }
 
-  // static CompressFormat _getCompressFormat(ExportFormat format) {
-  //   switch (format) {
-  //     case ExportFormat.original:
-  //       return CompressFormat.jpeg;
-  //     case ExportFormat.jpeg:
-  //       return CompressFormat.jpeg;
-  //     case ExportFormat.png:
-  //       return CompressFormat.png;
-  //     case ExportFormat.webp:
-  //       return CompressFormat.webp;
-  //     // case ExportFormat.heic:
-  //     //   return CompressFormat.heic;
-  //   }
-  // }
+  // Method to manually cancel current operation
+  static void cancelCurrentOperation() {
+    _currentToken?.cancel();
+  }
+
+  // Method to check if there's an active operation
+  static bool get hasActiveOperation =>
+      _currentToken != null && !_currentToken!.isCancelled;
 }

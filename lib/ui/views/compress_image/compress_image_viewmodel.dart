@@ -159,7 +159,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
     }
     _debounceTimer?.cancel();
     _totalCompressedImageSize = 0;
-    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       _updateEstimatedSize();
     });
 
@@ -182,6 +182,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
         dimension: photoDimensions,
         format: _selectedFormat,
       );
+      notifyListeners();
     } catch (e) {
       _totalCompressedImageSize = 0;
     }
