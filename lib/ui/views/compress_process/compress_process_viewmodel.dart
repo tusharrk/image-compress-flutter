@@ -3,7 +3,6 @@ import 'package:flutter_boilerplate/core/constants/app_strings.dart';
 import 'package:flutter_boilerplate/core/models/compression_settings.dart';
 import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/core/utils/ImageCompressor.dart';
-import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
 import 'package:flutter_boilerplate/core/utils/permission_manager.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -41,7 +40,7 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
     _currentName = '';
     _isSuccess = false;
     _processError = null;
-    _updateEstimatedSize();
+    // _updateEstimatedSize();
     setBusy(false);
     notifyListeners();
     compressImages();
@@ -75,7 +74,7 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
       // notifyListeners();
       ////////////////test code end
       // add delay of 2 seconds to simulate processing time
-      await ImageCompressor.compressAndSaveImages(
+      var compressionResult = await ImageCompressor.compressAndSaveImages(
         imageAssets: selectedPhotosList,
         quality: compressSettings?.photoQuality ?? 0.8,
         dimension: compressSettings?.photoDimensions ?? 0.9,
@@ -94,6 +93,9 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
           notifyListeners();
         },
       );
+
+      _updateEstimatedSize(compressionResult);
+
       _isSuccess = true;
       setBusy(false);
       notifyListeners();
@@ -106,29 +108,43 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
     }
   }
 
-  Future<void> _updateEstimatedSize() async {
+  Future<void> _updateEstimatedSize(
+      CompressedImagesResult compressedImagesResult) async {
     if (selectedPhotosList.isEmpty) return;
 
     notifyListeners();
     try {
       _beforeCompressionSize = compressSettings?.totalSize ?? 0;
 
-      _afterCompressionSize =
-          await CompressionCalculator.getTotalCompressedSize(
-        imageAssets: selectedPhotosList,
-        quality: compressSettings?.photoQuality ?? 0.8,
-        dimension: compressSettings?.photoDimensions ?? 0.9,
-        format: compressSettings?.outputFormat ?? ExportFormat.original,
-      );
+      // _afterCompressionSize =
+      //     await CompressionCalculator.getTotalCompressedSize(
+      //   imageAssets: selectedPhotosList,
+      //   quality: compressSettings?.photoQuality ?? 0.8,
+      //   dimension: compressSettings?.photoDimensions ?? 0.9,
+      //   format: compressSettings?.outputFormat ?? ExportFormat.original,
+      // );
+      _afterCompressionSize = compressedImagesResult.totalSize;
       if (_beforeCompressionSize != null && _afterCompressionSize != null) {
         _savedSize =
             ((_beforeCompressionSize ?? 0) - (_afterCompressionSize ?? 0));
       } else {
         _savedSize = 0;
       }
+      updateTotalLifeTimeSavedSize(_savedSize ?? 0);
     } catch (e) {
       _afterCompressionSize = 0;
     }
+    notifyListeners();
+  }
+
+  void updateTotalLifeTimeSavedSize(int totalSavedSize) {
+    var beforeSavedSize = storageService.read<int>("total_saved_size") ?? 0;
+    // print(
+    //     "Before saved size: $beforeSavedSize, Total saved size: $totalSavedSize");
+    var newSavedSize = beforeSavedSize + totalSavedSize;
+    storageService.write("total_saved_size", newSavedSize);
+    // print(
+    //     "Updated total saved size: ${storageService.read<int>("total_saved_size")}");
     notifyListeners();
   }
 

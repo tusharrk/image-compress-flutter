@@ -120,11 +120,14 @@ class HomeView extends StackedView<HomeViewModel> {
                         size: 24,
                       ),
                       const SizedBox(width: 12),
-                      Text(
-                        "Space saved: ${viewModel.totalSpaceSaved}",
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurface.withOpacity(0.8),
+                      Flexible(
+                        child: Text(
+                          "Total Space saved: ${viewModel.totalSpaceSaved}",
+                          softWrap: true,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface.withOpacity(0.8),
+                          ),
                         ),
                       ),
                     ],

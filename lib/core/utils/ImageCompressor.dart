@@ -60,7 +60,7 @@ class ImageCompressor {
   //   return compressedFiles;
   // }
 
-  static Future<List<File>> compressAndSaveImages({
+  static Future<CompressedImagesResult> compressAndSaveImages({
     required List<AssetEntity> imageAssets,
     required double quality,
     required double dimension,
@@ -72,6 +72,7 @@ class ImageCompressor {
   }) async {
     final List<File> compressedFiles = [];
     final total = imageAssets.length;
+    int totalSize = 0;
 
     // Create temporary directory for processing
     final Directory tempDir = await getTemporaryDirectory();
@@ -123,6 +124,9 @@ class ImageCompressor {
         compressedFiles.add(fallbackFile);
       }
 
+      // Update total size
+      totalSize += finalBytes.length;
+
       // Progress callback
       onProgress(
         currentName: name,
@@ -131,7 +135,10 @@ class ImageCompressor {
       );
     }
 
-    return compressedFiles;
+    return CompressedImagesResult(
+      files: compressedFiles,
+      totalSize: totalSize,
+    );
   }
 
   static Future<Uint8List?> _compressImageBytes({
@@ -275,6 +282,16 @@ class ImageCompressor {
         return CompressFormat.jpeg; // Fallback default
     }
   }
+}
+
+class CompressedImagesResult {
+  final List<File> files;
+  final int totalSize;
+
+  CompressedImagesResult({
+    required this.files,
+    required this.totalSize,
+  });
 }
 
 class ExifChannel {

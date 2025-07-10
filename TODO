@@ -6,5 +6,5 @@ Todo:
   ☐ add notification for successful compression
   ✔ add logic for keep or not keep exif, location metadata @done(25-07-08 15:33)
   ✔ add logic for output file format @done(25-07-08 15:34)
-  ☐ save size saved in prefs to diaplay in home summary
+  ✔ save size saved in prefs to diaplay in home summary @done(25-07-10 15:05)
   ☐ optimise estimated size calculation
