@@ -3,12 +3,16 @@ import 'package:flutter_boilerplate/core/constants/app_strings.dart';
 import 'package:flutter_boilerplate/core/models/compression_settings.dart';
 import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/core/utils/ImageCompressor.dart';
+import 'package:flutter_boilerplate/core/utils/asset_utils.dart';
 import 'package:flutter_boilerplate/core/utils/permission_manager.dart';
+import 'package:flutter_boilerplate/services/notification_service.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class CompressProcessViewModel extends CommonBaseViewmodel {
   List<AssetEntity> selectedPhotosList = [];
   PhotoCompressSettings? compressSettings;
+
+  final notificationService = locator<NotificationService>();
 
   // Progress state
   int _currentIndex = 0;
@@ -131,6 +135,8 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
         _savedSize = 0;
       }
       updateTotalLifeTimeSavedSize(_savedSize ?? 0);
+      sendTaskCompletionNotification(
+          compressedImagesResult.files.length, _savedSize ?? 0);
     } catch (e) {
       _afterCompressionSize = 0;
     }
@@ -146,6 +152,21 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
     // print(
     //     "Updated total saved size: ${storageService.read<int>("total_saved_size")}");
     notifyListeners();
+  }
+
+  void sendTaskCompletionNotification(int noOfFiles, int savedSize) {
+    var isNotificationEnabled =
+        storageService.read<bool>("notifications_enabled") ?? true;
+
+    if (!isNotificationEnabled) {
+      return;
+    }
+    notificationService.showNotification(
+      id: 1,
+      title: 'Compression Completed',
+      body: 'Successfully compressed $noOfFiles images. '
+          'You saved: ${AssetUtils().formatBytes(savedSize)} 🎉',
+    );
   }
 
   void navigateToHome() {

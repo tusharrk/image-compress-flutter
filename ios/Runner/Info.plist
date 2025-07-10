@@ -49,5 +49,13 @@
 		<string>To Save Compressed images</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>To Save Compressed images</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>remote-notification</string>
+		</array>
+		<key>NSUserTrackingUsageDescription</key>
+		<string>This identifier will be used to deliver notifications to you.</string>
+		<key>UNUserNotificationCenter</key>
+		<string>YES</string>
 	</dict>
 </plist>

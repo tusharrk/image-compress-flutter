@@ -7,6 +7,7 @@ import 'package:flutter_boilerplate/services/environment_service.dart';
 import 'package:flutter_boilerplate/services/user_service.dart';
 import 'package:flutter_boilerplate/services/gallery_service.dart';
 import 'package:flutter_boilerplate/services/theme_service.dart';
+import 'package:flutter_boilerplate/services/notification_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -22,6 +23,7 @@ import 'test_helpers.mocks.dart';
     MockSpec<UserService>(onMissingStub: OnMissingStub.returnDefault),
     MockSpec<GalleryService>(onMissingStub: OnMissingStub.returnDefault),
     MockSpec<ThemeService>(onMissingStub: OnMissingStub.returnDefault),
+    MockSpec<NotificationService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
   ],
 )
@@ -34,6 +36,7 @@ void registerServices() {
   getAndRegisterUserService();
   getAndRegisterGalleryService();
   getAndRegisterThemeService();
+  getAndRegisterNotificationService();
 // @stacked-mock-register
 }
 
@@ -123,6 +126,13 @@ MockThemeService getAndRegisterThemeService() {
   _removeRegistrationIfExists<ThemeService>();
   final service = MockThemeService();
   locator.registerSingleton<ThemeService>(service);
+  return service;
+}
+
+MockNotificationService getAndRegisterNotificationService() {
+  _removeRegistrationIfExists<NotificationService>();
+  final service = MockNotificationService();
+  locator.registerSingleton<NotificationService>(service);
   return service;
 }
 // @stacked-mock-create

@@ -7,6 +7,7 @@ import 'package:flutter_boilerplate/app/app.router.dart';
 import 'package:flutter_boilerplate/core/theme/custom_dark_theme.dart';
 import 'package:flutter_boilerplate/core/theme/custom_light_theme.dart';
 import 'package:flutter_boilerplate/core/translation/app_localization.dart';
+import 'package:flutter_boilerplate/services/notification_service.dart';
 import 'package:flutter_boilerplate/services/theme_service.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await setupLocator();
+  await locator<NotificationService>().init();
   setupServices();
   setupSnackbarUi();
   setupDialogUi();

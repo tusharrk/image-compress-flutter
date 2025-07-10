@@ -17,6 +17,7 @@ import 'package:flutter_boilerplate/ui/views/settings/settings_view.dart';
 import 'package:flutter_boilerplate/ui/views/startup/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:flutter_boilerplate/services/notification_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -43,6 +44,7 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: UserService),
     LazySingleton(classType: GalleryService),
     LazySingleton(classType: ThemeService),
+    LazySingleton(classType: NotificationService),
 // @stacked-service
   ],
   bottomsheets: [

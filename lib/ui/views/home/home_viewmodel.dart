@@ -1,7 +1,15 @@
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/utils/asset_utils.dart';
+import 'package:flutter_boilerplate/services/notification_service.dart';
 
 class HomeViewModel extends CommonBaseViewmodel {
+  // Services
+  final notificationService = locator<NotificationService>();
+
+  void initialise() {
+    askNotificationPermission();
+  }
+
   void navigateToSettings() {
     print("Theme mode saved: ${storageService.read<String>("theme_mode")}");
 
@@ -29,5 +37,9 @@ class HomeViewModel extends CommonBaseViewmodel {
 
   bool isUserProPurchased() {
     return isProUser();
+  }
+
+  void askNotificationPermission() async {
+    await notificationService.requestPermissions();
   }
 }
