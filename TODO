@@ -1,6 +1,6 @@
 
 Todo:
-  ☐ add logic for advanced options for compression
+  ✔ add logic for advanced options for compression @done(25-07-10 16:24)
   ☐ create paywall page
   ☐ add payment setup
   ✔ add notification for successful compression @done(25-07-10 16:24)
