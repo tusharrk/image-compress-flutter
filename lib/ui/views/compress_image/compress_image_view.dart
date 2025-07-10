@@ -50,14 +50,17 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
               ),
             ),
             const SizedBox(height: 24),
-            StatsView(
-              totalImages: photosList.length,
-              totalSizeBefore: viewModel
-                  .totalImageSize, // Placeholder for actual size in bytes
-              totalSizeAfter: viewModel
-                  .totalCompressedImageSize, // Placeholder for actual size in bytes
-            ),
-            const SizedBox(height: 16),
+            if (viewModel.isStatsEnabled) ...[
+              StatsView(
+                totalImages: photosList.length,
+                totalSizeBefore: viewModel
+                    .totalImageSize, // Placeholder for actual size in bytes
+                totalSizeAfter: viewModel
+                    .totalCompressedImageSize, // Placeholder for actual size in bytes
+              ),
+              const SizedBox(height: 16),
+            ],
+
             const SettingsDivider(),
             const SizedBox(height: 16),
             SettingsSegmentedTile<CompressSettingsType>(

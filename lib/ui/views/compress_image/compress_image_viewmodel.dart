@@ -42,6 +42,8 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   bool get isCalculating => _isCalculating;
   // ExportFormat selectedFormat = ExportFormat.original;
 
+  bool isStatsEnabled = false;
+
   //Simple settings
   SimpleImageQuality _selectedImageQuality = SimpleImageQuality.medium;
   SimpleImageQuality get selectedImageQuality => _selectedImageQuality;
@@ -67,6 +69,12 @@ class CompressImageViewModel extends CommonBaseViewmodel {
     setBusy(true);
     selectedPhotosList.clear();
     selectedPhotosList.addAll(photosList);
+    if (photosList.length < 4) {
+      isStatsEnabled = true;
+    } else {
+      isStatsEnabled = false;
+    }
+    notifyListeners();
     setBusy(false);
     calculateTotalImageSize();
     setPhotoQualityText(_photoQuality);
@@ -146,9 +154,12 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   }
 
   Future<void> calculateTotalCompressedImageSize() async {
+    if (!isStatsEnabled) {
+      return;
+    }
     _debounceTimer?.cancel();
     _totalCompressedImageSize = 0;
-    _debounceTimer = Timer(const Duration(milliseconds: 1000), () {
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
       _updateEstimatedSize();
     });
 
