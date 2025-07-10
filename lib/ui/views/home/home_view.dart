@@ -44,7 +44,7 @@ class HomeView extends StackedView<HomeViewModel> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 0),
 
               // Hero Section
               Expanded(
@@ -169,7 +169,9 @@ class HomeView extends StackedView<HomeViewModel> {
                     // Pro upgrade card
                     if (!viewModel.isUserProPurchased())
                       ModernProBadgeContainer(
-                        onTap: () {},
+                        onTap: () {
+                          viewModel.onProBtnClicked();
+                        },
                         child: ProFeatureBannerView(
                             colorScheme: colorScheme, theme: theme),
                       ),

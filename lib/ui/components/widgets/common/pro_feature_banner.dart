@@ -41,7 +41,7 @@ class ProFeatureBannerView extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                "Batch processing • Higher quality • No limits",
+                "Batch processing • Advance Options • No limits",
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurface.withOpacity(0.6),
                   height: 1.3,

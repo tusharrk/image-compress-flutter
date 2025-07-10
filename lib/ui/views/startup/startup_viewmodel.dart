@@ -16,6 +16,6 @@ class StartupViewModel extends CommonBaseViewmodel {
 
   Future<void> test() async {
     await storageService.write('testKey', "test Value");
-    setProUser(true);
+    setProUser(false);
   }
 }

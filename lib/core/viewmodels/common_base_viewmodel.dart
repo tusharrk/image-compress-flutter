@@ -47,4 +47,8 @@ class CommonBaseViewmodel extends BaseViewModel {
     storageService.remove("isProUser");
     logger.i('Cleared Pro user status');
   }
+
+  void navigateToProUpgrade() {
+    navigationService.navigateToPaywallSubscriptionView();
+  }
 }

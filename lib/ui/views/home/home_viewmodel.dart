@@ -16,7 +16,9 @@ class HomeViewModel extends CommonBaseViewmodel {
     navigationService.navigateToSettingsView();
   }
 
-  void navigateToProUpgrade() {}
+  void onProBtnClicked() {
+    navigateToProUpgrade();
+  }
 
   void navigateToSelectImage() {
     navigationService.navigateToListAlbumsView();
