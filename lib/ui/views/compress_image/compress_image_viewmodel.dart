@@ -18,11 +18,11 @@ class CompressImageViewModel extends CommonBaseViewmodel {
       CompressSettingsType.values;
 
   // photo quality
-  double _photoQuality = 0.8;
+  double _photoQuality = 0.5;
   double get photoQuality => _photoQuality;
 
   // photo dimension
-  double _photoDimensions = 0.9;
+  double _photoDimensions = 0.7;
   double get photoDimensions => _photoDimensions;
 
   String _photoQualityText = "Great";
@@ -41,6 +41,16 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   bool _isCalculating = false;
   bool get isCalculating => _isCalculating;
   // ExportFormat selectedFormat = ExportFormat.original;
+
+  //Simple settings
+  SimpleImageQuality _selectedImageQuality = SimpleImageQuality.medium;
+  SimpleImageQuality get selectedImageQuality => _selectedImageQuality;
+
+  String _selectedImageQualityDescription = "Medium Resolution - Good Quality";
+  String get selectedImageQualityDescription =>
+      _selectedImageQualityDescription;
+  List<SimpleImageQuality> get simpleImageQualityList =>
+      SimpleImageQuality.values;
 
 //advanced settings
   ExportFormat _selectedFormat = ExportFormat.original;
@@ -138,7 +148,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   Future<void> calculateTotalCompressedImageSize() async {
     _debounceTimer?.cancel();
     _totalCompressedImageSize = 0;
-    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+    _debounceTimer = Timer(const Duration(milliseconds: 1000), () {
       _updateEstimatedSize();
     });
 
@@ -220,10 +230,35 @@ class CompressImageViewModel extends CommonBaseViewmodel {
     // }
   }
 
+  void updateSimpleImageQuality(SimpleImageQuality quality) {
+    _selectedImageQuality = quality;
+    switch (quality) {
+      case SimpleImageQuality.small:
+        _photoQuality = 0.3;
+        _photoDimensions = 0.4;
+        _selectedImageQualityDescription =
+            "Small Resolution - Acceptable Quality";
+        break;
+      case SimpleImageQuality.medium:
+        _photoQuality = 0.5;
+        _photoDimensions = 0.7;
+        _selectedImageQualityDescription = "Medium Resolution - Good Quality";
+        break;
+      case SimpleImageQuality.large:
+        _photoQuality = 0.8;
+        _photoDimensions = 0.95;
+        _selectedImageQualityDescription = "Original Resolution - Best Quality";
+        break;
+    }
+
+    notifyListeners();
+    calculateTotalCompressedImageSize();
+  }
+
   void updateImageFormat(ExportFormat format) {
     _selectedFormat = format;
     notifyListeners();
-    _updateEstimatedSize();
+    calculateTotalCompressedImageSize();
   }
 
   void toggleLocationEnabled(bool value) {

@@ -8,6 +8,7 @@ import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_action_ti
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_card.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_divider.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_dropdown_tile.dart';
+import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_section_header.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_segmented_tile.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_slider_tile.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_switch_tile.dart';
@@ -48,7 +49,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
             const SizedBox(height: 24),
 
             // Compression Settings Section
-            _buildSectionHeader("Compression Settings"),
+            const SettingsSectionHeader(title: "Compression Settings"),
             SettingsCard(
               children: [
                 SettingsSliderTile(
@@ -87,7 +88,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
             const SizedBox(height: 24),
 
             // Appearance Section
-            _buildSectionHeader("Appearance"),
+            const SettingsSectionHeader(title: "Appearance"),
             SettingsCard(
               children: [
                 SettingsSegmentedTile<ThemeMode>(
@@ -118,7 +119,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
             const SizedBox(height: 24),
 
             // Notifications Section
-            _buildSectionHeader("Notifications"),
+            const SettingsSectionHeader(title: "Notifications"),
             SettingsCard(
               children: [
                 SettingsSwitchTile(
@@ -133,7 +134,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
             const SizedBox(height: 24),
 
             // Storage Section
-            // _buildSectionHeader("Storage"),
+            // _const SettingsSectionHeader(title:"Storage"),
             // SettingsCard(
             //   children: [
             //     SettingsActionTile(
@@ -154,7 +155,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
             //     const SizedBox(height: 24),
 
             // About Section
-            _buildSectionHeader("About"),
+            const SettingsSectionHeader(title: "About"),
             SettingsCard(
               children: [
                 SettingsActionTile(
@@ -197,7 +198,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
               ],
             ),
             const SizedBox(height: 24),
-            _buildSectionHeader("Our other Apps"),
+            const SettingsSectionHeader(title: "Our other Apps"),
             SettingsCard(children: [
               SettingsActionTile(
                 title: "GPS Map Camera",
@@ -213,20 +214,6 @@ class SettingsView extends StackedView<SettingsViewModel> {
             ]),
             const SizedBox(height: 32),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: Colors.grey,
         ),
       ),
     );

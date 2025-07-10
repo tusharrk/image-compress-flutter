@@ -8,6 +8,7 @@ import 'package:flutter_boilerplate/ui/views/compress_image/widgets/slider_butto
 import 'package:flutter_boilerplate/ui/views/compress_image/widgets/stats_view.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_card.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_divider.dart';
+import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_section_header.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_segmented_tile.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_slider_tile.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_switch_tile.dart';
@@ -84,6 +85,8 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
               text: "Swipe to Compress",
               icon: Icons.compress_rounded,
             ),
+            const SizedBox(height: 16),
+            const SizedBox(height: 16),
             // PrimaryFullWidthContainer(
             //   onTap: () {
             //     viewModel.compressImages();
@@ -118,23 +121,37 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
   ) {
     return SettingsCard(
       children: [
-        SettingsSliderTile(
-          title: "Photo Quality: ${viewModel.photoQualityText}",
-          subtitle: "${(viewModel.photoQuality * 100).round()}%",
-          value: viewModel.photoQuality,
-          onChanged: viewModel.updatePhotoQuality,
-          min: 0.05,
-          max: 1.0,
+        SettingsSegmentedTile<SimpleImageQuality>(
+          title: "Select Output Image Size",
+          value: viewModel.selectedImageQuality,
+          items: viewModel.simpleImageQualityList,
+          onChanged: viewModel.updateSimpleImageQuality,
+          itemBuilder: (format) => format.displayName,
         ),
-        const SettingsDivider(),
-        SettingsSliderTile(
-          title: "Photo Dimension: ${viewModel.photoDimensionsText}",
-          subtitle: "${(viewModel.photoDimensions * 100).round()}%",
-          value: viewModel.photoDimensions,
-          onChanged: viewModel.updatePhotoDimension,
-          min: 0.05,
-          max: 1.0,
+        Text(
+          viewModel.selectedImageQualityDescription,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
+        // SettingsSliderTile(
+        //   title: "Photo Quality: ${viewModel.photoQualityText}",
+        //   subtitle: "${(viewModel.photoQuality * 100).round()}%",
+        //   value: viewModel.photoQuality,
+        //   onChanged: viewModel.updatePhotoQuality,
+        //   min: 0.05,
+        //   max: 1.0,
+        // ),
+        // const SettingsDivider(),
+        // SettingsSliderTile(
+        //   title: "Photo Dimension: ${viewModel.photoDimensionsText}",
+        //   subtitle: "${(viewModel.photoDimensions * 100).round()}%",
+        //   value: viewModel.photoDimensions,
+        //   onChanged: viewModel.updatePhotoDimension,
+        //   min: 0.05,
+        //   max: 1.0,
+        // ),
       ],
     );
   }
@@ -146,44 +163,53 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Add advanced options widgets here
-        SettingsSliderTile(
-          title: "Photo Quality: ${viewModel.photoQualityText}",
-          subtitle: "${(viewModel.photoQuality * 100).round()}%",
-          value: viewModel.photoQuality,
-          onChanged: viewModel.updatePhotoQuality,
-          min: 0.05,
-          max: 1.0,
+        SettingsCard(
+          children: [
+            SettingsSliderTile(
+              title: "Photo Quality: ${viewModel.photoQualityText}",
+              subtitle: "${(viewModel.photoQuality * 100).round()}%",
+              value: viewModel.photoQuality,
+              onChanged: viewModel.updatePhotoQuality,
+              min: 0.05,
+              max: 1.0,
+            ),
+            const SettingsDivider(),
+            SettingsSliderTile(
+              title: "Photo Dimension: ${viewModel.photoDimensionsText}",
+              subtitle: "${(viewModel.photoDimensions * 100).round()}%",
+              value: viewModel.photoDimensions,
+              onChanged: viewModel.updatePhotoDimension,
+              min: 0.05,
+              max: 1.0,
+            ),
+          ],
         ),
-        const SettingsDivider(),
-        SettingsSliderTile(
-          title: "Photo Dimension: ${viewModel.photoDimensionsText}",
-          subtitle: "${(viewModel.photoDimensions * 100).round()}%",
-          value: viewModel.photoDimensions,
-          onChanged: viewModel.updatePhotoDimension,
-          min: 0.05,
-          max: 1.0,
-        ),
-        const SettingsDivider(),
-        SettingsSegmentedTile<ExportFormat>(
-          title: "Default Image Format",
-          value: viewModel.selectedFormat,
-          items: viewModel.imageFormats,
-          onChanged: viewModel.updateImageFormat,
-          itemBuilder: (format) => format.displayName,
-        ),
-        const SettingsDivider(),
-        SettingsSwitchTile(
-          title: "Keep Location Data",
-          subtitle: "Include GPS coordinates in the image metadata",
-          value: viewModel.isLocationEnabled,
-          onChanged: viewModel.toggleLocationEnabled,
-        ),
-        const SettingsDivider(),
-        SettingsSwitchTile(
-          title: "Remove Image Metadata by Default",
-          subtitle: "Strip EXIF data from compressed images",
-          value: viewModel.isRemoveImageMetadata,
-          onChanged: viewModel.toggleRemoveMetadata,
+        const SizedBox(height: 12),
+        const SettingsSectionHeader(title: "Pro Features"),
+        SettingsCard(
+          children: [
+            SettingsSegmentedTile<ExportFormat>(
+              title: "Default Image Format",
+              value: viewModel.selectedFormat,
+              items: viewModel.imageFormats,
+              onChanged: viewModel.updateImageFormat,
+              itemBuilder: (format) => format.displayName,
+            ),
+            const SettingsDivider(),
+            SettingsSwitchTile(
+              title: "Keep Location Data",
+              subtitle: "Include GPS coordinates in the image metadata",
+              value: viewModel.isLocationEnabled,
+              onChanged: viewModel.toggleLocationEnabled,
+            ),
+            const SettingsDivider(),
+            SettingsSwitchTile(
+              title: "Remove Image Metadata by Default",
+              subtitle: "Strip EXIF data from compressed images",
+              value: viewModel.isRemoveImageMetadata,
+              onChanged: viewModel.toggleRemoveMetadata,
+            ),
+          ],
         ),
       ],
     );
