@@ -49,6 +49,10 @@ class CommonBaseViewmodel extends BaseViewModel {
   }
 
   void navigateToProUpgrade() {
-    navigationService.navigateToPaywallSubscriptionView();
+    navigationService.navigateTo(
+      Routes.paywallSubscriptionView,
+      transition: TransitionsBuilders.slideBottom,
+    );
+    // navigationService.navigateToPaywallSubscriptionView();
   }
 }

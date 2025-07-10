@@ -174,9 +174,14 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i11.PaywallSubscriptionView: (data) {
-      return _i12.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i11.PaywallSubscriptionView(),
+      return _i12.PageRouteBuilder<dynamic>(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const _i11.PaywallSubscriptionView(),
         settings: data,
+        transitionsBuilder: data.transition ??
+            (context, animation, secondaryAnimation, child) {
+              return child;
+            },
       );
     },
   };

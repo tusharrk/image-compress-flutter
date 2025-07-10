@@ -1,5 +1,6 @@
 import 'package:flutter_boilerplate/services/environment_service.dart';
 import 'package:flutter_boilerplate/services/gallery_service.dart';
+import 'package:flutter_boilerplate/services/notification_service.dart';
 import 'package:flutter_boilerplate/services/storage_service.dart';
 import 'package:flutter_boilerplate/services/theme_service.dart';
 import 'package:flutter_boilerplate/services/user_service.dart';
@@ -17,7 +18,6 @@ import 'package:flutter_boilerplate/ui/views/settings/settings_view.dart';
 import 'package:flutter_boilerplate/ui/views/startup/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:flutter_boilerplate/services/notification_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -31,7 +31,7 @@ import 'package:flutter_boilerplate/services/notification_service.dart';
     MaterialRoute(page: CompressImageView),
     MaterialRoute(page: CompressProcessView),
     MaterialRoute(page: CompressResultView),
-    MaterialRoute(page: PaywallSubscriptionView),
+    CustomRoute(page: PaywallSubscriptionView),
 // @stacked-route
   ],
   dependencies: [

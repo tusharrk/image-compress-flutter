@@ -14,8 +14,9 @@ class PaywallSubscriptionView
     Widget? child,
   ) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Container(
+        color: Theme.of(context).colorScheme.primary,
         padding: const EdgeInsets.only(left: 25.0, right: 25.0),
         child: const Center(child: Text("PaywallSubscriptionView")),
       ),

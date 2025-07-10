@@ -40,7 +40,12 @@ class AppColors {
   // Shadows
   static const shadow = Color(0xFF000000);
   static const scrim = Color(0xFF000000);
+
+  static const Color proButtonColor =
+      Color(0xFFFFCF5D); // Modern fresh blue for Pro button
 }
+
+//#FFCF5D test yello color for pro button
 
 //colors to consider
 //#1b63f6 blue

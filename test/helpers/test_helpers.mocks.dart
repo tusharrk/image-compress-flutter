@@ -1587,4 +1587,66 @@ class MockThemeService extends _i1.Mock implements _i14.ThemeService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNotificationService extends _i1.Mock
-    implements _i15.NotificationService {}
+    implements _i15.NotificationService {
+  @override
+  _i8.Future<void> init() => (super.noSuchMethod(
+        Invocation.method(
+          #init,
+          [],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<void> showNotification({
+    required int? id,
+    required String? title,
+    required String? body,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #showNotification,
+          [],
+          {
+            #id: id,
+            #title: title,
+            #body: body,
+          },
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<void> scheduleNotification({
+    required int? id,
+    required String? title,
+    required String? body,
+    required DateTime? scheduledTime,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #scheduleNotification,
+          [],
+          {
+            #id: id,
+            #title: title,
+            #body: body,
+            #scheduledTime: scheduledTime,
+          },
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<void> requestPermissions() => (super.noSuchMethod(
+        Invocation.method(
+          #requestPermissions,
+          [],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+}
