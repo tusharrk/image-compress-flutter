@@ -1,6 +1,7 @@
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/utils/asset_utils.dart';
 import 'package:flutter_boilerplate/services/notification_service.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 class HomeViewModel extends CommonBaseViewmodel {
   // Services
@@ -16,8 +17,12 @@ class HomeViewModel extends CommonBaseViewmodel {
     navigationService.navigateToSettingsView();
   }
 
-  void onProBtnClicked() {
-    navigateToProUpgrade();
+  void onProBtnClicked() async {
+    // navigateToProUpgrade();
+    //void presentPaywall() async {
+    final paywallResult = await RevenueCatUI.presentPaywall();
+    print('Paywall result: $paywallResult');
+    // }
   }
 
   void navigateToSelectImage() {

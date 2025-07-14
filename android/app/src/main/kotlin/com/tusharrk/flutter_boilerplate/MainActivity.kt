@@ -5,11 +5,12 @@ import android.graphics.Bitmap
 
 import android.graphics.BitmapFactory
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.*
 
-class MainActivity: FlutterActivity() {
+class MainActivity: FlutterFragmentActivity() {
     private val CHANNEL = "image_exif_channel"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

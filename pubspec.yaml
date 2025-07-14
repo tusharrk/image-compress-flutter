@@ -32,6 +32,8 @@ dependencies:
   photo_manager: ^3.7.1
   photo_manager_image_provider: ^2.2.0
   pretty_dio_logger: ^1.4.0
+  purchases_flutter: ^8.10.6
+  purchases_ui_flutter: ^8.10.6
   share_plus: ^11.0.0
   shared_preferences: ^2.5.3
   stacked: ^3.4.0

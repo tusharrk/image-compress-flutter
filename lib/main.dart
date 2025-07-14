@@ -7,6 +7,8 @@ import 'package:flutter_boilerplate/app/app.router.dart';
 import 'package:flutter_boilerplate/core/theme/custom_dark_theme.dart';
 import 'package:flutter_boilerplate/core/theme/custom_light_theme.dart';
 import 'package:flutter_boilerplate/core/translation/app_localization.dart';
+import 'package:flutter_boilerplate/core/utils/revenue_cat_util.dart'
+    as revenue_cat;
 import 'package:flutter_boilerplate/services/notification_service.dart';
 import 'package:flutter_boilerplate/services/theme_service.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -17,6 +19,12 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await setupLocator();
   await locator<NotificationService>().init();
+  await revenue_cat.initialize(
+    "appl_nFzgpaiGxNTpEVgSeTmpfBcmPZf",
+    "Play Store API Key",
+    debugLogEnabled: true,
+    loadDataAfterLaunch: true,
+  );
   setupServices();
   setupSnackbarUi();
   setupDialogUi();
