@@ -116,7 +116,7 @@ final class CustomLightTheme implements CustomTheme {
       );
 
   @override
-  TabBarTheme get tabBarTheme => TabBarTheme(
+  TabBarThemeData get tabBarTheme => TabBarThemeData(
         // TabBar background is primary blue - so texts must be light
         labelColor: CustomColorScheme.lightColorScheme.onPrimary, // white
         unselectedLabelColor:

@@ -14,5 +14,5 @@ abstract class CustomTheme {
   TextTheme get textTheme => const TextTheme();
   IconThemeData get iconThemeData => const IconThemeData();
   SwitchThemeData get switchThemeData => const SwitchThemeData();
-  TabBarTheme get tabBarTheme => const TabBarTheme();
+  TabBarThemeData get tabBarTheme => const TabBarThemeData();
 }

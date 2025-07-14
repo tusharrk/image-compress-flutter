@@ -5,15 +5,19 @@ import MobileCoreServices
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    GeneratedPluginRegistrant.register(with: self)
-
+    
+    // Define the channel name constant
+    private let channelName = "image_exif_channel"
+    
+    override func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        GeneratedPluginRegistrant.register(with: self)
+        
         let controller = window?.rootViewController as! FlutterViewController
         let channel = FlutterMethodChannel(name: channelName, binaryMessenger: controller.binaryMessenger)
-
+        
         channel.setMethodCallHandler { call, result in
             guard call.method == "addExifToImage",
                   let args = call.arguments as? [String: Any],
@@ -24,7 +28,7 @@ import MobileCoreServices
                 result(FlutterError(code: "INVALID", message: "Invalid arguments", details: nil))
                 return
             }
-
+            
             guard let source = CGImageSourceCreateWithData(originalData as CFData, nil),
                   let originalMetadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
                   let image = UIImage(data: compressedData),
@@ -33,12 +37,12 @@ import MobileCoreServices
                 result(FlutterError(code: "DECODE_FAIL", message: "Failed to decode images", details: nil))
                 return
             }
-
+            
             var updatedMetadata = originalMetadata
             if !keepLocation {
                 updatedMetadata.removeValue(forKey: kCGImagePropertyGPSDictionary)
             }
-
+            
             let destData = NSMutableData()
             if let destination = CGImageDestinationCreateWithData(destData, kUTTypeJPEG, 1, nil) {
                 CGImageDestinationAddImage(destination, cgImage, updatedMetadata as CFDictionary)
@@ -48,8 +52,7 @@ import MobileCoreServices
                 result(FlutterError(code: "EXIF_FAIL", message: "Could not create destination", details: nil))
             }
         }
-
-
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
+        
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
 }

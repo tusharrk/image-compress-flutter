@@ -117,7 +117,7 @@ final class CustomDarkTheme implements CustomTheme {
       );
 
   @override
-  TabBarTheme get tabBarTheme => TabBarTheme(
+  TabBarThemeData get tabBarTheme => TabBarThemeData(
         labelColor: CustomColorScheme.darkColorScheme.onPrimary, // white
         unselectedLabelColor:
             CustomColorScheme.darkColorScheme.onPrimary.withOpacity(0.7),
