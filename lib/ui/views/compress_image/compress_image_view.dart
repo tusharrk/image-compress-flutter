@@ -201,16 +201,17 @@ class CompressImageView extends StackedView<CompressImageViewModel> {
             const SettingsDivider(),
             SettingsSwitchTile(
               title: "Keep Location Data",
-              subtitle: "Include GPS coordinates in the image metadata",
+              subtitle:
+                  "Enable to retain GPS Location coordinates in compressed images",
               value: viewModel.isLocationEnabled,
               onChanged: viewModel.toggleLocationEnabled,
             ),
             const SettingsDivider(),
             SettingsSwitchTile(
-              title: "Remove Image Metadata by Default",
-              subtitle: "Strip EXIF data from compressed images",
-              value: viewModel.isRemoveImageMetadata,
-              onChanged: viewModel.toggleRemoveMetadata,
+              title: "Keep Image Metadata",
+              subtitle: "Enable to retain EXIF data in compressed images",
+              value: viewModel.isKeepMetadata,
+              onChanged: viewModel.toggleKeepMetadata,
             ),
           ],
         ),

@@ -10,7 +10,6 @@ import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_divider.d
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_dropdown_tile.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_section_header.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_segmented_tile.dart';
-import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_slider_tile.dart';
 import 'package:flutter_boilerplate/ui/views/settings/widgets/settings_switch_tile.dart';
 import 'package:stacked/stacked.dart';
 
@@ -31,6 +30,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
     return AppScaffold(
       appBar: const AppAppBar(
         title: "Settings",
+        showBack: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -52,13 +52,27 @@ class SettingsView extends StackedView<SettingsViewModel> {
             const SettingsSectionHeader(title: "Compression Settings"),
             SettingsCard(
               children: [
-                SettingsSliderTile(
+                // SettingsSliderTile(
+                //   title: "Default Photo Quality",
+                //   subtitle: "${(viewModel.compressionQuality * 100).round()}%",
+                //   value: viewModel.compressionQuality,
+                //   onChanged: viewModel.updateCompressionQuality,
+                //   min: 0.05,
+                //   max: 1.0,
+                // ),
+                SettingsSegmentedTile<SimpleImageQuality>(
                   title: "Default Photo Quality",
-                  subtitle: "${(viewModel.compressionQuality * 100).round()}%",
-                  value: viewModel.compressionQuality,
-                  onChanged: viewModel.updateCompressionQuality,
-                  min: 0.05,
-                  max: 1.0,
+                  value: viewModel.selectedImageQuality,
+                  items: viewModel.simpleImageQualityList,
+                  onChanged: viewModel.updateSimpleImageQuality,
+                  itemBuilder: (format) => format.displayName,
+                ),
+                Text(
+                  viewModel.selectedImageQualityDescription,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SettingsDivider(),
                 SettingsSegmentedTile<ExportFormat>(
@@ -77,10 +91,19 @@ class SettingsView extends StackedView<SettingsViewModel> {
                 // ),
                 const SettingsDivider(),
                 SettingsSwitchTile(
-                  title: "Remove Image Metadata by Default",
-                  subtitle: "Strip EXIF data from compressed images",
-                  value: viewModel.removeMetadata,
-                  onChanged: viewModel.toggleRemoveMetadata,
+                  title: "Keep Image Metadata by Default",
+                  subtitle: "Enable to retain EXIF data in compressed images",
+                  value: viewModel.keepMetadata,
+                  onChanged: viewModel.toggleKeepMetadata,
+                ),
+
+                const SettingsDivider(),
+                SettingsSwitchTile(
+                  title: "Keep Location Data by Default",
+                  subtitle:
+                      "Enable to retain GPS Location coordinates in compressed images",
+                  value: viewModel.keepLocation,
+                  onChanged: viewModel.toggleKeepLocation,
                 ),
               ],
             ),

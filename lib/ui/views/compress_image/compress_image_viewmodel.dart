@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
+import 'package:flutter_boilerplate/core/constants/enums/enum_helper.dart';
 import 'package:flutter_boilerplate/core/models/compression_settings.dart';
 import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/core/utils/compression_calculator.dart';
@@ -62,8 +63,8 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   bool _isLocationEnabled = false;
   bool get isLocationEnabled => _isLocationEnabled;
 
-  bool _isRemoveImageMetadata = true;
-  bool get isRemoveImageMetadata => _isRemoveImageMetadata;
+  bool _isKeepMetadata = false;
+  bool get isKeepMetadata => _isKeepMetadata;
 
   Future<void> initialise(List<AssetEntity> photosList) async {
     setBusy(true);
@@ -76,11 +77,29 @@ class CompressImageViewModel extends CommonBaseViewmodel {
     }
     notifyListeners();
     setBusy(false);
+    loadDefaults();
     calculateTotalImageSize();
     setPhotoQualityText(_photoQuality);
     setPhotoDimensionsText(_photoDimensions);
     calculateTotalCompressedImageSize();
     notifyListeners();
+  }
+
+  void loadDefaults() {
+    _selectedImageQuality = EnumHelper.fromString<SimpleImageQuality>(
+            storageService.read<String>("compression_quality"),
+            SimpleImageQuality.values) ??
+        SimpleImageQuality.medium;
+    updateSimpleImageQuality(_selectedImageQuality);
+
+    _selectedFormat = EnumHelper.fromString<ExportFormat>(
+            storageService.read<String>("default_image_format"),
+            ExportFormat.values) ??
+        ExportFormat.original;
+
+    _isKeepMetadata = storageService.read<bool>("keep_metadata") ?? false;
+
+    _isLocationEnabled = storageService.read<bool>("keep_location") ?? false;
   }
 
   void updateCompressOptionType(CompressSettingsType format) {
@@ -202,7 +221,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
         photoDimensions: _photoDimensions,
         outputFormat: _selectedFormat,
         keepLocation: isLocationEnabled,
-        keepExif: !isRemoveImageMetadata,
+        keepExif: !isKeepMetadata,
         totalSize: _totalImageSize,
         compressedSize: _totalCompressedImageSize);
 
@@ -278,8 +297,8 @@ class CompressImageViewModel extends CommonBaseViewmodel {
     notifyListeners();
   }
 
-  void toggleRemoveMetadata(bool value) {
-    _isRemoveImageMetadata = value;
+  void toggleKeepMetadata(bool value) {
+    _isKeepMetadata = value;
     notifyListeners();
   }
 

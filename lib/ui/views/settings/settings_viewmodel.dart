@@ -13,9 +13,21 @@ class SettingsViewModel extends CommonBaseViewmodel {
   final themeService = locator<ThemeService>();
 
   // Compression Settings
-  double _compressionQuality = 0.8;
+  // double _compressionQuality = 0.8;
+  // double _photoDimensions = 0.7;
   ExportFormat _defaultImageFormat = ExportFormat.original;
-  bool _removeMetadata = true;
+  bool _keepMetadata = false;
+  bool _keepLocation = false;
+
+  //Simple settings
+  SimpleImageQuality _selectedImageQuality = SimpleImageQuality.medium;
+  SimpleImageQuality get selectedImageQuality => _selectedImageQuality;
+
+  String _selectedImageQualityDescription = "Medium Resolution - Good Quality";
+  String get selectedImageQualityDescription =>
+      _selectedImageQualityDescription;
+  List<SimpleImageQuality> get simpleImageQualityList =>
+      SimpleImageQuality.values;
 
   // Appearance Settings
   ThemeMode _themeMode = ThemeMode.system;
@@ -30,9 +42,10 @@ class SettingsViewModel extends CommonBaseViewmodel {
   String _appVersion = "1.0.0";
 
   // Getters
-  double get compressionQuality => _compressionQuality;
+  // double get compressionQuality => _compressionQuality;
   ExportFormat get defaultImageFormat => _defaultImageFormat;
-  bool get removeMetadata => _removeMetadata;
+  bool get keepMetadata => _keepMetadata;
+  bool get keepLocation => _keepLocation;
   ThemeMode get themeMode => _themeMode;
   String get selectedLanguage => _selectedLanguage;
   bool get notificationsEnabled => _notificationsEnabled;
@@ -52,9 +65,32 @@ class SettingsViewModel extends CommonBaseViewmodel {
   }
 
   // Compression Settings Methods
-  void updateCompressionQuality(double value) {
-    _compressionQuality = value;
-    _saveCompressionQuality(value);
+  // void updateCompressionQuality(double value) {
+  //   _compressionQuality = value;
+  //   _saveCompressionQuality(value);
+  //   notifyListeners();
+  // }
+  void updateSimpleImageQuality(SimpleImageQuality quality) {
+    _selectedImageQuality = quality;
+    switch (quality) {
+      case SimpleImageQuality.small:
+        // _compressionQuality = 0.3;
+        // _photoDimensions = 0.4;
+        _selectedImageQualityDescription =
+            "Small Resolution - Acceptable Quality";
+        break;
+      case SimpleImageQuality.medium:
+        // _compressionQuality = 0.5;
+        // _photoDimensions = 0.7;
+        _selectedImageQualityDescription = "Medium Resolution - Good Quality";
+        break;
+      case SimpleImageQuality.large:
+        // _compressionQuality = 0.8;
+        // _photoDimensions = 0.95;
+        _selectedImageQualityDescription = "Original Resolution - Best Quality";
+        break;
+    }
+    _saveCompressionQuality(quality);
     notifyListeners();
   }
 
@@ -64,9 +100,15 @@ class SettingsViewModel extends CommonBaseViewmodel {
     notifyListeners();
   }
 
-  void toggleRemoveMetadata(bool value) {
-    _removeMetadata = value;
-    _saveRemoveMetadata(value);
+  void toggleKeepMetadata(bool value) {
+    _keepMetadata = value;
+    _saveKeepMetadata(value);
+    notifyListeners();
+  }
+
+  void toggleKeepLocation(bool value) {
+    _keepLocation = value;
+    _saveKeepLocation(value);
     notifyListeners();
   }
 
@@ -159,8 +201,12 @@ class SettingsViewModel extends CommonBaseViewmodel {
   Future<void> _loadSettings() async {
     // Load settings from SharedPreferences or secure storage
     try {
-      _compressionQuality =
-          storageService.read<double>("compression_quality") ?? 0.8;
+      // _compressionQuality =
+      //     storageService.read<double>("compression_quality") ?? 0.8;
+      _selectedImageQuality = EnumHelper.fromString<SimpleImageQuality>(
+              storageService.read<String>("compression_quality"),
+              SimpleImageQuality.values) ??
+          SimpleImageQuality.medium;
 
       // _defaultImageFormat =
       //     storageService.read<ImageFormat>("default_image_format") ??
@@ -175,7 +221,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
               storageService.read<String>("theme_mode"), ThemeMode.values) ??
           ThemeMode.system;
 
-      _removeMetadata = storageService.read<bool>("remove_metadata") ?? true;
+      _keepMetadata = storageService.read<bool>("keep_metadata") ?? false;
       // _themeMode =
       //     storageService.read<ThemeMode>("theme_mode") ?? ThemeMode.system;
       _selectedLanguage = storageService.read<String>("language") ?? 'en';
@@ -187,8 +233,9 @@ class SettingsViewModel extends CommonBaseViewmodel {
     }
   }
 
-  Future<void> _saveCompressionQuality(double value) async {
-    await storageService.write("compression_quality", value);
+  Future<void> _saveCompressionQuality(SimpleImageQuality quality) async {
+    await storageService.write(
+        "compression_quality", EnumHelper.enumToString(quality));
   }
 
   Future<void> _saveImageFormat(ExportFormat format) async {
@@ -196,8 +243,12 @@ class SettingsViewModel extends CommonBaseViewmodel {
         "default_image_format", EnumHelper.enumToString(format));
   }
 
-  Future<void> _saveRemoveMetadata(bool value) async {
-    await storageService.write("remove_metadata", value);
+  Future<void> _saveKeepMetadata(bool value) async {
+    await storageService.write("keep_metadata", value);
+  }
+
+  Future<void> _saveKeepLocation(bool value) async {
+    await storageService.write("keep_location", value);
   }
 
   Future<void> _saveThemeMode(ThemeMode mode) async {
