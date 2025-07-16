@@ -95,18 +95,40 @@ class SettingsViewModel extends CommonBaseViewmodel {
   }
 
   void updateImageFormat(ExportFormat format) {
+    if (!isProUser()) {
+      navigateToProUpgrade();
+      logger.i(
+          'User is not a Pro user, redirecting to Pro upgrade for changing image format');
+      _defaultImageFormat =
+          ExportFormat.original; // Reset to default if not Pro
+      notifyListeners();
+      return;
+    }
+
     _defaultImageFormat = format;
     _saveImageFormat(format);
     notifyListeners();
   }
 
   void toggleKeepMetadata(bool value) {
+    if (!isProUser()) {
+      navigateToProUpgrade();
+      logger.i(
+          'User is not a Pro user, redirecting to Pro upgrade for changing image format');
+      return;
+    }
     _keepMetadata = value;
     _saveKeepMetadata(value);
     notifyListeners();
   }
 
   void toggleKeepLocation(bool value) {
+    if (!isProUser()) {
+      navigateToProUpgrade();
+      logger.i(
+          'User is not a Pro user, redirecting to Pro upgrade for changing image format');
+      return;
+    }
     _keepLocation = value;
     _saveKeepLocation(value);
     notifyListeners();
@@ -140,6 +162,12 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   // Notification Methods
   void toggleNotifications(bool value) {
+    if (!isProUser()) {
+      navigateToProUpgrade();
+      logger.i(
+          'User is not a Pro user, redirecting to Pro upgrade for changing image format');
+      return;
+    }
     _notificationsEnabled = value;
     _saveNotificationsEnabled(value);
     notifyListeners();
@@ -222,6 +250,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
           ThemeMode.system;
 
       _keepMetadata = storageService.read<bool>("keep_metadata") ?? false;
+      _keepLocation = storageService.read<bool>("keep_location") ?? false;
       // _themeMode =
       //     storageService.read<ThemeMode>("theme_mode") ?? ThemeMode.system;
       _selectedLanguage = storageService.read<String>("language") ?? 'en';

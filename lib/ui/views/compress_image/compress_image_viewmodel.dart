@@ -287,17 +287,37 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   }
 
   void updateImageFormat(ExportFormat format) {
+    if (!isProUser()) {
+      navigateToProUpgrade();
+      logger.i(
+          'User is not a Pro user, redirecting to Pro upgrade for changing image format');
+      _selectedFormat = ExportFormat.original; // Reset to default if not Pro
+      notifyListeners();
+      return;
+    }
     _selectedFormat = format;
     notifyListeners();
     calculateTotalCompressedImageSize();
   }
 
   void toggleLocationEnabled(bool value) {
+    if (!isProUser()) {
+      navigateToProUpgrade();
+      logger.i(
+          'User is not a Pro user, redirecting to Pro upgrade for changing image format');
+      return;
+    }
     _isLocationEnabled = value;
     notifyListeners();
   }
 
   void toggleKeepMetadata(bool value) {
+    if (!isProUser()) {
+      navigateToProUpgrade();
+      logger.i(
+          'User is not a Pro user, redirecting to Pro upgrade for changing image format');
+      return;
+    }
     _isKeepMetadata = value;
     notifyListeners();
   }

@@ -76,7 +76,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                 ),
                 const SettingsDivider(),
                 SettingsSegmentedTile<ExportFormat>(
-                  title: "Default Image Format",
+                  title: "Default Image Compression Format",
                   value: viewModel.defaultImageFormat,
                   items: viewModel.imageFormats,
                   onChanged: viewModel.updateImageFormat,
