@@ -125,9 +125,9 @@ class CompressImageViewModel extends CommonBaseViewmodel {
 
   void setPhotoQualityText(double value) {
     if (value < 0.2) {
-      _photoQualityText = "Worst";
-    } else if (value < 0.4) {
       _photoQualityText = "Poor";
+    } else if (value < 0.4) {
+      _photoQualityText = "Acceptable";
     } else if (value < 0.6) {
       _photoQualityText = "Acceptable";
     } else if (value < 0.8) {
