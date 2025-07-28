@@ -58,7 +58,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
 //advanced settings
   ExportFormat _selectedFormat = ExportFormat.original;
   ExportFormat get selectedFormat => _selectedFormat;
-  List<ExportFormat> get imageFormats => ExportFormat.values;
+  List<ExportFormat> get imageFormats => ExportFormat.availableFormats;
 
   bool _isLocationEnabled = false;
   bool get isLocationEnabled => _isLocationEnabled;
@@ -94,7 +94,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
 
     _selectedFormat = EnumHelper.fromString<ExportFormat>(
             storageService.read<String>("default_image_format"),
-            ExportFormat.values) ??
+            ExportFormat.availableFormats) ??
         ExportFormat.original;
 
     _isKeepMetadata = storageService.read<bool>("keep_metadata") ?? false;

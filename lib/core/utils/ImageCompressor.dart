@@ -226,6 +226,8 @@ class ImageCompressor {
         return 'webp';
       case ExportFormat.original:
         return 'jpg'; // fallback if filePath is null
+      case ExportFormat.heic:
+        return 'heic';
     }
   }
 
@@ -261,6 +263,12 @@ class ImageCompressor {
             return CompressFormat.png;
           case 'webp':
             return CompressFormat.webp;
+          case 'heic':
+            if (Platform.isIOS) {
+              return CompressFormat.heic; // Add HEIC support if needed
+            } else {
+              return CompressFormat.jpeg; // Fallback for non-iOS
+            }
           // Add more if flutter_image_compress supports them
         }
       }
@@ -276,8 +284,14 @@ class ImageCompressor {
         return CompressFormat.png;
       case ExportFormat.webp:
         return CompressFormat.webp;
-      // case ExportFormat.heic:
-      //   return CompressFormat.heic;
+      case ExportFormat.heic:
+        {
+          if (Platform.isIOS) {
+            return CompressFormat.heic; // Add HEIC support if needed
+          } else {
+            return CompressFormat.jpeg; // Fallback for non-iOS
+          }
+        }
       default:
         return CompressFormat.jpeg; // Fallback default
     }

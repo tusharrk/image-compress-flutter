@@ -54,7 +54,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
   String get appVersion => _appVersion;
 
   // Available options
-  List<ExportFormat> get imageFormats => ExportFormat.values;
+  List<ExportFormat> get imageFormats => ExportFormat.availableFormats;
   List<ThemeMode> get themeModes => ThemeMode.values;
   List<String> get availableLanguages => ['en', 'es', 'fr', 'de', 'zh', 'hi'];
 
@@ -242,7 +242,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
       _defaultImageFormat = EnumHelper.fromString<ExportFormat>(
               storageService.read<String>("default_image_format"),
-              ExportFormat.values) ??
+              ExportFormat.availableFormats) ??
           ExportFormat.original;
 
       _themeMode = EnumHelper.fromString<ThemeMode>(

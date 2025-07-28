@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/core/utils/ImageCompressor.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -32,7 +33,9 @@ class CompressionCalculator {
     // Create new cancellation token
     final token = CancellationToken();
     _currentToken = token;
-
+    print(
+      'Starting compression calculation for $imageAssets',
+    );
     try {
       int totalCompressedSize = 0;
 
@@ -43,7 +46,21 @@ class CompressionCalculator {
         }
 
         final image = imageAssets[i];
-        final originalBytes = await image.originBytes;
+
+        var originalBytes = await image.originBytes;
+
+        if (Platform.isIOS) {
+          // Use file instead of originBytes for better iOS compatibility
+          final file = await image.file;
+          if (file == null) {
+            print('Could not get file for image ${i + 1}');
+            continue;
+          }
+          originalBytes = await file.readAsBytes();
+        }
+
+        print(
+            'Original image---- ${i + 1}/${imageAssets.length}: $originalBytes bytes');
         if (originalBytes == null) continue;
 
         // Check cancellation again before processing
@@ -51,13 +68,29 @@ class CompressionCalculator {
           return 0;
         }
 
+        var fileName = "";
+        // ignore: await_only_futures
+        if (image.title?.isEmpty != false) {
+          fileName = await image.titleAsync;
+        } else {
+          fileName = image.title!;
+        }
+
+        print('Processing file: $fileName');
+
         final compressedBytes = await _compressImageBytes(
           bytes: originalBytes,
-          fileName: image.title ?? "image.${format.name}",
+          fileName: fileName,
           quality: (quality * 100).toInt(),
           dimensionRatio: dimension,
           format: format,
           token: token,
+        );
+        print(
+            'original image ${i + 1}/${imageAssets.length}: ${originalBytes.length} bytes');
+        print('image:- $fileName');
+        print(
+          'Compressed image ${i + 1}/${imageAssets.length}: ${compressedBytes?.length ?? 0} bytes',
         );
 
         // Check if compression was cancelled
@@ -100,8 +133,14 @@ class CompressionCalculator {
     }
 
     final formatEnum = ImageCompressor.getCompressFormat(format, fileName);
+    print(
+      'Compressing image: $fileName, format: $formatEnum, quality: $quality',
+    );
 
     final decodedImage = img.decodeImage(bytes);
+    print(
+      'Decoded image: $fileName, size: ${decodedImage?.width}x${decodedImage?.height}',
+    );
     if (decodedImage == null) return null;
 
     // Check cancellation before expensive operations
@@ -111,7 +150,9 @@ class CompressionCalculator {
 
     final newWidth = (decodedImage.width * dimensionRatio).toInt();
     final newHeight = (decodedImage.height * dimensionRatio).toInt();
-
+    print(
+      'Resizing image: $fileName to $newWidth x $newHeight',
+    );
     // Check cancellation one more time before compression
     if (token.isCancelled) {
       return null;
@@ -124,7 +165,9 @@ class CompressionCalculator {
       minWidth: newWidth,
       minHeight: newHeight,
     );
-
+    print(
+      'Compressed image: $fileName, size: ${compressedBytes.length} bytes',
+    );
     // Final check after compression
     if (token.isCancelled) {
       return null;

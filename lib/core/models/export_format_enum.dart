@@ -1,9 +1,12 @@
 // enum ImageFormat { jpg, png, webp, heic }
+import 'dart:io';
+
 enum ExportFormat {
   original,
   jpeg,
   png,
-  webp;
+  webp,
+  heic;
 
   String get displayName {
     switch (this) {
@@ -15,6 +18,18 @@ enum ExportFormat {
         return 'PNG';
       case ExportFormat.webp:
         return 'WebP';
+      case ExportFormat.heic:
+        return 'HEIC';
+    }
+  }
+
+  static List<ExportFormat> get availableFormats {
+    if (Platform.isIOS) {
+      return ExportFormat.values;
+    } else {
+      return ExportFormat.values
+          .where((format) => format != ExportFormat.heic)
+          .toList();
     }
   }
 }
