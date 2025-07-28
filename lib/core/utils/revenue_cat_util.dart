@@ -2,7 +2,15 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
+import 'package:flutter_boilerplate/app/app.dialogs.dart';
+import 'package:flutter_boilerplate/app/app.locator.dart';
+import 'package:flutter_boilerplate/app/app.router.dart';
+import 'package:flutter_boilerplate/core/utils/revenue_cat_util.dart'
+    as RevenueCatUI;
+import 'package:flutter_boilerplate/services/storage_service.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_ui_flutter/paywall_result.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 export 'package:purchases_flutter/purchases_flutter.dart'
     show Package, Offering;
@@ -14,6 +22,10 @@ String? _loggedInUid;
 Offerings? get offerings => _offerings;
 
 CustomerInfo? get customerInfo => _customerInfo;
+
+final dialogService = locator<DialogService>();
+final storageService = locator<StorageService>();
+final navigationService = locator<NavigationService>();
 
 set customerInfo(CustomerInfo? customerInfo) => _customerInfo = customerInfo;
 
@@ -132,4 +144,59 @@ Future restorePurchases() async {
   } on PlatformException catch (e) {
     print("Unable to restore purchases in RevenueCat: $e");
   }
+}
+
+Future fetchUserPurchases() async {
+  try {
+    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+    // access latest customerInfo
+    // print('Customer Info: ${customerInfo.toJson()}');
+    // print('Active Entitlements: ${customerInfo.entitlements.active}');
+    // print(
+    //     'active Entitlements: ${customerInfo.activeSubscriptions.join(', ')}');
+    print(
+        'Active Entitlements: ${customerInfo.entitlements.active.isNotEmpty}');
+    if (customerInfo.entitlements.active.isNotEmpty) {
+      //user has access to some entitlement
+      await storageService.write("isProUser", true);
+    } else {
+      await storageService.write("isProUser", false);
+    }
+  } on PlatformException catch (e) {
+    // Error fetching customer info
+  }
+}
+
+Future presentPaywall() async {
+  final paywallResult = await RevenueCatUI.presentPaywall();
+  print('Paywall result: $paywallResult');
+  await handlePurchaseResult(paywallResult);
+}
+
+Future handlePurchaseResult(PaywallResult result) async {
+  if (result == PaywallResult.purchased) {
+    // Handle successful purchase
+    print('Purchase was successful.');
+    // Optionally, you can navigate to a different screen or show a success message
+    await _showPurchaseSuccessDialog();
+    await storageService.write("isProUser", true);
+    navigationService.clearStackAndShow(Routes.homeView);
+    print('User is now a Pro user, status saved in storage.');
+  } else if (result == PaywallResult.notPresented) {
+    print('Paywall was not presented.');
+  } else if (result == PaywallResult.cancelled) {
+    print('Purchase was cancelled by the user.');
+  } else {
+    print('An unknown result occurred: $result');
+  }
+}
+
+Future _showPurchaseSuccessDialog() async {
+  await dialogService.showCustomDialog(
+    variant: DialogType.infoAlert,
+    title: 'Purchase Successful',
+    description:
+        'Thank you for subscribing to our Pro plan! You now have access to all premium features.',
+    mainButtonTitle: 'Got it',
+  );
 }

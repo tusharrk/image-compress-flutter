@@ -1,6 +1,8 @@
 import 'package:flutter_boilerplate/app/app.logger.dart';
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/common_imports/service_imports.dart';
+import 'package:flutter_boilerplate/core/utils/revenue_cat_util.dart'
+    as revenue_cat;
 import 'package:logger/logger.dart';
 
 class CommonBaseViewmodel extends BaseViewModel {
@@ -48,11 +50,7 @@ class CommonBaseViewmodel extends BaseViewModel {
     logger.i('Cleared Pro user status');
   }
 
-  void navigateToProUpgrade() {
-    navigationService.navigateTo(
-      Routes.paywallSubscriptionView,
-      transition: TransitionsBuilders.slideBottom,
-    );
-    // navigationService.navigateToPaywallSubscriptionView();
+  void presentPaywall() {
+    revenue_cat.presentPaywall();
   }
 }

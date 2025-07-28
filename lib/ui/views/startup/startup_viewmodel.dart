@@ -1,5 +1,7 @@
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/common_imports/service_imports.dart';
+import 'package:flutter_boilerplate/core/utils/revenue_cat_util.dart'
+    as revenue_cat;
 
 class StartupViewModel extends CommonBaseViewmodel {
   final _navigationService = locator<NavigationService>();
@@ -15,7 +17,8 @@ class StartupViewModel extends CommonBaseViewmodel {
   }
 
   Future<void> test() async {
-    await storageService.write('testKey', "test Value");
-    setProUser(false);
+    //await storageService.write('testKey', "test Value");
+    await revenue_cat.fetchUserPurchases();
+    // setProUser(false);
   }
 }

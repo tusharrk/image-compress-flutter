@@ -42,7 +42,9 @@ class SettingsView extends StackedView<SettingsViewModel> {
             //Pro Banner
             if (!viewModel.isProUser())
               ModernProBadgeContainer(
-                onTap: () {},
+                onTap: () {
+                  viewModel.presentPaywall();
+                },
                 child: ProFeatureBannerView(
                     colorScheme: colorScheme, theme: theme),
               ),

@@ -1,7 +1,8 @@
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
 import 'package:flutter_boilerplate/core/utils/asset_utils.dart';
+import 'package:flutter_boilerplate/core/utils/revenue_cat_util.dart'
+    as revenue_cat;
 import 'package:flutter_boilerplate/services/notification_service.dart';
-import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 class HomeViewModel extends CommonBaseViewmodel {
   // Services
@@ -20,8 +21,7 @@ class HomeViewModel extends CommonBaseViewmodel {
   void onProBtnClicked() async {
     // navigateToProUpgrade();
     //void presentPaywall() async {
-    final paywallResult = await RevenueCatUI.presentPaywall();
-    print('Paywall result: $paywallResult');
+    revenue_cat.presentPaywall();
     // }
   }
 

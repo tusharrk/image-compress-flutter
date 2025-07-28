@@ -96,7 +96,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   void updateImageFormat(ExportFormat format) {
     if (!isProUser()) {
-      navigateToProUpgrade();
+      presentPaywall();
       logger.i(
           'User is not a Pro user, redirecting to Pro upgrade for changing image format');
       _defaultImageFormat =
@@ -112,7 +112,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   void toggleKeepMetadata(bool value) {
     if (!isProUser()) {
-      navigateToProUpgrade();
+      presentPaywall();
       logger.i(
           'User is not a Pro user, redirecting to Pro upgrade for changing image format');
       return;
@@ -124,7 +124,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   void toggleKeepLocation(bool value) {
     if (!isProUser()) {
-      navigateToProUpgrade();
+      presentPaywall();
       logger.i(
           'User is not a Pro user, redirecting to Pro upgrade for changing image format');
       return;
@@ -163,7 +163,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
   // Notification Methods
   void toggleNotifications(bool value) {
     if (!isProUser()) {
-      navigateToProUpgrade();
+      presentPaywall();
       logger.i(
           'User is not a Pro user, redirecting to Pro upgrade for changing image format');
       return;
