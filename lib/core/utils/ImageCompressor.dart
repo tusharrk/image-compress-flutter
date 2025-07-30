@@ -84,14 +84,34 @@ class ImageCompressor {
 
     for (int i = 0; i < imageAssets.length; i++) {
       final image = imageAssets[i];
-      final name = "compressed_${image.title ?? "image_$i"}";
 
-      final originalBytes = await image.originBytes;
+      var originalBytes = await image.originBytes;
+
+      if (Platform.isIOS) {
+        // Use file instead of originBytes for better iOS compatibility
+        final file = await image.file;
+        if (file == null) {
+          print('Could not get file for image ${i + 1}');
+          continue;
+        }
+        originalBytes = await file.readAsBytes();
+      }
       if (originalBytes == null) continue;
+
+      var fileName = "";
+      // ignore: await_only_futures
+      if (image.title?.isEmpty != false) {
+        fileName = await image.titleAsync;
+      } else {
+        fileName = image.title ?? "image.${format.name}";
+      }
+      final name = "compressed_$fileName";
+
+      print('Processing file: $fileName');
 
       final compressedBytes = await _compressImageBytes(
           bytes: originalBytes,
-          fileName: image.title ?? "image.${format.name}",
+          fileName: fileName,
           quality: (quality * 100).toInt(),
           dimensionRatio: dimension,
           format: format,
@@ -99,8 +119,7 @@ class ImageCompressor {
           keepLocationData: keepLocationData);
       final finalBytes = compressedBytes ?? originalBytes;
 
-      final String fileExt =
-          _getExtension(format, image.title ?? "image.${format.name}");
+      final String fileExt = _getExtension(format, fileName);
 
       // Save to temporary location first
       final File tempFile = File(p.join(processingDir.path, "$name.$fileExt"));
@@ -211,6 +230,12 @@ class ImageCompressor {
           return 'png';
         case 'webp':
           return 'webp';
+        case 'heic':
+          if (Platform.isIOS) {
+            return 'heic'; // Add HEIC support if needed
+          } else {
+            return 'jpg'; // Fallback for non-iOS
+          }
         // Add more if needed
       }
       // If extension is unknown or unsupported
