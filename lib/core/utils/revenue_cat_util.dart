@@ -5,11 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate/app/app.dialogs.dart';
 import 'package:flutter_boilerplate/app/app.locator.dart';
 import 'package:flutter_boilerplate/app/app.router.dart';
-import 'package:flutter_boilerplate/core/utils/revenue_cat_util.dart'
-    as RevenueCatUI;
 import 'package:flutter_boilerplate/services/storage_service.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:purchases_ui_flutter/paywall_result.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 export 'package:purchases_flutter/purchases_flutter.dart'
@@ -167,7 +165,7 @@ Future fetchUserPurchases() async {
   }
 }
 
-Future presentPaywall() async {
+Future presentRevenueCatPaywall() async {
   final paywallResult = await RevenueCatUI.presentPaywall();
   print('Paywall result: $paywallResult');
   await handlePurchaseResult(paywallResult);

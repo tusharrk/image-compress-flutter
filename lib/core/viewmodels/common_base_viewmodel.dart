@@ -51,6 +51,6 @@ class CommonBaseViewmodel extends BaseViewModel {
   }
 
   void presentPaywall() {
-    revenue_cat.presentPaywall();
+    revenue_cat.presentRevenueCatPaywall();
   }
 }

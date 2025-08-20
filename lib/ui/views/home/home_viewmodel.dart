@@ -21,7 +21,7 @@ class HomeViewModel extends CommonBaseViewmodel {
   void onProBtnClicked() async {
     // navigateToProUpgrade();
     //void presentPaywall() async {
-    revenue_cat.presentPaywall();
+    revenue_cat.presentRevenueCatPaywall();
     // }
   }
 
