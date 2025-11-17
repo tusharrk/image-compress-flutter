@@ -37,24 +37,24 @@ PODS:
   - photo_manager (3.7.1):
     - Flutter
     - FlutterMacOS
-  - purchases_flutter (8.10.6):
+  - purchases_flutter (9.9.6):
     - Flutter
-    - PurchasesHybridCommon (= 14.2.0)
-  - purchases_ui_flutter (8.10.6):
+    - PurchasesHybridCommon (= 17.17.0)
+  - purchases_ui_flutter (9.9.6):
     - Flutter
-    - PurchasesHybridCommonUI (= 14.2.0)
-  - PurchasesHybridCommon (14.2.0):
-    - RevenueCat (= 5.32.0)
-  - PurchasesHybridCommonUI (14.2.0):
-    - PurchasesHybridCommon (= 14.2.0)
-    - RevenueCatUI (= 5.32.0)
-  - RevenueCat (5.32.0)
-  - RevenueCatUI (5.32.0):
-    - RevenueCat (= 5.32.0)
-  - SDWebImage (5.21.1):
-    - SDWebImage/Core (= 5.21.1)
-  - SDWebImage/Core (5.21.1)
-  - SDWebImageWebPCoder (0.14.6):
+    - PurchasesHybridCommonUI (= 17.17.0)
+  - PurchasesHybridCommon (17.17.0):
+    - RevenueCat (= 5.47.0)
+  - PurchasesHybridCommonUI (17.17.0):
+    - PurchasesHybridCommon (= 17.17.0)
+    - RevenueCatUI (= 5.47.0)
+  - RevenueCat (5.47.0)
+  - RevenueCatUI (5.47.0):
+    - RevenueCat (= 5.47.0)
+  - SDWebImage (5.21.3):
+    - SDWebImage/Core (= 5.21.3)
+  - SDWebImage/Core (5.21.3)
+  - SDWebImageWebPCoder (0.15.0):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
   - share_plus (0.0.1):
@@ -130,28 +130,28 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_image_compress_common: 1697a328fd72bfb335507c6bca1a65fa5ad87df1
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
   gal: baecd024ebfd13c441269ca7404792a7152fde89
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   photo_manager: 1d80ae07a89a67dfbcae95953a1e5a24af7c3e62
-  purchases_flutter: 7f2f923fde8ab75125c3e85522a43f6ed1253580
-  purchases_ui_flutter: 6e8a65999babcb5ff1ff19875a6e7deed1cc9ae1
-  PurchasesHybridCommon: f1650b33e9a1dd04d5e8a40dfe757f39e63f935c
-  PurchasesHybridCommonUI: c573749b8317555ddda02d454d58f7a108462e79
-  RevenueCat: 7e1d0768fb287c9983173c9b28e39ccbeeb828a9
-  RevenueCatUI: 61ddba6f94803f9b79c470ffe1e8b81d807c11ce
-  SDWebImage: f29024626962457f3470184232766516dee8dfea
-  SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
+  purchases_flutter: d031d615554d92b949918d4cd9025e5f08feb800
+  purchases_ui_flutter: 77c2d6bf4b1f70d6d38a6b0cb38d0b747984589c
+  PurchasesHybridCommon: fc38c0596d63ad06a3acab2937496fbf77f8af07
+  PurchasesHybridCommonUI: 015ce303055d9542a6da00905c14e445a9b88f9a
+  RevenueCat: e9024be15991ff39bf6bd887def57693115ec8c5
+  RevenueCatUI: 5c59977655854eddd7588d52c0a6b156a5c9430e
+  SDWebImage: 16309af6d214ba3f77a7c6f6fdda888cb313a50a
+  SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
 
 PODFILE CHECKSUM: 251cb053df7158f337c0712f2ab29f4e0fa474ce
 
