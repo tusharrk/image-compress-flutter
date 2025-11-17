@@ -8,11 +8,11 @@ class StatsView extends StatelessWidget {
   final int totalSizeAfter;
 
   const StatsView({
-    Key? key,
+    super.key,
     required this.totalImages,
     required this.totalSizeBefore,
     required this.totalSizeAfter,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

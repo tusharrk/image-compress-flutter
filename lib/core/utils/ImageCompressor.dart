@@ -1,10 +1,9 @@
+// image_compressor.dart
 import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gal/gal.dart';
-import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -16,212 +15,159 @@ typedef CompressionProgressCallback = void Function({
 });
 
 class ImageCompressor {
-  // static Future<List<File>> compressAndSaveImages({
-  //   required List<AssetEntity> imageAssets,
-  //   required double quality,
-  //   required double dimension,
-  //   required ExportFormat format,
-  //   required CompressionProgressCallback onProgress,
-  //   required String folderName,
-  // }) async {
-  //   final List<File> compressedFiles = [];
-  //   final total = imageAssets.length;
+  static const MethodChannel _channel = MethodChannel('image_compressor_ios');
 
-  //   final Directory saveDir = await _getSaveDirectory(folderName);
-
-  //   for (int i = 0; i < imageAssets.length; i++) {
-  //     final image = imageAssets[i];
-  //     final name = "compressed_${image.title ?? "image_$i"}";
-
-  //     final originalBytes = await image.originBytes;
-  //     if (originalBytes == null) continue;
-
-  //     final compressedBytes = await _compressImageBytes(
-  //       bytes: originalBytes,
-  //       quality: (quality * 100).toInt(),
-  //       dimensionRatio: dimension,
-  //       format: format,
-  //     );
-  //     final finalBytes = compressedBytes ?? originalBytes;
-
-  //     final String fileExt = _getExtension(format);
-  //     final File file = File(p.join(saveDir.path, "$name.$fileExt"));
-
-  //     await file.writeAsBytes(finalBytes);
-  //     compressedFiles.add(file);
-  //     // Progress callback
-  //     onProgress(
-  //       currentName: name,
-  //       currentIndex: i + 1,
-  //       total: total,
-  //     );
-  //   }
-
-  //   return compressedFiles;
-  // }
-
+  /// Compress and save images (native pipeline).
   static Future<CompressedImagesResult> compressAndSaveImages({
     required List<AssetEntity> imageAssets,
-    required double quality,
-    required double dimension,
+    required double quality, // 0.0 .. 1.0
+    required double dimension, // fraction 0..1 to scale original dims
     required ExportFormat format,
     required bool keepExif,
     required bool keepLocationData,
     required CompressionProgressCallback onProgress,
     required String folderName,
   }) async {
-    final List<File> compressedFiles = [];
+    final Directory tempDir = await getTemporaryDirectory();
+    final processingDir = Directory(p.join(tempDir.path, 'compressed_images'));
+    if (!await processingDir.exists())
+      await processingDir.create(recursive: true);
+
     final total = imageAssets.length;
+    final files = <File>[];
     int totalSize = 0;
 
-    // Create temporary directory for processing
-    final Directory tempDir = await getTemporaryDirectory();
-    final Directory processingDir =
-        Directory(p.join(tempDir.path, 'compressed_images'));
-    if (!await processingDir.exists()) {
-      await processingDir.create(recursive: true);
-    }
-
     for (int i = 0; i < imageAssets.length; i++) {
-      final image = imageAssets[i];
+      final asset = imageAssets[i];
 
-      var originalBytes = await image.originBytes;
-
-      if (Platform.isIOS) {
-        // Use file instead of originBytes for better iOS compatibility
-        final file = await image.file;
-        if (file == null) {
-          print('Could not get file for image ${i + 1}');
-          continue;
-        }
-        originalBytes = await file.readAsBytes();
-      }
-      if (originalBytes == null) continue;
-
-      var fileName = "";
-      // ignore: await_only_futures
-      if (image.title?.isEmpty != false) {
-        fileName = await image.titleAsync;
-      } else {
-        fileName = image.title ?? "image.${format.name}";
-      }
-      final name = "compressed_$fileName";
-
-      print('Processing file: $fileName');
-
-      final compressedBytes = await _compressImageBytes(
-          bytes: originalBytes,
-          fileName: fileName,
-          quality: (quality * 100).toInt(),
-          dimensionRatio: dimension,
-          format: format,
-          keepExif: keepExif,
-          keepLocationData: keepLocationData);
-      final finalBytes = compressedBytes ?? originalBytes;
-
-      final String fileExt = _getExtension(format, fileName);
-
-      // Save to temporary location first
-      final File tempFile = File(p.join(processingDir.path, "$name.$fileExt"));
-      await tempFile.writeAsBytes(finalBytes);
-
-      try {
-        // Save to gallery with album name
-        await Gal.putImage(
-          tempFile.path,
-          album: folderName, // This creates/uses the album
-        );
-
-        // Keep reference to temp file
-        compressedFiles.add(tempFile);
-      } catch (e) {
-        print('Error saving to gallery: $e');
-        // Fallback: save to app directory
-        final Directory saveDir = await _getSaveDirectory(folderName);
-        final File fallbackFile = File(p.join(saveDir.path, "$name.$fileExt"));
-        await fallbackFile.writeAsBytes(finalBytes);
-        compressedFiles.add(fallbackFile);
+      // ALWAYS use originFile (original file bytes, correct format)
+      final file = await asset.originFile ?? await asset.file;
+      if (file == null) {
+        // skip if we can't fetch anything
+        continue;
       }
 
-      // Update total size
-      totalSize += finalBytes.length;
+      final sourceBytes = await file.readAsBytes();
+      final fileName = asset.title?.isNotEmpty == true
+          ? asset.title!
+          : p.basename(file.path);
+      final newWidth = (asset.width * dimension).toInt();
+      final newHeight = (asset.height * dimension).toInt();
+      print("compressAndSaveImages== Processing File Path: ${file.path}");
+      print(
+          "compressAndSaveImages== File Extension: ${p.extension(file.path)}");
+      print(
+          "filename before compress:- ${asset.title ?? p.basename(file.path)}");
+      print("height-$newHeight");
+      print("width-$newWidth");
+      print("keepExif-$keepExif");
+      print("keepLocationData-$keepLocationData");
 
-      // Progress callback
-      onProgress(
-        currentName: name,
-        currentIndex: i + 1,
-        total: total,
+      // call native compressor
+      final Uint8List? compressed = await compressNative(
+        originalImage: sourceBytes,
+        quality: quality,
+        width: newWidth,
+        height: newHeight,
+        format: format,
+        keepExif: keepExif,
+        keepLocation: keepLocationData,
+        sourceFileName: fileName,
       );
+
+      final bytesToSave = compressed ?? sourceBytes;
+      final ext = _getExtension(format, fileName);
+      final outFile =
+          File(p.join(processingDir.path, 'compressed_$fileName.$ext'));
+      await outFile.writeAsBytes(bytesToSave);
+
+      // try save to gallery
+      try {
+        await Gal.putImage(outFile.path, album: folderName);
+        files.add(outFile);
+      } catch (_) {
+        // fallback to app directory
+        final saveDir = await _getSaveDirectory(folderName);
+        final fallback =
+            File(p.join(saveDir.path, 'compressed_$fileName.$ext'));
+        await fallback.writeAsBytes(bytesToSave);
+        files.add(fallback);
+      }
+
+      totalSize += bytesToSave.length;
+      print("size after compress:- ${bytesToSave.length}");
+      onProgress(currentName: fileName, currentIndex: i + 1, total: total);
     }
 
-    return CompressedImagesResult(
-      files: compressedFiles,
-      totalSize: totalSize,
-    );
+    return CompressedImagesResult(files: files, totalSize: totalSize);
   }
 
-  static Future<Uint8List?> _compressImageBytes({
-    required Uint8List bytes,
-    required String fileName,
-    required int quality,
-    required double dimensionRatio,
+  /// Calculates compressed size using identical native pipeline. Returns size in bytes.
+  static Future<int> calculateCompressedSize({
+    required Uint8List originalImage,
+    required double quality,
+    required int width,
+    required int height,
+    required ExportFormat format,
+    required String? sourceFileName,
+    required bool keepExif,
+    required bool keepLocation,
+  }) async {
+    try {
+      final res =
+          await _channel.invokeMethod<int>('calculateSize', <String, dynamic>{
+        'originalImage': originalImage,
+        'quality': quality,
+        'width': width,
+        'height': height,
+        'format': format.name,
+        'sourceFileName': sourceFileName ?? '',
+        'keepExif': keepExif,
+        'keepLocation': keepLocation,
+      });
+      return res ?? 0;
+    } catch (e) {
+      print('calculateCompressedSize error: $e');
+      return 0;
+    }
+  }
+
+  static Future<Uint8List?> compressNative({
+    required Uint8List originalImage,
+    required double quality,
+    required int width,
+    required int height,
     required ExportFormat format,
     required bool keepExif,
-    required bool keepLocationData,
+    required bool keepLocation,
+    required String sourceFileName,
   }) async {
-    final formatEnum = getCompressFormat(format, fileName);
-    final decodedImage = img.decodeImage(bytes);
-    if (decodedImage == null) return null;
+    try {
+      final res = await _channel
+          .invokeMethod<dynamic>('compressImage', <String, dynamic>{
+        'originalImage': originalImage,
+        'quality': quality,
+        'width': width,
+        'height': height,
+        'format': format.name,
+        'keepExif': keepExif,
+        'keepLocation': keepLocation,
+        'sourceFileName': sourceFileName,
+      });
 
-    final newWidth = (decodedImage.width * dimensionRatio).toInt();
-    final newHeight = (decodedImage.height * dimensionRatio).toInt();
-
-    final compressed = await FlutterImageCompress.compressWithList(
-      bytes,
-      quality: quality,
-      format: formatEnum,
-      minWidth: newWidth,
-      minHeight: newHeight,
-      autoCorrectionAngle: true,
-      keepExif: false, // always false, we'll manually add EXIF
-    );
-
-    // Only JPEG & HEIC support EXIF
-    // final shouldAddExif =
-    //     (format == ExportFormat.jpeg || format == ExportFormat.heic) && keepExif;
-
-    final shouldAddExif = (format == ExportFormat.jpeg) && keepExif;
-
-    if (shouldAddExif) {
-      final finalBytes = await ExifChannel.addExifToImage(
-        originalImage: bytes,
-        compressedImage: Uint8List.fromList(compressed),
-        keepLocation: keepLocationData,
-      );
-      return (finalBytes ?? compressed);
-    } else {
-      return compressed;
+      if (res == null) return null;
+      if (res is Uint8List) return res;
+      if (res is List<int>) return Uint8List.fromList(res);
+      return null;
+    } catch (e) {
+      print('compressNative error: $e');
+      return null;
     }
   }
-
-  // static CompressFormat getCompressFormat(ExportFormat format) {
-  //   switch (format) {
-  //     case ExportFormat.original:
-  //       return CompressFormat.jpeg;
-  //     case ExportFormat.jpeg:
-  //       return CompressFormat.jpeg;
-  //     case ExportFormat.png:
-  //       return CompressFormat.png;
-  //     case ExportFormat.webp:
-  //       return CompressFormat.webp;
-  //     // case ExportFormat.heic:
-  //     //   return CompressFormat.heic;
-  //   }
-  // }
 
   static String _getExtension(ExportFormat format, String? filePath) {
     if (format == ExportFormat.original && filePath != null) {
-      final ext = filePath.split('.').last.toLowerCase();
+      final ext = p.extension(filePath).replaceFirst('.', '').toLowerCase();
       switch (ext) {
         case 'jpg':
         case 'jpeg':
@@ -231,14 +177,8 @@ class ImageCompressor {
         case 'webp':
           return 'webp';
         case 'heic':
-          if (Platform.isIOS) {
-            return 'heic'; // Add HEIC support if needed
-          } else {
-            return 'jpg'; // Fallback for non-iOS
-          }
-        // Add more if needed
+          return 'heic';
       }
-      // If extension is unknown or unsupported
       return 'jpg';
     }
 
@@ -249,76 +189,24 @@ class ImageCompressor {
         return 'png';
       case ExportFormat.webp:
         return 'webp';
-      case ExportFormat.original:
-        return 'jpg'; // fallback if filePath is null
       case ExportFormat.heic:
         return 'heic';
+      case ExportFormat.original:
+      default:
+        return 'jpg';
     }
   }
 
   static Future<Directory> _getSaveDirectory(String folderName) async {
-    Directory baseDir;
-
     if (Platform.isAndroid) {
-      // Android: use public Pictures folder
-      baseDir = Directory('/storage/emulated/0/Pictures/$folderName');
+      final dir = Directory('/storage/emulated/0/Pictures/$folderName');
+      if (!await dir.exists()) await dir.create(recursive: true);
+      return dir;
     } else {
-      // iOS: use app documents directory
-      baseDir = await getApplicationDocumentsDirectory();
-      baseDir = Directory(p.join(baseDir.path, folderName));
-    }
-
-    if (!await baseDir.exists()) {
-      await baseDir.create(recursive: true);
-    }
-
-    return baseDir;
-  }
-
-  static CompressFormat getCompressFormat(
-      ExportFormat format, String? filePath) {
-    if (format == ExportFormat.original) {
-      if (filePath != null) {
-        final ext = filePath.split('.').last.toLowerCase();
-        switch (ext) {
-          case 'jpg':
-          case 'jpeg':
-            return CompressFormat.jpeg;
-          case 'png':
-            return CompressFormat.png;
-          case 'webp':
-            return CompressFormat.webp;
-          case 'heic':
-            if (Platform.isIOS) {
-              return CompressFormat.heic; // Add HEIC support if needed
-            } else {
-              return CompressFormat.jpeg; // Fallback for non-iOS
-            }
-          // Add more if flutter_image_compress supports them
-        }
-      }
-      // Default fallback if extension is unknown or unsupported
-      return CompressFormat.jpeg;
-    }
-
-    // Other specific formats
-    switch (format) {
-      case ExportFormat.jpeg:
-        return CompressFormat.jpeg;
-      case ExportFormat.png:
-        return CompressFormat.png;
-      case ExportFormat.webp:
-        return CompressFormat.webp;
-      case ExportFormat.heic:
-        {
-          if (Platform.isIOS) {
-            return CompressFormat.heic; // Add HEIC support if needed
-          } else {
-            return CompressFormat.jpeg; // Fallback for non-iOS
-          }
-        }
-      default:
-        return CompressFormat.jpeg; // Fallback default
+      final base = await getApplicationDocumentsDirectory();
+      final dir = Directory(p.join(base.path, folderName));
+      if (!await dir.exists()) await dir.create(recursive: true);
+      return dir;
     }
   }
 }
@@ -326,28 +214,5 @@ class ImageCompressor {
 class CompressedImagesResult {
   final List<File> files;
   final int totalSize;
-
-  CompressedImagesResult({
-    required this.files,
-    required this.totalSize,
-  });
-}
-
-class ExifChannel {
-  static const _channel = MethodChannel('image_exif_channel');
-
-  static Future<Uint8List?> addExifToImage({
-    required Uint8List originalImage,
-    required Uint8List compressedImage,
-    required bool keepLocation,
-  }) async {
-    return await _channel.invokeMethod<Uint8List>(
-      'addExifToImage',
-      {
-        'originalImage': originalImage,
-        'compressedImage': compressedImage,
-        'keepLocation': keepLocation,
-      },
-    );
-  }
+  CompressedImagesResult({required this.files, required this.totalSize});
 }

@@ -18,17 +18,19 @@ Future<bool> requestStoragePermission() async {
       return status.isGranted;
     }
   } else if (Platform.isIOS) {
-    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    final status = await Permission.photosAddOnly.request();
+    return status.isGranted;
+    // IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
-    // For iOS 14+, use limited photo library access
-    if (iosInfo.systemVersion.split('.').first.compareTo('14') >= 0) {
-      final status = await Permission.photos.request();
-      return status.isGranted || status.isLimited;
-    } else {
-      // For iOS versions below 14, use photos permission
-      final status = await Permission.photos.request();
-      return status.isGranted;
-    }
+    // // For iOS 14+, use limited photo library access
+    // if (iosInfo.systemVersion.split('.').first.compareTo('14') >= 0) {
+    //   final status = await Permission.photos.request();
+    //   return status.isGranted || status.isLimited;
+    // } else {
+    //   // For iOS versions below 14, use photos permission
+    //   final status = await Permission.photos.request();
+    //   return status.isGranted;
+    // }
   }
 
   return true;

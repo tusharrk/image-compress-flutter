@@ -1,3 +1,4 @@
+// file: compress_image_viewmodel.dart
 import 'dart:async';
 
 import 'package:flutter_boilerplate/core/common_imports/common_imports.dart';
@@ -10,7 +11,7 @@ import 'package:photo_manager/photo_manager.dart';
 class CompressImageViewModel extends CommonBaseViewmodel {
   List<AssetEntity> selectedPhotosList = [];
 
-// compression settings type
+  // compression settings type
   CompressSettingsType _defaultCompressSettingType =
       CompressSettingsType.simple;
   CompressSettingsType get defaultCompressSettingType =>
@@ -41,7 +42,6 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   Timer? _debounceTimer;
   bool _isCalculating = false;
   bool get isCalculating => _isCalculating;
-  // ExportFormat selectedFormat = ExportFormat.original;
 
   bool isStatsEnabled = false;
 
@@ -55,7 +55,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
   List<SimpleImageQuality> get simpleImageQualityList =>
       SimpleImageQuality.values;
 
-//advanced settings
+  //advanced settings
   ExportFormat _selectedFormat = ExportFormat.original;
   ExportFormat get selectedFormat => _selectedFormat;
   List<ExportFormat> get imageFormats => ExportFormat.availableFormats;
@@ -98,6 +98,7 @@ class CompressImageViewModel extends CommonBaseViewmodel {
         ExportFormat.original;
 
     _isKeepMetadata = storageService.read<bool>("keep_metadata") ?? false;
+    print("_isKeepMetadata: $_isKeepMetadata");
 
     _isLocationEnabled = storageService.read<bool>("keep_location") ?? false;
   }
@@ -200,7 +201,10 @@ class CompressImageViewModel extends CommonBaseViewmodel {
         quality: photoQuality,
         dimension: photoDimensions,
         format: _selectedFormat,
+        keepExif: _isKeepMetadata,
+        keepLocation: _isLocationEnabled,
       );
+      print("_totalCompressedImageSize: $_totalCompressedImageSize");
       notifyListeners();
     } catch (e) {
       _totalCompressedImageSize = 0;
@@ -221,44 +225,13 @@ class CompressImageViewModel extends CommonBaseViewmodel {
         photoDimensions: _photoDimensions,
         outputFormat: _selectedFormat,
         keepLocation: isLocationEnabled,
-        keepExif: !isKeepMetadata,
+        keepExif: isKeepMetadata,
         totalSize: _totalImageSize,
         compressedSize: _totalCompressedImageSize);
 
     navigationService.navigateToCompressProcessView(
         photosList: selectedPhotosList, compressSettings: compressSettings);
     return;
-
-    // setBusy(true);
-    // try {
-    //   final permissionGranted = await requestStoragePermission();
-    //   if (!permissionGranted) {
-    //     print("Storage permission denied.");
-    //     return;
-    //   }
-
-    //   await ImageCompressor.compressAndSaveImages(
-    //     imageAssets: selectedPhotosList,
-    //     quality: photoQuality,
-    //     dimension: photoDimensions,
-    //     format: selectedFormat,
-    //     folderName: "MyAppCompressedImages",
-    //     onProgress: ({
-    //       required String currentName,
-    //       required int currentIndex,
-    //       required int total,
-    //     }) {
-    //       print("Compressing $currentName ($currentIndex/$total)");
-    //     },
-    //   );
-
-    //   // Optionally, you can navigate to a success screen or show a success message
-    // } catch (e) {
-    //   // Handle any errors that occur during compression
-    //   print("Compression error: $e");
-    // } finally {
-    //   setBusy(false);
-    // }
   }
 
   void updateSimpleImageQuality(SimpleImageQuality quality) {

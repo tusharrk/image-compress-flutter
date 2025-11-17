@@ -57,5 +57,7 @@
 		<string>This identifier will be used to deliver notifications to you.</string>
 		<key>UNUserNotificationCenter</key>
 		<string>YES</string>
+		<key>MinimumOSVersion</key>
+		<string>14.0</string>
 	</dict>
 </plist>

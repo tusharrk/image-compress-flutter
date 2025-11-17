@@ -64,12 +64,12 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
       await Future.delayed(const Duration(seconds: 1));
 
       final permissionGranted = await requestStoragePermission();
-      if (!permissionGranted) {
-        _processError = "Storage permission denied.";
-        setBusy(false);
-        notifyListeners();
-        return;
-      }
+      // if (!permissionGranted) {
+      //   _processError = "Storage permission denied.";
+      //   setBusy(false);
+      //   notifyListeners();
+      //   return;
+      // }
       ////////////////test code
       // _currentName = "Compressing ${selectedPhotosList.length} images...";
       // _isSuccess = false;
@@ -78,6 +78,8 @@ class CompressProcessViewModel extends CommonBaseViewmodel {
       // notifyListeners();
       ////////////////test code end
       // add delay of 2 seconds to simulate processing time
+      print("keepExif-------: ${compressSettings?.keepExif}");
+      print("keepLocation------: ${compressSettings?.keepLocation}");
       var compressionResult = await ImageCompressor.compressAndSaveImages(
         imageAssets: selectedPhotosList,
         quality: compressSettings?.photoQuality ?? 0.8,
