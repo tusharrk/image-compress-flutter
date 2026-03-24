@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate/app/app.dialogs.dart';
 import 'package:flutter_boilerplate/app/app.locator.dart';
@@ -132,7 +133,7 @@ Future login(String? uid) async {
     }
     _loggedInUid = uid;
   } on Exception catch (e) {
-    print("Unable to logIn or logOut user in RevenueCat: $e");
+    debugPrint("Unable to logIn or logOut user in RevenueCat: $e");
   }
 }
 
@@ -141,7 +142,7 @@ Future restorePurchases() async {
   try {
     customerInfo = await Purchases.restorePurchases();
   } on PlatformException catch (e) {
-    print("Unable to restore purchases in RevenueCat: $e");
+    debugPrint("Unable to restore purchases in RevenueCat: $e");
   }
 }
 
@@ -153,7 +154,7 @@ Future fetchUserPurchases() async {
     // print('Active Entitlements: ${customerInfo.entitlements.active}');
     // print(
     //     'active Entitlements: ${customerInfo.activeSubscriptions.join(', ')}');
-    print(
+    debugPrint(
         'Active Entitlements: ${customerInfo.entitlements.active.isNotEmpty}');
     if (customerInfo.entitlements.active.isNotEmpty) {
       //user has access to some entitlement
@@ -163,6 +164,7 @@ Future fetchUserPurchases() async {
     }
   } on PlatformException catch (e) {
     // Error fetching customer info
+    debugPrint("Error fetching customer info: $e");
   }
 }
 
