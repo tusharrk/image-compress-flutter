@@ -5,14 +5,30 @@ const String ksHomeBottomSheetDescription =
 class AppStrings {
   static const String appName = "Compresso";
   static const String downloadFolderName = "Image Compressor";
-  static const String androidPlaystoreUrl =
+
+  //image compressor app urls
+  static const String androidPlaystoreImageCompressorAppUrl =
+      "https://play.google.com/store/apps/details?id=com.tusharrk.imagecompressor.photoresizer.imagecompressor";
+  static const String iosAppStoreImageCompressorAppUrl =
+      "https://apps.apple.com/us/app/image-compressor-photo-resizer/id1234567890";
+
+  //gps camera app urls
+  static const String androidPlaystoreGpsCameraAppUrl =
       "https://play.google.com/store/apps/details?id=com.tusharrk.gpsmapcamera.geotagginglocationphoto.weather";
-  static const String iosAppStoreUrl =
-      "https://apps.apple.com/us/app/gps-map-camera/id1234567890";
+  static const String iosAppStoreGpsCameraAppUrl =
+      "https://apps.apple.com/us/app/gps-map-camera-location-stamp/id6751233626";
+
+  //widget store pro app urls
+  static const String iosAppStoreWidgetStoreProAppUrl =
+      "https://apps.apple.com/us/app/widgetstore-pro/id1633987442";
+
+  // developer profile urls
   static const String playstoreDeveloperPageUrl =
       "https://play.google.com/store/apps/dev?id=5781465379183677790&hl=en_IN";
   static const String appStoreDeveloperPageUrl =
-      "https://apps.apple.com/in/developer/tushar-kalsara/id5781465379";
+      "https://apps.apple.com/us/developer/tushar-kalsara/id1633987444";
+
+  // privacy policy url
   static const String privacyPolicyUrl =
       "https://doc-hosting.flycricket.io/gps-map-camera-privacy-policy/0297115c-f0ab-475f-b5de-77342842fbdd/privacy";
 

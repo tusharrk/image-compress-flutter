@@ -34,7 +34,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
   String _selectedLanguage = 'en';
 
   // Notification Settings
-  bool _notificationsEnabled = true;
+  bool _notificationsEnabled = false;
 
   // Cache
   bool _isClearingCache = false;
@@ -195,34 +195,41 @@ class SettingsViewModel extends CommonBaseViewmodel {
 
   // External Actions
   void openPrivacyPolicy() {
-    _launchUrl("https://yourapp.com/privacy");
+    _launchUrl(AppStrings.privacyPolicyUrl);
   }
 
   void openTermsAndConditions() {
-    _launchUrl("https://yourapp.com/terms");
+    //_launchUrl(AppStrings.termsAndConditionsUrl);
   }
 
   void rateApp() {
     // Implement app store rating logic
-    _launchUrl(
-        "https://play.google.com/store/apps/details?id=your.package.name");
+    if (Platform.isIOS) {
+      _launchUrl(AppStrings.iosAppStoreImageCompressorAppUrl);
+    } else {
+      _launchUrl(AppStrings.androidPlaystoreImageCompressorAppUrl);
+    }
   }
 
   void shareApp() {
     if (Platform.isIOS) {
       SharePlus.instance.share(ShareParams(
           text:
-              'Check out this amazing Image Compressor app: ${AppStrings.iosAppStoreUrl}'));
+              'Check out this amazing Image Compressor app: ${AppStrings.iosAppStoreImageCompressorAppUrl}'));
     } else {
       SharePlus.instance.share(ShareParams(
           text:
-              'Check out this amazing Image Compressor app: ${AppStrings.androidPlaystoreUrl}'));
+              'Check out this amazing Image Compressor app: ${AppStrings.androidPlaystoreImageCompressorAppUrl}'));
     }
   }
 
   void showAboutDeveloper() {
-    // Show about developer dialog or navigate to developer page
-    navigationService.navigateToHomeView();
+    // open developer page
+    if (Platform.isIOS) {
+      _launchUrl(AppStrings.appStoreDeveloperPageUrl);
+    } else {
+      _launchUrl(AppStrings.playstoreDeveloperPageUrl);
+    }
   }
 
   // Private Methods
@@ -255,7 +262,7 @@ class SettingsViewModel extends CommonBaseViewmodel {
       //     storageService.read<ThemeMode>("theme_mode") ?? ThemeMode.system;
       _selectedLanguage = storageService.read<String>("language") ?? 'en';
       _notificationsEnabled =
-          storageService.read<bool>("notifications_enabled") ?? true;
+          storageService.read<bool>("notifications_enabled") ?? false;
       notifyListeners();
     } catch (e) {
       debugPrint("Error loading settings: $e");
@@ -313,6 +320,20 @@ class SettingsViewModel extends CommonBaseViewmodel {
     } catch (e) {
       _appVersion = "Unknown";
       notifyListeners();
+    }
+  }
+
+  void openGPSCameraAppStore() {
+    if (Platform.isIOS) {
+      _launchUrl(AppStrings.iosAppStoreGpsCameraAppUrl);
+    } else {
+      _launchUrl(AppStrings.androidPlaystoreGpsCameraAppUrl);
+    }
+  }
+
+  void openWidgetStoreProAppStore() {
+    if (Platform.isIOS) {
+      _launchUrl(AppStrings.iosAppStoreWidgetStoreProAppUrl);
     }
   }
 

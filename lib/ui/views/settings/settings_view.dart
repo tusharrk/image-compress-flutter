@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/core/models/export_format_enum.dart';
 import 'package:flutter_boilerplate/ui/components/widgets/base/app_app_bar.dart';
@@ -16,7 +18,7 @@ import 'package:stacked/stacked.dart';
 import 'settings_viewmodel.dart';
 
 class SettingsView extends StackedView<SettingsViewModel> {
-  const SettingsView({Key? key}) : super(key: key);
+  const SettingsView({super.key});
 
   @override
   Widget builder(
@@ -194,12 +196,12 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   trailing: const Icon(Icons.open_in_new, size: 20),
                   onTap: viewModel.openPrivacyPolicy,
                 ),
-                const SettingsDivider(),
-                SettingsActionTile(
-                  title: "Terms & Conditions",
-                  trailing: const Icon(Icons.open_in_new, size: 20),
-                  onTap: viewModel.openTermsAndConditions,
-                ),
+                // const SettingsDivider(),
+                // SettingsActionTile(
+                //   title: "Terms & Conditions",
+                //   trailing: const Icon(Icons.open_in_new, size: 20),
+                //   onTap: viewModel.openTermsAndConditions,
+                // ),
                 const SettingsDivider(),
                 SettingsActionTile(
                   title: "Rate App",
@@ -227,15 +229,19 @@ class SettingsView extends StackedView<SettingsViewModel> {
             SettingsCard(children: [
               SettingsActionTile(
                 title: "GPS Map Camera",
+                subtitle: "Add GPS Location to your Photos",
                 trailing: const Icon(Icons.camera_alt_outlined, size: 20),
-                onTap: viewModel.rateApp,
+                onTap: viewModel.openGPSCameraAppStore,
               ),
-              SettingsActionTile(
-                title: "Rate App",
-                subtitle: "Help us improve by leaving a review",
-                trailing: const Icon(Icons.camera_alt_outlined, size: 20),
-                onTap: viewModel.rateApp,
-              ),
+              if (Platform.isIOS) ...[
+                const SettingsDivider(),
+                SettingsActionTile(
+                  title: "WidgetStore Pro",
+                  subtitle: "Create Custom Widgets for your Home Screen",
+                  trailing: const Icon(Icons.widgets_outlined, size: 20),
+                  onTap: viewModel.openWidgetStoreProAppStore,
+                ),
+              ],
             ]),
             const SizedBox(height: 32),
           ],
